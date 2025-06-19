@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnyd3ju6qr4bg"]
+
+[ext_resource type="PackedScene" uid="uid://b2jl1786nqx48" path="res://Scenes/enemy.tscn" id="1_cmxwi"]
+[ext_resource type="Texture2D" uid="uid://b7pwrmwoxw0wl" path="res://textures/EnemyShip1_Upgraded.png" id="2_ywgmh"]
+
+[node name="DiverEnemy" instance=ExtResource("1_cmxwi")]
+speed = 420
+hp = 2
+
+[node name="Sprite2D" parent="." index="0"]
+position = Vector2(-1.90735e-06, 14)
+scale = Vector2(0.429688, 0.386719)
+texture = ExtResource("2_ywgmh")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, 14)
