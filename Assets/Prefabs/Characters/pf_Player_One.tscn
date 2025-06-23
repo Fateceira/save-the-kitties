@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://t1npnwhj8j4e"]
+[gd_scene load_steps=8 format=3 uid="uid://t1npnwhj8j4e"]
 
 [ext_resource type="Script" uid="uid://rrt7cqx34bhn" path="res://Scripts/Core/Player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://877bpuw1ggd4" path="res://Assets/Sprites/nave_base__1_-removebg-preview.png" id="1_v0iea"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://bmru4hhsqxw2e" path="res://Projectiles/res_BasicProjectile.tres" id="3_1kvxw"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_ebihn"]
 [ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://Assets/Prefabs/Components/pf_BlinkComponent.tscn" id="4_0d3bl"]
+[ext_resource type="PackedScene" uid="uid://brstb7qetc6e4" path="res://Assets/VFX/pf_Fire.tscn" id="5_klsxt"]
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_mask = 8
@@ -15,6 +16,12 @@ ship_stats = ExtResource("2_m0ojv")
 equipped_projectile = ExtResource("3_1kvxw")
 
 [node name="BlinkComponent" parent="." instance=ExtResource("4_0d3bl")]
+
+[node name="Fire" parent="." instance=ExtResource("5_klsxt")]
+position = Vector2(33, 30)
+
+[node name="Fire2" parent="." instance=ExtResource("5_klsxt")]
+position = Vector2(-33, 30)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-9.53674e-07, -14)

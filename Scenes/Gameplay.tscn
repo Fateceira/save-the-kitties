@@ -1,10 +1,9 @@
 [gd_scene load_steps=21 format=3 uid="uid://dtdbxmo7tjsvg"]
 
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://Assets/Prefabs/Components/pf_Parallax.tscn" id="1_tdndw"]
-[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="2_7wr7o"]
+[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="2_2aia5"]
 [ext_resource type="Texture2D" uid="uid://v7aor0dnsf2s" path="res://Assets/Sprites/star.png" id="2_mofsa"]
 [ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://Assets/Prefabs/Characters/pf_Player_One.tscn" id="4_rhmiw"]
-[ext_resource type="Resource" uid="uid://k71yh85bi3p2" path="res://Projectiles/res_FirepawProjectile.tres" id="5_7wr7o"]
 [ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://Assets/Prefabs/Components/pf_Invisible_wall.tscn" id="6_u8j7u"]
 [ext_resource type="PackedScene" uid="uid://4w4jgxgfn2um" path="res://Assets/Prefabs/Components/pf_Enemy_Spawner.tscn" id="6_xwjbm"]
 [ext_resource type="PackedScene" uid="uid://cdrcq0atefc6k" path="res://Assets/Prefabs/Components/pf_Camera2D.tscn" id="7_5klrq"]
@@ -15,9 +14,10 @@
 [ext_resource type="Script" uid="uid://biqccyyu52q7b" path="res://Scripts/Test/LevelTest.gd" id="10_vu60g"]
 [ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://Assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="11_w5l26"]
 [ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://Assets/Prefabs/Components/pf_PostProcessing.tscn" id="15_2aia5"]
+[ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://Assets/Prefabs/Components/pf_ExplosionManager.tscn" id="15_buxyy"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5klrq"]
-shader = ExtResource("2_7wr7o")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_buxyy"]
+shader = ExtResource("2_2aia5")
 shader_parameter/pixel_scale = 0.165
 shader_parameter/star_texture = ExtResource("2_mofsa")
 shader_parameter/use_star_texture = true
@@ -92,7 +92,7 @@ metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 [node name="Fase_Teste" type="Node2D"]
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
-material = SubResource("ShaderMaterial_5klrq")
+material = SubResource("ShaderMaterial_buxyy")
 pixel_scale = 0.165
 star_texture = ExtResource("2_mofsa")
 star_density = 30.0
@@ -104,7 +104,6 @@ color_variation = 0.783
 
 [node name="Player" parent="." instance=ExtResource("4_rhmiw")]
 position = Vector2(0, 227)
-equipped_projectile = ExtResource("5_7wr7o")
 
 [node name="InvisibleWall" parent="." instance=ExtResource("6_u8j7u")]
 
@@ -120,5 +119,7 @@ viper_path_spacing = 0.015
 
 [node name="Dev_Script" type="Node" parent="."]
 script = ExtResource("10_vu60g")
+
+[node name="pf_ExplosionManager" parent="." instance=ExtResource("15_buxyy")]
 
 [node name="PostProcessWorldEnvi" parent="." instance=ExtResource("15_2aia5")]
