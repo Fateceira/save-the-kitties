@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://t1npnwhj8j4e"]
 
-[ext_resource type="Script" uid="uid://rrt7cqx34bhn" path="res://Scripts/Core/player.gd" id="1_cvnsp"]
+[ext_resource type="Script" uid="uid://rrt7cqx34bhn" path="res://Scripts/Core/Player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://877bpuw1ggd4" path="res://Assets/Sprites/nave_base__1_-removebg-preview.png" id="1_v0iea"]
 [ext_resource type="Resource" uid="uid://bns14gcx57n25" path="res://Entities/res_PlayerShip.tres" id="2_m0ojv"]
 [ext_resource type="Resource" uid="uid://bmru4hhsqxw2e" path="res://Projectiles/res_BasicProjectile.tres" id="3_1kvxw"]

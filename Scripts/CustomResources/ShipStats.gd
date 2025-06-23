@@ -5,3 +5,4 @@ class_name ShipStats
 @export var speed: float = 200.0
 @export var fire_rate: float = 0.5
 @export var luck: float = 0.1
+@export var crit_multiplier: float = 2.0

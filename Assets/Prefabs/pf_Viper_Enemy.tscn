@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0x40v2ab2vqj"]
+
+[ext_resource type="Script" uid="uid://d0cgpwa518wna" path="res://Scripts/Enemys/ViperEnemy.gd" id="1_dyoyu"]
+[ext_resource type="Resource" uid="uid://u4sjiarmik5h" path="res://Entities/res_Diver_Enemy.tres" id="2_cbq27"]
+[ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_acp2i"]
+[ext_resource type="Texture2D" uid="uid://w3m8q2p081fv" path="res://Assets/Sprites/EnemyShip3_Base.png" id="4_j148q"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
+radius = 35.0
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_dyoyu")
+stats = ExtResource("2_cbq27")
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("3_acp2i")
+metadata/_custom_type_script = "uid://l7so7vxpv0dj"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_j148q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 10)
+shape = SubResource("CircleShape2D_afpow")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

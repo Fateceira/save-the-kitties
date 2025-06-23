@@ -6,8 +6,7 @@
 [resource]
 script = ExtResource("1_jjctp")
 damage = 3
-pierce = 0
+pierce = 2
 speed = 600.0
-crit_chance = 0.05
 projectile_scene = ExtResource("1_pdxm1")
 metadata/_custom_type_script = "uid://kfcsw8xp3cmh"
