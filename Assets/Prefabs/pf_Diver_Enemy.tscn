@@ -6,11 +6,11 @@
 [ext_resource type="Resource" uid="uid://u4sjiarmik5h" path="res://Entities/res_Diver_Enemy.tres" id="2_8tvbv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
-radius = 35.0
+radius = 40.05
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 5
+collision_mask = 0
 script = ExtResource("1_b8qpg")
 stats = ExtResource("2_8tvbv")
 

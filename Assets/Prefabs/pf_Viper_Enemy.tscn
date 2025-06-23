@@ -1,18 +1,18 @@
 [gd_scene load_steps=6 format=3 uid="uid://d0x40v2ab2vqj"]
 
 [ext_resource type="Script" uid="uid://d0cgpwa518wna" path="res://Scripts/Enemys/ViperEnemy.gd" id="1_dyoyu"]
-[ext_resource type="Resource" uid="uid://u4sjiarmik5h" path="res://Entities/res_Diver_Enemy.tres" id="2_cbq27"]
+[ext_resource type="Resource" uid="uid://c7e6d4677c6e2" path="res://Entities/res_Viper_Enemy.tres" id="2_dyoyu"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_acp2i"]
-[ext_resource type="Texture2D" uid="uid://w3m8q2p081fv" path="res://Assets/Sprites/EnemyShip3_Base.png" id="4_j148q"]
+[ext_resource type="Texture2D" uid="uid://cskd6f3bcggmd" path="res://Assets/Sprites/EnemyShip3_BaseV2.png" id="4_dyoyu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
-radius = 35.0
+radius = 35.5106
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 5
+collision_mask = 0
 script = ExtResource("1_dyoyu")
-stats = ExtResource("2_cbq27")
+stats = ExtResource("2_dyoyu")
 
 [node name="DamageableComponent" type="Node" parent="."]
 script = ExtResource("3_acp2i")
@@ -20,7 +20,7 @@ metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("4_j148q")
+texture = ExtResource("4_dyoyu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 10)

@@ -1,6 +1,41 @@
-[gd_scene load_steps=2 format=3 uid="uid://4w4jgxgfn2um"]
+[gd_scene load_steps=4 format=3 uid="uid://4w4jgxgfn2um"]
 
 [ext_resource type="Script" uid="uid://bmqcx13rbx2d6" path="res://Scripts/Core/EnemySpawner.gd" id="1_2vdhy"]
 
+[sub_resource type="Curve2D" id="Curve2D_2vdhy"]
+_data = {
+"points": PackedVector2Array(-66.4513, -233.651, 66.4513, 233.651, -544.187, -511, -84.6893, -156.052, 84.6893, 156.052, -32.187, 502, -12.6276, 320.372, 12.6276, -320.372, 323.813, 267, 7.60447, -150.03, -7.60447, 150.03, 806.813, 205, -189.703, 0, 189.703, 0, 1381.81, 1606)
+}
+point_count = 5
+
+[sub_resource type="Curve2D" id="Curve2D_rspkk"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1704, -829, 146.193, -308.891, -146.193, 308.891, 1335, -71, 155.673, 191.659, -155.673, -191.659, 819, 233, 2.35795, 193.352, -2.35795, -193.352, 660, -186, 14.1477, -264.09, -14.1477, 264.09, 139, -202, -16.5056, -313.607, 16.5056, 313.607, 145, 431, 64.5575, -68.355, -64.5575, 68.355, -455, 1254)
+}
+point_count = 7
+
 [node name="EnemySpawner" type="Node2D"]
 script = ExtResource("1_2vdhy")
+
+[node name="Spawner" type="Node2D" parent="."]
+position = Vector2(703, -91)
+
+[node name="Paths" type="Node2D" parent="."]
+
+[node name="Path 1" type="Path2D" parent="Paths"]
+position = Vector2(180.187, -297)
+curve = SubResource("Curve2D_2vdhy")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/Path 1"]
+position = Vector2(-544.187, -511)
+rotation = 1.29371
+loop = false
+
+[node name="Path 2" type="Path2D" parent="Paths"]
+position = Vector2(20, 10)
+curve = SubResource("Curve2D_rspkk")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Paths/Path 2"]
+position = Vector2(1704, -829)
+rotation = 2.02383
+loop = false

@@ -18,4 +18,3 @@ func _physics_process(delta: float) -> void:
 		velocity.y = stats.speed
 		velocity.x = sin(time_alive * zigzag_frequency) * zigzag_amplitude
 		move_and_slide()
-		check_collisions()

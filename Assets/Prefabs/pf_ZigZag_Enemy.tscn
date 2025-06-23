@@ -1,19 +1,19 @@
 [gd_scene load_steps=6 format=3 uid="uid://bu84xhe0os3ph"]
 
 [ext_resource type="Script" uid="uid://d31ixwbfaex3d" path="res://Scripts/Enemys/ZigZagEnemy.gd" id="1_onk86"]
-[ext_resource type="Resource" uid="uid://u4sjiarmik5h" path="res://Entities/res_Diver_Enemy.tres" id="2_l0et4"]
+[ext_resource type="Resource" uid="uid://faivk0u4f3pc" path="res://Entities/res_ZigZag_Enemy.tres" id="2_bent3"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_dvvel"]
-[ext_resource type="Texture2D" uid="uid://w3m8q2p081fv" path="res://Assets/Sprites/EnemyShip3_Base.png" id="4_ocew1"]
+[ext_resource type="Texture2D" uid="uid://dsuuoddfvms35" path="res://Assets/Sprites/EnemyShip1_UpgradedV2.png" id="4_bent3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
 radius = 35.0
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 5
+collision_mask = 0
 script = ExtResource("1_onk86")
 zigzag_amplitude = 250.0
-stats = ExtResource("2_l0et4")
+stats = ExtResource("2_bent3")
 
 [node name="DamageableComponent" type="Node" parent="."]
 script = ExtResource("3_dvvel")
@@ -21,7 +21,7 @@ metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("4_ocew1")
+texture = ExtResource("4_bent3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 10)
