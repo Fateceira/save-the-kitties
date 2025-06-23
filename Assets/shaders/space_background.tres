@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://e0wdr3qxq02m"]
+
+[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="1_vnrmc"]
+[ext_resource type="Texture2D" uid="uid://cuqt022jhugoo" path="res://assets/sprites/star.png" id="2_qbm3y"]
+
+[resource]
+shader = ExtResource("1_vnrmc")
+shader_parameter/pixel_scale = 1.0
+shader_parameter/star_texture = ExtResource("2_qbm3y")
+shader_parameter/use_star_texture = true
+shader_parameter/star_tint = Vector4(1, 1, 1, 1)
+shader_parameter/star_density = 80.0
+shader_parameter/star_size_min = 0.2
+shader_parameter/star_size_max = 0.8
+shader_parameter/twinkle_speed = 0.25
+shader_parameter/parallax_speed = 0.025
+shader_parameter/nebula_color1 = Vector4(0.8, 0.4, 1, 1)
+shader_parameter/nebula_color2 = Vector4(0.2, 0.4, 1, 1)
+shader_parameter/nebula_color3 = Vector4(0.1, 0.8, 0.9, 1)
+shader_parameter/nebula_size1 = 2.0
+shader_parameter/nebula_size2 = 3.0
+shader_parameter/nebula_size3 = 1.5
+shader_parameter/nebula_density = 0.4
+shader_parameter/space_color = Vector4(0.1, 0.005, 0.105, 1)
+shader_parameter/color_variation = 0.3

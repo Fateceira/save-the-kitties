@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://dr1pjh4t44adi"]
+
+[ext_resource type="Material" uid="uid://e0wdr3qxq02m" path="res://Assets/shaders/space_background.tres" id="1_orpsj"]
+[ext_resource type="Script" uid="uid://doqn2dou21ouw" path="res://Assets/shaders/SpaceController.gd" id="2_iix8q"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_orpsj"]
+
+[node name="Parallax" type="TextureRect"]
+material = ExtResource("1_orpsj")
+offset_left = -927.0
+offset_top = 528.0
+offset_right = 153.0
+offset_bottom = 2448.0
+rotation = -1.5708
+texture = SubResource("CanvasTexture_orpsj")
+script = ExtResource("2_iix8q")

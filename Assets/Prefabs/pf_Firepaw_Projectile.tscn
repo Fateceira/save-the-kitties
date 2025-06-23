@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://sugk8ay3mopb"]
+
+[ext_resource type="Script" uid="uid://dfsn3b3dkgop0" path="res://Scripts/Core/Projectile.gd" id="1_trxfs"]
+[ext_resource type="Texture2D" uid="uid://o0msx50ng4t5" path="res://Assets/Sprites/bullet.png" id="2_7oh63"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpww0"]
+atlas = ExtResource("2_7oh63")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8n78"]
+atlas = ExtResource("2_7oh63")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0ov3"]
+atlas = ExtResource("2_7oh63")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_igpje"]
+atlas = ExtResource("2_7oh63")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lwp8u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpww0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8n78")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t0ov3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_igpje")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_66wql"]
+radius = 19.0
+height = 40.0
+
+[node name="Projectile" type="Area2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_trxfs")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1.64014, 1.42892)
+sprite_frames = SubResource("SpriteFrames_lwp8u")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_66wql")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0, 44)
+scale = Vector2(0.6, 0.35)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

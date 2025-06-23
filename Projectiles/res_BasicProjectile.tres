@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProjectileStats" load_steps=3 format=3 uid="uid://bmru4hhsqxw2e"]
+
+[ext_resource type="Script" uid="uid://kfcsw8xp3cmh" path="res://Scripts/CustomResources/ProjectileStats.gd" id="1_jjctp"]
+[ext_resource type="PackedScene" uid="uid://cnyl5gu2blh45" path="res://Assets/Prefabs/pf_laser_Projectile.tscn" id="1_pdxm1"]
+
+[resource]
+script = ExtResource("1_jjctp")
+damage = 3
+pierce = 0
+speed = 600.0
+crit_chance = 0.05
+projectile_scene = ExtResource("1_pdxm1")
+metadata/_custom_type_script = "uid://kfcsw8xp3cmh"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://877bpuw1ggd4"
-path="res://.godot/imported/nave_base__1_-removebg-preview.png-384441aa4ff34c95aff5445ed6ef9255.ctex"
+uid="uid://b7pwrmwoxw0wl"
+path="res://.godot/imported/EnemyShip1_Upgraded.png-2ac113f2b578eb1b8deffda9fd7166fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/nave_base__1_-removebg-preview.png"
-dest_files=["res://.godot/imported/nave_base__1_-removebg-preview.png-384441aa4ff34c95aff5445ed6ef9255.ctex"]
+source_file="res://Assets/Sprites/EnemyShip1_Upgraded.png"
+dest_files=["res://.godot/imported/EnemyShip1_Upgraded.png-2ac113f2b578eb1b8deffda9fd7166fc.ctex"]
 
 [params]
 

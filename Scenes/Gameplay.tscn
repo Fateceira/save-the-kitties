@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://dtdbxmo7tjsvg"]
+
+[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="1_ovofm"]
+[ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://Assets/Prefabs/pf_Parallax.tscn" id="1_tdndw"]
+[ext_resource type="Texture2D" uid="uid://v7aor0dnsf2s" path="res://Assets/Sprites/star.png" id="2_mofsa"]
+[ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://Assets/Prefabs/player.tscn" id="4_rhmiw"]
+[ext_resource type="Resource" uid="uid://k71yh85bi3p2" path="res://Projectiles/res_FirepawProjectile.tres" id="5_mofsa"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tdndw"]
+shader = ExtResource("1_ovofm")
+shader_parameter/pixel_scale = 0.165
+shader_parameter/star_texture = ExtResource("2_mofsa")
+shader_parameter/use_star_texture = true
+shader_parameter/star_tint = Vector4(1, 1, 1, 1)
+shader_parameter/star_density = 30.0
+shader_parameter/star_size_min = 0.217
+shader_parameter/star_size_max = 0.303
+shader_parameter/twinkle_speed = 0.5
+shader_parameter/parallax_speed = 0.02
+shader_parameter/nebula_color1 = Vector4(0.8, 0.4, 1, 1)
+shader_parameter/nebula_color2 = Vector4(0.2, 0.4, 1, 1)
+shader_parameter/nebula_color3 = Vector4(0.1, 0.8, 0.9, 1)
+shader_parameter/nebula_size1 = 2.0
+shader_parameter/nebula_size2 = 3.0
+shader_parameter/nebula_size3 = 1.5
+shader_parameter/nebula_density = 0.5
+shader_parameter/space_color = Vector4(0.03, 0.01, 0.1, 1)
+shader_parameter/color_variation = 0.783
+
+[node name="Fase_Teste" type="Node2D"]
+
+[node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
+material = SubResource("ShaderMaterial_tdndw")
+pixel_scale = 0.165
+star_texture = ExtResource("2_mofsa")
+star_density = 30.0
+star_size_min = 0.217
+star_size_max = 0.303
+space_color = Color(0.0436077, 0.0145812, 0.12636, 1)
+color_variation = 0.783
+
+[node name="Player" parent="." instance=ExtResource("4_rhmiw")]
+position = Vector2(0, 269)
+equipped_projectile = ExtResource("5_mofsa")
+
+[node name="Camera2D" type="Camera2D" parent="."]
