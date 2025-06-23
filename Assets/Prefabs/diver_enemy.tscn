@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://b7pwrmwoxw0wl" path="res://Assets/Sprites/EnemyShip1_Upgraded.png" id="2_ywgmh"]
 
 [node name="DiverEnemy" instance=ExtResource("1_cmxwi")]
-speed = 420
 hp = 2
+speed = 420
 
 [node name="Sprite2D" parent="." index="0"]
 position = Vector2(-1.90735e-06, 14)

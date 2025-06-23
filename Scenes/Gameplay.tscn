@@ -1,12 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://dtdbxmo7tjsvg"]
+[gd_scene load_steps=8 format=3 uid="uid://dtdbxmo7tjsvg"]
 
 [ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="1_ovofm"]
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://Assets/Prefabs/pf_Parallax.tscn" id="1_tdndw"]
 [ext_resource type="Texture2D" uid="uid://v7aor0dnsf2s" path="res://Assets/Sprites/star.png" id="2_mofsa"]
 [ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://Assets/Prefabs/player.tscn" id="4_rhmiw"]
 [ext_resource type="Resource" uid="uid://k71yh85bi3p2" path="res://Projectiles/res_FirepawProjectile.tres" id="5_mofsa"]
+[ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://Assets/Prefabs/pf_Invisible_wall.tscn" id="6_u8j7u"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tdndw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xwjbm"]
 shader = ExtResource("1_ovofm")
 shader_parameter/pixel_scale = 0.165
 shader_parameter/star_texture = ExtResource("2_mofsa")
@@ -30,7 +31,7 @@ shader_parameter/color_variation = 0.783
 [node name="Fase_Teste" type="Node2D"]
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
-material = SubResource("ShaderMaterial_tdndw")
+material = SubResource("ShaderMaterial_xwjbm")
 pixel_scale = 0.165
 star_texture = ExtResource("2_mofsa")
 star_density = 30.0
@@ -40,7 +41,9 @@ space_color = Color(0.0436077, 0.0145812, 0.12636, 1)
 color_variation = 0.783
 
 [node name="Player" parent="." instance=ExtResource("4_rhmiw")]
-position = Vector2(0, 269)
+position = Vector2(0, 271)
 equipped_projectile = ExtResource("5_mofsa")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="InvisibleWall" parent="." instance=ExtResource("6_u8j7u")]

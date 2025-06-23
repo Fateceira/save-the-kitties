@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbse754nr8vs6"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_dfdco"]
+
+[node name="InvisibleWall" type="Node"]
+
+[node name="Wall_Top" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Top"]
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_dfdco")
+debug_color = Color(0.958536, 0, 0.401614, 0.42)
+
+[node name="Wall_Bottom" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Bottom"]
+position = Vector2(0, 360)
+shape = SubResource("WorldBoundaryShape2D_dfdco")
+one_way_collision = true
+debug_color = Color(0.958536, 0, 0.401614, 0.42)
+
+[node name="Wall_Left" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Left"]
+position = Vector2(-640, 0)
+rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_dfdco")
+debug_color = Color(0.958536, 0, 0.401614, 0.42)
+
+[node name="Wall_Right" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Right"]
+position = Vector2(642, 0)
+rotation = -1.5708
+shape = SubResource("WorldBoundaryShape2D_dfdco")
+debug_color = Color(0.958536, 0, 0.401614, 0.42)
