@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bu84xhe0os3ph"]
+[gd_scene load_steps=7 format=3 uid="uid://bu84xhe0os3ph"]
 
 [ext_resource type="Script" uid="uid://d31ixwbfaex3d" path="res://Scripts/Enemys/ZigZagEnemy.gd" id="1_onk86"]
 [ext_resource type="Resource" uid="uid://faivk0u4f3pc" path="res://Entities/res_ZigZag_Enemy.tres" id="2_bent3"]
+[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://Assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_abdwo"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_dvvel"]
 [ext_resource type="Texture2D" uid="uid://dsuuoddfvms35" path="res://Assets/Sprites/EnemyShip1_UpgradedV2.png" id="4_bent3"]
 
@@ -14,6 +15,8 @@ collision_mask = 0
 script = ExtResource("1_onk86")
 zigzag_amplitude = 250.0
 stats = ExtResource("2_bent3")
+
+[node name="BlinkComponent" parent="." instance=ExtResource("3_abdwo")]
 
 [node name="DamageableComponent" type="Node" parent="."]
 script = ExtResource("3_dvvel")

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bemxm0enl8fpt"]
+[gd_scene load_steps=7 format=3 uid="uid://bemxm0enl8fpt"]
 
 [ext_resource type="Script" uid="uid://60p3o3bg3mau" path="res://Scripts/Core/EnemyBase.gd" id="1_wufry"]
 [ext_resource type="Resource" uid="uid://d2nqs01h6118e" path="res://Entities/res_Asteroid_Enemy.tres" id="2_wufry"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_7h1lb"]
+[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://Assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_d07xv"]
 [ext_resource type="Texture2D" uid="uid://c287v3mmo0yyo" path="res://Assets/Sprites/asteroid.png" id="4_wufry"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
@@ -14,6 +15,8 @@ collision_mask = 0
 script = ExtResource("1_wufry")
 stats = ExtResource("2_wufry")
 
+[node name="BlinkComponent" parent="." instance=ExtResource("3_d07xv")]
+
 [node name="DamageableComponent" type="Node" parent="."]
 script = ExtResource("3_7h1lb")
 metadata/_custom_type_script = "uid://l7so7vxpv0dj"
@@ -24,6 +27,7 @@ scale = Vector2(2.5, 2.5)
 texture = ExtResource("4_wufry")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(-1, 10)
 shape = SubResource("CircleShape2D_afpow")
 

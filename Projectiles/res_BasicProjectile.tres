@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ProjectileStats" load_steps=3 format=3 uid="uid://bmru4hhsqxw2e"]
 
 [ext_resource type="Script" uid="uid://kfcsw8xp3cmh" path="res://Scripts/CustomResources/ProjectileStats.gd" id="1_jjctp"]
-[ext_resource type="PackedScene" uid="uid://cnyl5gu2blh45" path="res://Assets/Prefabs/pf_laser_Projectile.tscn" id="1_pdxm1"]
+[ext_resource type="PackedScene" uid="uid://cnyl5gu2blh45" path="res://Assets/Prefabs/Projectiles/pf_laser_Projectile.tscn" id="1_pdxm1"]
 
 [resource]
 script = ExtResource("1_jjctp")

@@ -16,7 +16,7 @@ func apply_damage(damage_info: DamageInfo) -> void:
 	emit_signal("damaged", damage_info)
 
 	if damage_info.is_crit:
-		print("Dano CRÍTICO!")
+		print("Critou!")
 
 	if current_hp <= 0:
 		die()

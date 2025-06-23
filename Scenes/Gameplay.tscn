@@ -1,21 +1,22 @@
-[gd_scene load_steps=19 format=3 uid="uid://dtdbxmo7tjsvg"]
+[gd_scene load_steps=20 format=3 uid="uid://dtdbxmo7tjsvg"]
 
-[ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://Assets/Prefabs/pf_Parallax.tscn" id="1_tdndw"]
+[ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://Assets/Prefabs/Components/pf_Parallax.tscn" id="1_tdndw"]
+[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="2_7wr7o"]
 [ext_resource type="Texture2D" uid="uid://v7aor0dnsf2s" path="res://Assets/Sprites/star.png" id="2_mofsa"]
-[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="2_uotjs"]
-[ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://Assets/Prefabs/pf_Player_One.tscn" id="4_rhmiw"]
+[ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://Assets/Prefabs/Characters/pf_Player_One.tscn" id="4_rhmiw"]
 [ext_resource type="Resource" uid="uid://k71yh85bi3p2" path="res://Projectiles/res_FirepawProjectile.tres" id="5_7wr7o"]
-[ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://Assets/Prefabs/pf_Invisible_wall.tscn" id="6_u8j7u"]
-[ext_resource type="PackedScene" uid="uid://4w4jgxgfn2um" path="res://Assets/Prefabs/pf_Enemy_Spawner.tscn" id="6_xwjbm"]
+[ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://Assets/Prefabs/Components/pf_Invisible_wall.tscn" id="6_u8j7u"]
+[ext_resource type="PackedScene" uid="uid://4w4jgxgfn2um" path="res://Assets/Prefabs/Components/pf_Enemy_Spawner.tscn" id="6_xwjbm"]
+[ext_resource type="PackedScene" uid="uid://cdrcq0atefc6k" path="res://Assets/Prefabs/Components/pf_Camera2D.tscn" id="7_5klrq"]
 [ext_resource type="Script" uid="uid://ckerbjvn8w5w6" path="res://Scripts/CustomResources/SpawnData.gd" id="7_uotjs"]
-[ext_resource type="PackedScene" uid="uid://bu84xhe0os3ph" path="res://Assets/Prefabs/pf_ZigZag_Enemy.tscn" id="8_rhmiw"]
-[ext_resource type="PackedScene" uid="uid://d0x40v2ab2vqj" path="res://Assets/Prefabs/pf_Viper_Enemy.tscn" id="8_vu60g"]
-[ext_resource type="PackedScene" uid="uid://b2jl1786nqx48" path="res://Assets/Prefabs/pf_Diver_Enemy.tscn" id="9_cfeic"]
+[ext_resource type="PackedScene" uid="uid://bu84xhe0os3ph" path="res://Assets/Prefabs/Enemys/pf_ZigZag_Enemy.tscn" id="8_rhmiw"]
+[ext_resource type="PackedScene" uid="uid://d0x40v2ab2vqj" path="res://Assets/Prefabs/Enemys/pf_Viper_Enemy.tscn" id="8_vu60g"]
+[ext_resource type="PackedScene" uid="uid://b2jl1786nqx48" path="res://Assets/Prefabs/Enemys/pf_Diver_Enemy.tscn" id="9_cfeic"]
 [ext_resource type="Script" uid="uid://biqccyyu52q7b" path="res://Scripts/Test/LevelTest.gd" id="10_vu60g"]
-[ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://Assets/Prefabs/pf_Asteroid_Enemy.tscn" id="11_w5l26"]
+[ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://Assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="11_w5l26"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cfeic"]
-shader = ExtResource("2_uotjs")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2aia5"]
+shader = ExtResource("2_7wr7o")
 shader_parameter/pixel_scale = 0.165
 shader_parameter/star_texture = ExtResource("2_mofsa")
 shader_parameter/use_star_texture = true
@@ -90,7 +91,7 @@ metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 [node name="Fase_Teste" type="Node2D"]
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
-material = SubResource("ShaderMaterial_cfeic")
+material = SubResource("ShaderMaterial_2aia5")
 pixel_scale = 0.165
 star_texture = ExtResource("2_mofsa")
 star_density = 30.0
@@ -103,9 +104,10 @@ color_variation = 0.783
 position = Vector2(0, 227)
 equipped_projectile = ExtResource("5_7wr7o")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
 [node name="InvisibleWall" parent="." instance=ExtResource("6_u8j7u")]
+
+[node name="Camera2D" parent="." instance=ExtResource("7_5klrq")]
+fade_speed = 10.0
 
 [node name="EnemySpawner" parent="." instance=ExtResource("6_xwjbm")]
 position = Vector2(-704, -403)
