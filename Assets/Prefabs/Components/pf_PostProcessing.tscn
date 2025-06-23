@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfa3sv3uep71a"]
+
+[sub_resource type="Environment" id="Environment_o3ced"]
+background_mode = 3
+tonemap_mode = 1
+tonemap_white = 1.25
+glow_enabled = true
+glow_levels/1 = 0.27
+glow_levels/2 = 0.27
+glow_levels/3 = 1.53
+glow_levels/4 = 2.41
+glow_levels/5 = 0.11
+glow_normalized = true
+glow_bloom = 0.1
+glow_blend_mode = 0
+glow_hdr_threshold = 0.35
+glow_hdr_scale = 1.5
+glow_hdr_luminance_cap = 2.0
+fog_light_energy = 4.37
+adjustment_enabled = true
+
+[node name="PostProcessWorldEnvi" type="WorldEnvironment"]
+environment = SubResource("Environment_o3ced")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dtdbxmo7tjsvg"]
+[gd_scene load_steps=21 format=3 uid="uid://dtdbxmo7tjsvg"]
 
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://Assets/Prefabs/Components/pf_Parallax.tscn" id="1_tdndw"]
 [ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="2_7wr7o"]
@@ -14,8 +14,9 @@
 [ext_resource type="PackedScene" uid="uid://b2jl1786nqx48" path="res://Assets/Prefabs/Enemys/pf_Diver_Enemy.tscn" id="9_cfeic"]
 [ext_resource type="Script" uid="uid://biqccyyu52q7b" path="res://Scripts/Test/LevelTest.gd" id="10_vu60g"]
 [ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://Assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="11_w5l26"]
+[ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://Assets/Prefabs/Components/pf_PostProcessing.tscn" id="15_2aia5"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2aia5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5klrq"]
 shader = ExtResource("2_7wr7o")
 shader_parameter/pixel_scale = 0.165
 shader_parameter/star_texture = ExtResource("2_mofsa")
@@ -91,13 +92,14 @@ metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 [node name="Fase_Teste" type="Node2D"]
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
-material = SubResource("ShaderMaterial_2aia5")
+material = SubResource("ShaderMaterial_5klrq")
 pixel_scale = 0.165
 star_texture = ExtResource("2_mofsa")
 star_density = 30.0
 star_size_min = 0.217
 star_size_max = 0.303
-space_color = Color(0.0436077, 0.0145812, 0.12636, 1)
+nebula_color1 = Color(0.61263, 0.643526, 0.292669, 1)
+space_color = Color(0.0775852, 0.00745042, 0.0937775, 1)
 color_variation = 0.783
 
 [node name="Player" parent="." instance=ExtResource("4_rhmiw")]
@@ -118,3 +120,5 @@ viper_path_spacing = 0.015
 
 [node name="Dev_Script" type="Node" parent="."]
 script = ExtResource("10_vu60g")
+
+[node name="PostProcessWorldEnvi" parent="." instance=ExtResource("15_2aia5")]
