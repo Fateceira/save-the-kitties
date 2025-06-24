@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ProjectileStats" load_steps=3 format=3 uid="uid://k71yh85bi3p2"]
 
-[ext_resource type="PackedScene" uid="uid://sugk8ay3mopb" path="res://Assets/Prefabs/Projectiles/pf_Firepaw_Projectile.tscn" id="1_clxup"]
+[ext_resource type="PackedScene" uid="uid://sugk8ay3mopb" path="res://assets/Prefabs/Projectiles/pf_Firepaw_Projectile.tscn" id="1_clxup"]
 [ext_resource type="Script" uid="uid://kfcsw8xp3cmh" path="res://Scripts/CustomResources/ProjectileStats.gd" id="2_b6vrn"]
 
 [resource]

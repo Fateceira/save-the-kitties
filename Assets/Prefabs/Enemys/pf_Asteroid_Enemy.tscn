@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://60p3o3bg3mau" path="res://Scripts/Core/EnemyBase.gd" id="1_wufry"]
 [ext_resource type="Resource" uid="uid://d2nqs01h6118e" path="res://Entities/res_Asteroid_Enemy.tres" id="2_wufry"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_7h1lb"]
-[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://Assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_d07xv"]
-[ext_resource type="Texture2D" uid="uid://c287v3mmo0yyo" path="res://Assets/Sprites/asteroid.png" id="4_wufry"]
+[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_d07xv"]
+[ext_resource type="Texture2D" uid="uid://c287v3mmo0yyo" path="res://assets/sprites/asteroid.png" id="4_wufry"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
 radius = 40.05

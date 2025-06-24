@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dn23syotaslqm"]
 
-[ext_resource type="Texture2D" uid="uid://c7nqrphgh6qs1" path="res://Assets/Sprites/explosion.png" id="1_36qth"]
+[ext_resource type="Texture2D" uid="uid://c7nqrphgh6qs1" path="res://assets/sprites/explosion.png" id="1_36qth"]
 
 [sub_resource type="Curve" id="Curve_8x1w7"]
 _data = [Vector2(0.0168539, 0), 0.0, 0.178137, 0, 0, Vector2(0.25, 0.799339), 1.72383, 1.72383, 0, 0, Vector2(0.682584, 0.871003), -1.0343, -1.0343, 0, 0, Vector2(0.960674, 0.441014), -4.30526, -4.30526, 0, 0, Vector2(1, 0), -1.96917, 0.0, 0, 0]

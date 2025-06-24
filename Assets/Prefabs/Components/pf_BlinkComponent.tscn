@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ctw3nilh6fk4y"]
 
 [ext_resource type="Script" uid="uid://dgr187a55oy21" path="res://Scripts/Core/DamageBlinkEffect.gd" id="1_he4xl"]
-[ext_resource type="Material" uid="uid://8vfw55p5d2d8" path="res://Assets/shaders/damage_blink.tres" id="2_lpv1w"]
+[ext_resource type="Material" uid="uid://8vfw55p5d2d8" path="res://assets/shaders/damage_blink.tres" id="2_lpv1w"]
 
 [node name="BlinkComponent" type="Node"]
 script = ExtResource("1_he4xl")

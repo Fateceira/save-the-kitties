@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://d31ixwbfaex3d" path="res://Scripts/Enemys/ZigZagEnemy.gd" id="1_onk86"]
 [ext_resource type="Resource" uid="uid://faivk0u4f3pc" path="res://Entities/res_ZigZag_Enemy.tres" id="2_bent3"]
-[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://Assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_abdwo"]
+[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_abdwo"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_dvvel"]
-[ext_resource type="Texture2D" uid="uid://dsuuoddfvms35" path="res://Assets/Sprites/EnemyShip1_UpgradedV2.png" id="4_bent3"]
+[ext_resource type="Texture2D" uid="uid://dsuuoddfvms35" path="res://assets/sprites/EnemyShip1_UpgradedV2.png" id="4_bent3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
 radius = 35.0

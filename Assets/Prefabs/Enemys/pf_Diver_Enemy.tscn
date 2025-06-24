@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="1_5crnd"]
 [ext_resource type="Script" uid="uid://60p3o3bg3mau" path="res://Scripts/Core/EnemyBase.gd" id="1_b8qpg"]
-[ext_resource type="Texture2D" uid="uid://w3m8q2p081fv" path="res://Assets/Sprites/EnemyShip3_Base.png" id="1_g1jsd"]
+[ext_resource type="Texture2D" uid="uid://w3m8q2p081fv" path="res://assets/sprites/EnemyShip3_Base.png" id="1_g1jsd"]
 [ext_resource type="Resource" uid="uid://u4sjiarmik5h" path="res://Entities/res_Diver_Enemy.tres" id="2_8tvbv"]
-[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://Assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_u73ir"]
+[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_u73ir"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
 radius = 40.05

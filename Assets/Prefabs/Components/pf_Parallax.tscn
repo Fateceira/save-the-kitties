@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dr1pjh4t44adi"]
 
-[ext_resource type="Material" uid="uid://e0wdr3qxq02m" path="res://Assets/shaders/space_background.tres" id="1_orpsj"]
-[ext_resource type="Script" uid="uid://doqn2dou21ouw" path="res://Assets/shaders/SpaceController.gd" id="2_iix8q"]
+[ext_resource type="Material" uid="uid://e0wdr3qxq02m" path="res://assets/shaders/space_background.tres" id="1_orpsj"]
+[ext_resource type="Script" uid="uid://doqn2dou21ouw" path="res://assets/shaders/SpaceController.gd" id="2_iix8q"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_orpsj"]
 

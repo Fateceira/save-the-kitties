@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://e0wdr3qxq02m"]
 
 [ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="1_vnrmc"]
-[ext_resource type="Texture2D" uid="uid://cuqt022jhugoo" path="res://assets/sprites/star.png" id="2_qbm3y"]
+[ext_resource type="Texture2D" uid="uid://v7aor0dnsf2s" path="res://assets/sprites/star.png" id="2_qbm3y"]
 
 [resource]
 shader = ExtResource("1_vnrmc")

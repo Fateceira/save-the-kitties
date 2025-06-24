@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://5va1s3fpdpw8"
-path="res://.godot/imported/Projectile_Player_Laser1.png-131d7e35827742db99f02f0a7dd7d65e.ctex"
+path="res://.godot/imported/Projectile_Player_Laser1.png-4d086b846872d331f45a41418fb81383.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Projectile_Player_Laser1.png"
-dest_files=["res://.godot/imported/Projectile_Player_Laser1.png-131d7e35827742db99f02f0a7dd7d65e.ctex"]
+source_file="res://assets/sprites/Projectile_Player_Laser1.png"
+dest_files=["res://.godot/imported/Projectile_Player_Laser1.png-4d086b846872d331f45a41418fb81383.ctex"]
 
 [params]
 

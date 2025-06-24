@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cinur83quhu0m"]
 
 [ext_resource type="Script" uid="uid://crbev4rrcppn4" path="res://Scripts/Core/ExplosionManager.gd" id="1_y83qy"]
-[ext_resource type="PackedScene" uid="uid://dn23syotaslqm" path="res://Assets/VFX/pf_Explosion.tscn" id="2_kiad5"]
+[ext_resource type="PackedScene" uid="uid://dn23syotaslqm" path="res://assets/VFX/pf_Explosion.tscn" id="2_kiad5"]
 
 [node name="pf_ExplosionManager" type="Node2D"]
 script = ExtResource("1_y83qy")

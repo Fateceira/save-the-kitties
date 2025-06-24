@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://8vfw55p5d2d8"]
 
-[ext_resource type="Shader" uid="uid://x8jt7q4wyvvp" path="res://Assets/shaders/damage_blink.gdshader" id="1_l3wsr"]
+[ext_resource type="Shader" uid="uid://x8jt7q4wyvvp" path="res://assets/shaders/damage_blink.gdshader" id="1_l3wsr"]
 
 [resource]
 shader = ExtResource("1_l3wsr")
