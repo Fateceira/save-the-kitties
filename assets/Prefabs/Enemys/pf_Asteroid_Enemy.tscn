@@ -1,19 +1,23 @@
-[gd_scene load_steps=7 format=3 uid="uid://bemxm0enl8fpt"]
+[gd_scene load_steps=9 format=3 uid="uid://bemxm0enl8fpt"]
 
 [ext_resource type="Script" uid="uid://60p3o3bg3mau" path="res://Scripts/Core/EnemyBase.gd" id="1_wufry"]
 [ext_resource type="Resource" uid="uid://d2nqs01h6118e" path="res://Entities/res_Asteroid_Enemy.tres" id="2_wufry"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_7h1lb"]
 [ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_d07xv"]
-[ext_resource type="Texture2D" uid="uid://c287v3mmo0yyo" path="res://assets/sprites/asteroid.png" id="4_wufry"]
+[ext_resource type="AudioStream" uid="uid://csfmmas2kt04a" path="res://assets/Audio/sounds/3.wav" id="3_kgipk"]
+[ext_resource type="AudioStream" uid="uid://cpoeo66k7hvvt" path="res://assets/Audio/sounds/2.wav" id="4_gxxlv"]
+[ext_resource type="Texture2D" uid="uid://c6w7dfk1akv5" path="res://assets/sprites/others/meteor-1.png" id="5_ue3xm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
-radius = 40.05
+radius = 50.04
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_wufry")
 stats = ExtResource("2_wufry")
+damage_sfx = ExtResource("3_kgipk")
+death_sfx = ExtResource("4_gxxlv")
 
 [node name="BlinkComponent" parent="." instance=ExtResource("3_d07xv")]
 
@@ -24,10 +28,9 @@ metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, 9)
 scale = Vector2(2.5, 2.5)
-texture = ExtResource("4_wufry")
+texture = ExtResource("5_ue3xm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(-1, 10)
 shape = SubResource("CircleShape2D_afpow")
 

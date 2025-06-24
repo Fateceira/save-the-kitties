@@ -1,25 +1,27 @@
-[gd_scene load_steps=21 format=3 uid="uid://dtdbxmo7tjsvg"]
+[gd_scene load_steps=19 format=3 uid="uid://dtdbxmo7tjsvg"]
 
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="1_tdndw"]
 [ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="2_2aia5"]
-[ext_resource type="Texture2D" uid="uid://v7aor0dnsf2s" path="res://assets/sprites/star.png" id="2_mofsa"]
+[ext_resource type="Texture2D" uid="uid://bi4vttjdrerfn" path="res://assets/sprites/others/star-1.png" id="3_buxyy"]
 [ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://assets/Prefabs/Characters/pf_Player_One.tscn" id="4_rhmiw"]
 [ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://assets/Prefabs/Components/pf_Invisible_wall.tscn" id="6_u8j7u"]
 [ext_resource type="PackedScene" uid="uid://4w4jgxgfn2um" path="res://assets/Prefabs/Components/pf_Enemy_Spawner.tscn" id="6_xwjbm"]
 [ext_resource type="PackedScene" uid="uid://cdrcq0atefc6k" path="res://assets/Prefabs/Components/pf_Camera2D.tscn" id="7_5klrq"]
-[ext_resource type="Script" uid="uid://ckerbjvn8w5w6" path="res://Scripts/CustomResources/SpawnData.gd" id="7_uotjs"]
-[ext_resource type="PackedScene" uid="uid://bu84xhe0os3ph" path="res://assets/Prefabs/Enemys/pf_ZigZag_Enemy.tscn" id="8_rhmiw"]
-[ext_resource type="PackedScene" uid="uid://d0x40v2ab2vqj" path="res://assets/Prefabs/Enemys/pf_Viper_Enemy.tscn" id="8_vu60g"]
-[ext_resource type="PackedScene" uid="uid://b2jl1786nqx48" path="res://assets/Prefabs/Enemys/pf_Diver_Enemy.tscn" id="9_cfeic"]
+[ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="7_bk2no"]
+[ext_resource type="Resource" uid="uid://ciqwwhc2ewv65" path="res://WaveData/wv_TutorialWave.tres" id="8_5klrq"]
+[ext_resource type="Resource" uid="uid://cpaids5lgcisn" path="res://WaveData/wv_Wave_03.tres" id="8_7wr7o"]
+[ext_resource type="Resource" uid="uid://be043blu006h1" path="res://WaveData/wv_Wave_01.tres" id="9_2aia5"]
+[ext_resource type="Resource" uid="uid://cmfgyq1s0noff" path="res://WaveData/wv_Wave_02.tres" id="10_bk2no"]
 [ext_resource type="Script" uid="uid://biqccyyu52q7b" path="res://Scripts/Test/LevelTest.gd" id="10_vu60g"]
-[ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="11_w5l26"]
+[ext_resource type="Resource" uid="uid://b0exgurjhjpeq" path="res://WaveData/wv_Wave_04.tres" id="12_qaqk3"]
 [ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://assets/Prefabs/Components/pf_PostProcessing.tscn" id="15_2aia5"]
 [ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://assets/Prefabs/Components/pf_ExplosionManager.tscn" id="15_buxyy"]
+[ext_resource type="PackedScene" uid="uid://d25pxvapoj0rb" path="res://assets/Prefabs/Components/pf_TimeManager.tscn" id="16_buxyy"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2aia5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bk2no"]
 shader = ExtResource("2_2aia5")
-shader_parameter/pixel_scale = 0.165
-shader_parameter/star_texture = ExtResource("2_mofsa")
+shader_parameter/pixel_scale = 0.1
+shader_parameter/star_texture = ExtResource("3_buxyy")
 shader_parameter/use_star_texture = true
 shader_parameter/star_tint = Vector4(1, 1, 1, 1)
 shader_parameter/star_density = 30.0
@@ -37,64 +39,12 @@ shader_parameter/nebula_density = 0.5
 shader_parameter/space_color = Vector4(0.03, 0.01, 0.1, 1)
 shader_parameter/color_variation = 0.783
 
-[sub_resource type="Resource" id="Resource_vu60g"]
-script = ExtResource("7_uotjs")
-enemy_scene = ExtResource("8_vu60g")
-spawn_chance = 0.3
-spawn_interval = 5.0
-min_spawn_time = 0.0
-can_be_first_spawn = false
-formation_count = 8
-enemy_spacing = 50.0
-min_enemies = 1
-max_enemies = 8
-metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
-
-[sub_resource type="Resource" id="Resource_cfeic"]
-script = ExtResource("7_uotjs")
-enemy_scene = ExtResource("9_cfeic")
-spawn_chance = 0.5
-spawn_interval = 1.5
-min_spawn_time = 0.0
-can_be_first_spawn = true
-formation_count = 1
-enemy_spacing = 85.0
-min_enemies = 1
-max_enemies = 8
-metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
-
-[sub_resource type="Resource" id="Resource_w5l26"]
-script = ExtResource("7_uotjs")
-enemy_scene = ExtResource("8_rhmiw")
-spawn_chance = 0.2
-spawn_interval = 4.0
-min_spawn_time = 0.0
-can_be_first_spawn = true
-formation_count = 2
-enemy_spacing = 85.0
-min_enemies = 1
-max_enemies = 8
-metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
-
-[sub_resource type="Resource" id="Resource_7wr7o"]
-script = ExtResource("7_uotjs")
-enemy_scene = ExtResource("11_w5l26")
-spawn_chance = 0.65
-spawn_interval = 1.65
-min_spawn_time = 0.25
-can_be_first_spawn = false
-formation_count = 1
-enemy_spacing = 60.0
-min_enemies = 0
-max_enemies = 8
-metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
-
 [node name="Fase_Teste" type="Node2D"]
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
-material = SubResource("ShaderMaterial_2aia5")
-pixel_scale = 0.165
-star_texture = ExtResource("2_mofsa")
+material = SubResource("ShaderMaterial_bk2no")
+pixel_scale = 0.1
+star_texture = ExtResource("3_buxyy")
 star_density = 30.0
 star_size_min = 0.217
 star_size_max = 0.303
@@ -105,21 +55,28 @@ color_variation = 0.783
 [node name="Player" parent="." instance=ExtResource("4_rhmiw")]
 position = Vector2(0, 227)
 
-[node name="InvisibleWall" parent="." instance=ExtResource("6_u8j7u")]
-
 [node name="Camera2D" parent="." instance=ExtResource("7_5klrq")]
 fade_speed = 10.0
 
 [node name="EnemySpawner" parent="." instance=ExtResource("6_xwjbm")]
-position = Vector2(-704, -414)
+position = Vector2(-704, -460)
 spawn_area_width = 1200.0
-spawn_data_list = Array[ExtResource("7_uotjs")]([SubResource("Resource_vu60g"), SubResource("Resource_cfeic"), SubResource("Resource_w5l26"), SubResource("Resource_7wr7o")])
+wave_list = Array[ExtResource("7_bk2no")]([ExtResource("8_5klrq"), ExtResource("9_2aia5"), ExtResource("10_bk2no"), ExtResource("8_7wr7o"), ExtResource("12_qaqk3")])
 screen_margin = 80.0
 viper_path_spacing = 0.015
+max_total_enemies = 6
+min_spawn_distance = 100.0
+max_spawn_attempts = 2
+zigzag_spawn_variation = 120.0
+
+[node name="PostProcessWorldEnvi" parent="." instance=ExtResource("15_2aia5")]
+
+[node name="pf_ExplosionManager" parent="." instance=ExtResource("15_buxyy")]
+
+[node name="InvisibleWall" parent="." instance=ExtResource("6_u8j7u")]
 
 [node name="Dev_Script" type="Node" parent="."]
 script = ExtResource("10_vu60g")
 
-[node name="pf_ExplosionManager" parent="." instance=ExtResource("15_buxyy")]
-
-[node name="PostProcessWorldEnvi" parent="." instance=ExtResource("15_2aia5")]
+[node name="TimeManager" parent="." instance=ExtResource("16_buxyy")]
+HITSTOP_DURATION = 0.01

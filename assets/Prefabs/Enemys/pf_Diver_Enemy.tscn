@@ -1,19 +1,23 @@
-[gd_scene load_steps=7 format=3 uid="uid://b2jl1786nqx48"]
+[gd_scene load_steps=9 format=3 uid="uid://b2jl1786nqx48"]
 
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="1_5crnd"]
 [ext_resource type="Script" uid="uid://60p3o3bg3mau" path="res://Scripts/Core/EnemyBase.gd" id="1_b8qpg"]
-[ext_resource type="Texture2D" uid="uid://w3m8q2p081fv" path="res://assets/sprites/EnemyShip3_Base.png" id="1_g1jsd"]
 [ext_resource type="Resource" uid="uid://u4sjiarmik5h" path="res://Entities/res_Diver_Enemy.tres" id="2_8tvbv"]
+[ext_resource type="AudioStream" uid="uid://csfmmas2kt04a" path="res://assets/Audio/sounds/3.wav" id="3_fdj6p"]
 [ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_u73ir"]
+[ext_resource type="AudioStream" uid="uid://cpoeo66k7hvvt" path="res://assets/Audio/sounds/2.wav" id="4_0du81"]
+[ext_resource type="Texture2D" uid="uid://ifakyp8uwkvo" path="res://assets/sprites/ships/4.png" id="5_8o4ld"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
-radius = 40.05
+radius = 36.0139
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_b8qpg")
 stats = ExtResource("2_8tvbv")
+damage_sfx = ExtResource("3_fdj6p")
+death_sfx = ExtResource("4_0du81")
 
 [node name="BlinkComponent" parent="." instance=ExtResource("3_u73ir")]
 
@@ -22,11 +26,11 @@ script = ExtResource("1_5crnd")
 metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_g1jsd")
+position = Vector2(0.34043, -1.25532)
+scale = Vector2(1.51064, 1.51064)
+texture = ExtResource("5_8o4ld")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1, 10)
 shape = SubResource("CircleShape2D_afpow")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

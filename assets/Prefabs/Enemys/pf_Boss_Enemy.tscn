@@ -1,0 +1,49 @@
+[gd_scene load_steps=11 format=3 uid="uid://ddhj8o34jrs6g"]
+
+[ext_resource type="Script" uid="uid://clr2bqciwia30" path="res://Scripts/Enemys/BossEnemy.gd" id="1_3u5qh"]
+[ext_resource type="Resource" uid="uid://bkg5d1byo52e8" path="res://Projectiles/res_BasicProjectile_Boss.tres" id="2_0ta2x"]
+[ext_resource type="Resource" uid="uid://csm2ecgckcwy8" path="res://Entities/res_Boss_Enemy.tres" id="2_wp0n2"]
+[ext_resource type="AudioStream" uid="uid://gekbs5gg81ny" path="res://assets/Audio/sounds/dark-shoot.wav" id="3_0e6bi"]
+[ext_resource type="AudioStream" uid="uid://csfmmas2kt04a" path="res://assets/Audio/sounds/3.wav" id="3_h863f"]
+[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="5_3u5qh"]
+[ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="6_0ta2x"]
+[ext_resource type="AudioStream" uid="uid://onxbt731iwwm" path="res://assets/Audio/sounds/death.wav" id="6_h863f"]
+[ext_resource type="Texture2D" uid="uid://cjrmpj085unp0" path="res://assets/sprites/ships/7.png" id="7_cs1w2"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h863f"]
+radius = 56.0
+height = 112.0
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_3u5qh")
+projectile_stats = ExtResource("2_0ta2x")
+shoot_sfx = ExtResource("3_0e6bi")
+target_position_y = -260.0
+follow_delay = 0.6
+stats = ExtResource("2_wp0n2")
+damage_sfx = ExtResource("3_h863f")
+death_sfx = ExtResource("6_h863f")
+
+[node name="BlinkComponent" parent="." instance=ExtResource("5_3u5qh")]
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("6_0ta2x")
+metadata/_custom_type_script = "uid://l7so7vxpv0dj"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0.34043, -1.25532)
+scale = Vector2(1.51064, 1.51064)
+texture = ExtResource("7_cs1w2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_h863f")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="MuzzleLeft" type="Marker2D" parent="."]
+position = Vector2(-47, 56)
+
+[node name="MuzzleRight" type="Marker2D" parent="."]
+position = Vector2(48, 56)

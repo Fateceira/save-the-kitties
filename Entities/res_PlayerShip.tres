@@ -5,8 +5,10 @@
 [resource]
 script = ExtResource("1_cnne4")
 max_hp = 10
-speed = 400.0
-fire_rate = 0.2
-luck = 0.5
-crit_multiplier = 2.0
+speed = 350.0
+fire_rate = 0.25
+luck = 0.1
+crit_multiplier = 1.25
+projectile_count = 2
+burst_delay = 0.1
 metadata/_custom_type_script = "uid://df8aje4m337o4"

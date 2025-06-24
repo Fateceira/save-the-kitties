@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="WaveData" load_steps=7 format=3 uid="uid://be043blu006h1"]
+
+[ext_resource type="Script" uid="uid://ckerbjvn8w5w6" path="res://Scripts/CustomResources/SpawnData.gd" id="1_hrbc8"]
+[ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="2_u5ywf"]
+[ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="3_2uodo"]
+[ext_resource type="PackedScene" uid="uid://b2jl1786nqx48" path="res://assets/Prefabs/Enemys/pf_Diver_Enemy.tscn" id="3_u5ywf"]
+
+[sub_resource type="Resource" id="Resource_2uodo"]
+script = ExtResource("1_hrbc8")
+enemy_scene = ExtResource("3_u5ywf")
+spawn_chance = 0.6
+formation_count = 1
+enemy_spacing = 100.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[sub_resource type="Resource" id="Resource_v145j"]
+script = ExtResource("1_hrbc8")
+enemy_scene = ExtResource("2_u5ywf")
+spawn_chance = 0.5
+formation_count = 1
+enemy_spacing = 80.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[resource]
+script = ExtResource("3_2uodo")
+wave_name = "Wave 1"
+enemy_spawns = Array[ExtResource("1_hrbc8")]([SubResource("Resource_2uodo"), SubResource("Resource_v145j")])
+enemies_per_spawn = 1
+spawn_delay = 2.0
+wave_duration = 10.0
+break_duration = 3.0
+is_boss_wave = false
+metadata/_custom_type_script = "uid://br8fwkyeo43qx"

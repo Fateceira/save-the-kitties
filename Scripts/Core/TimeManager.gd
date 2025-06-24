@@ -5,8 +5,8 @@ var is_hitstop: bool = false
 var hitstop_timer: float = 0.0
 var connected_components: Array = []
 
-const HITSTOP_DURATION: float = 0.02
-const HITSTOP_TIMESCALE: float = 0.2
+@export var HITSTOP_DURATION: float = 0.02
+@export var HITSTOP_TIMESCALE: float = 0.2
 
 func _ready() -> void:
 	get_tree().node_added.connect(_on_node_added)

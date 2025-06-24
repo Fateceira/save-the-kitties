@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="ProjectileStats" load_steps=3 format=3 uid="uid://bmru4hhsqxw2e"]
+[gd_resource type="Resource" script_class="ProjectileStats" load_steps=4 format=3 uid="uid://bmru4hhsqxw2e"]
 
 [ext_resource type="Script" uid="uid://kfcsw8xp3cmh" path="res://Scripts/CustomResources/ProjectileStats.gd" id="1_jjctp"]
 [ext_resource type="PackedScene" uid="uid://cnyl5gu2blh45" path="res://assets/Prefabs/Projectiles/pf_laser_Projectile.tscn" id="1_pdxm1"]
+[ext_resource type="PackedScene" uid="uid://bu1hv23j21x3v" path="res://assets/VFX/pf_Sparks_Blue.tscn" id="1_v8p4m"]
 
 [resource]
 script = ExtResource("1_jjctp")
@@ -9,4 +10,5 @@ damage = 3
 pierce = 2
 speed = 600.0
 projectile_scene = ExtResource("1_pdxm1")
+impact_spark_scene = ExtResource("1_v8p4m")
 metadata/_custom_type_script = "uid://kfcsw8xp3cmh"

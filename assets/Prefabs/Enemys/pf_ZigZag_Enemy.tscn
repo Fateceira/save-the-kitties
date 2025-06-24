@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://bu84xhe0os3ph"]
+[gd_scene load_steps=9 format=3 uid="uid://bu84xhe0os3ph"]
 
 [ext_resource type="Script" uid="uid://d31ixwbfaex3d" path="res://Scripts/Enemys/ZigZagEnemy.gd" id="1_onk86"]
 [ext_resource type="Resource" uid="uid://faivk0u4f3pc" path="res://Entities/res_ZigZag_Enemy.tres" id="2_bent3"]
 [ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_abdwo"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_dvvel"]
-[ext_resource type="Texture2D" uid="uid://dsuuoddfvms35" path="res://assets/sprites/EnemyShip1_UpgradedV2.png" id="4_bent3"]
+[ext_resource type="AudioStream" uid="uid://csfmmas2kt04a" path="res://assets/Audio/sounds/3.wav" id="3_w25xd"]
+[ext_resource type="AudioStream" uid="uid://cpoeo66k7hvvt" path="res://assets/Audio/sounds/2.wav" id="4_yfwup"]
+[ext_resource type="Texture2D" uid="uid://b4t748n4e73nk" path="res://assets/sprites/ships/10.png" id="5_bhwbd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
 radius = 35.0
@@ -16,6 +18,8 @@ script = ExtResource("1_onk86")
 zigzag_amplitude = 200.0
 zigzag_frequency = 1.0
 stats = ExtResource("2_bent3")
+damage_sfx = ExtResource("3_w25xd")
+death_sfx = ExtResource("4_yfwup")
 
 [node name="BlinkComponent" parent="." instance=ExtResource("3_abdwo")]
 
@@ -24,8 +28,9 @@ script = ExtResource("3_dvvel")
 metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("4_bent3")
+position = Vector2(-0.719996, -0.719999)
+scale = Vector2(2.44, 2.44)
+texture = ExtResource("5_bhwbd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 0)

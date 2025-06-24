@@ -3,37 +3,47 @@ class_name EnemySpawner
 
 @export var spawn_area_width: float = 1145.0
 @export var spawn_area_height: float = 100.0
-@export var spawn_data_list: Array[SpawnData] = []
+@export var wave_list: Array[WaveData] = []
 @export var debug_draw_color: Color = Color(1, 0, 0, 0.5)
 @export var screen_margin: float = 50.0
 @export var viper_path_spacing: float = 0.15
-@export var max_total_enemies: int = 15
-@export var min_spawn_distance: float = 80.0  
-@export var max_spawn_attempts: int = 10   
-@export var zigzag_spawn_variation: float = 150.0  
+@export var max_total_enemies: int = 8
+@export var min_spawn_distance: float = 80.0
+@export var max_spawn_attempts: int = 10
+@export var zigzag_spawn_variation: float = 150.0
+@export var initial_spawn_delay: float = 2.0
+@export var boss_spawn_position_offset: Vector2 = Vector2(0, -100)
 
-var game_time: float = 0.0
+enum SpawnerState {
+	WAITING_TO_START,
+	SPAWNING_WAVE,
+	WAVE_BREAK,
+	FINISHED
+}
+
+var current_state: SpawnerState = SpawnerState.WAITING_TO_START
+var current_wave_index: int = 0
+var wave_timer: float = 0.0
+var spawn_timer: float = 0.0
 var screen_size: Vector2
 var spawner_node: Node2D
 var available_paths: Array[Path2D] = []
-var unlocked_enemies: Array[PackedScene] = []
-var spawn_timers: Dictionary = {}
 var last_used_path: Path2D = null
 var path_usage_history: Array[Path2D] = []
 var max_history_size: int = 3
 var recent_spawn_positions: Array[Vector2] = []
-var position_history_duration: float = 2.0      
+var boss_spawned_in_current_wave: bool = false
 
 func _ready() -> void:
 	screen_size = get_viewport().get_visible_rect().size
 	spawner_node = get_node("Spawner")
 	collect_available_paths()
-	initialize_spawn_timers()
-	perform_initial_spawns()
+	start_spawning()
 
-func initialize_spawn_timers() -> void:
-	for i in range(spawn_data_list.size()):
-		spawn_timers[i] = 0.0
+func start_spawning() -> void:
+	current_state = SpawnerState.WAITING_TO_START
+	wave_timer = initial_spawn_delay
+	current_wave_index = 0
 
 func collect_available_paths() -> void:
 	var paths_node = get_node("Paths")
@@ -41,6 +51,139 @@ func collect_available_paths() -> void:
 		for child in paths_node.get_children():
 			if child is Path2D:
 				available_paths.append(child)
+
+func _process(delta: float) -> void:
+	wave_timer -= delta
+	
+	match current_state:
+		SpawnerState.WAITING_TO_START:
+			if wave_timer <= 0.0:
+				start_current_wave()
+		
+		SpawnerState.SPAWNING_WAVE:
+			handle_wave_spawning(delta)
+		
+		SpawnerState.WAVE_BREAK:
+			if wave_timer <= 0.0:
+				next_wave()
+		
+		SpawnerState.FINISHED:
+			pass
+
+func start_current_wave() -> void:
+	if current_wave_index >= wave_list.size():
+		current_state = SpawnerState.FINISHED
+		return
+	
+	var current_wave = wave_list[current_wave_index]
+	current_state = SpawnerState.SPAWNING_WAVE
+	wave_timer = current_wave.wave_duration
+	spawn_timer = 0.0
+	boss_spawned_in_current_wave = false
+	
+	print("Iniciando ", current_wave.wave_name)
+	
+	if current_wave.is_boss_wave:
+		spawn_boss_immediately(current_wave)
+
+func spawn_boss_immediately(wave_data: WaveData) -> void:
+	if wave_data.enemy_spawns.size() == 0:
+		return
+	
+	var boss_spawn_data = wave_data.enemy_spawns[0]
+	spawn_boss_enemy(boss_spawn_data)
+	boss_spawned_in_current_wave = true
+	
+	print("Boss spawnado na wave: ", wave_data.wave_name)
+
+func spawn_boss_enemy(data: SpawnData) -> void:
+	if not data.enemy_scene:
+		return
+	
+	var boss = data.enemy_scene.instantiate()
+	boss.add_to_group("enemies")
+	boss.add_to_group("boss")
+	
+	var boss_position = get_boss_spawn_position()
+	boss.global_position = boss_position
+	
+	get_tree().current_scene.add_child(boss)
+	
+	print("Boss spawnado em posição fixa: ", boss_position)
+
+func get_boss_spawn_position() -> Vector2:
+	var center_x = spawner_node.global_position.x
+	var boss_y = spawner_node.global_position.y + boss_spawn_position_offset.y
+	return Vector2(center_x, boss_y)
+
+func handle_wave_spawning(delta: float) -> void:
+	if current_wave_index >= wave_list.size():
+		return
+	
+	var current_wave = wave_list[current_wave_index]
+	
+	if current_wave.is_boss_wave:
+		check_boss_wave_completion()
+		return
+	
+	spawn_timer -= delta
+	
+	if spawn_timer <= 0.0:
+		attempt_spawn_from_wave(current_wave)
+		spawn_timer = current_wave.spawn_delay
+	
+	if wave_timer <= 0.0:
+		end_current_wave()
+
+func check_boss_wave_completion() -> void:
+	var bosses = get_tree().get_nodes_in_group("boss")
+	
+	if bosses.size() == 0:
+		end_current_wave()
+
+func attempt_spawn_from_wave(wave_data: WaveData) -> void:
+	if get_total_enemy_count() >= max_total_enemies:
+		return
+	
+	var valid_spawns: Array[SpawnData] = []
+	for spawn_data in wave_data.enemy_spawns:
+		if randf() <= spawn_data.spawn_chance:
+			valid_spawns.append(spawn_data)
+	
+	if valid_spawns.size() == 0:
+		return
+	
+	var enemies_to_spawn = min(wave_data.enemies_per_spawn, max_total_enemies - get_total_enemy_count())
+	
+	for i in enemies_to_spawn:
+		var selected_spawn = valid_spawns[randi() % valid_spawns.size()]
+		spawn_enemy_from_data(selected_spawn)
+
+func end_current_wave() -> void:
+	if current_wave_index >= wave_list.size():
+		current_state = SpawnerState.FINISHED
+		return
+	
+	var current_wave = wave_list[current_wave_index]
+	current_state = SpawnerState.WAVE_BREAK
+	wave_timer = current_wave.break_duration
+	
+	if current_wave.is_boss_wave:
+		print("Boss da ", current_wave.wave_name, " foi derrotado! Intervalo: ", current_wave.break_duration, "s")
+	else:
+		print("Wave ", current_wave.wave_name, " finalizada. Intervalo: ", current_wave.break_duration, "s")
+
+func next_wave() -> void:
+	current_wave_index += 1
+	if current_wave_index >= wave_list.size():
+		current_state = SpawnerState.FINISHED
+		print("Todas as waves concluídas!")
+		return
+	
+	start_current_wave()
+
+func get_total_enemy_count() -> int:
+	return get_tree().get_nodes_in_group("enemies").size()
 
 func cleanup_old_spawn_positions() -> void:
 	var current_enemies = get_tree().get_nodes_in_group("enemies")
@@ -76,28 +219,6 @@ func get_valid_spawn_position() -> Vector2:
 	spawn_position = get_spawn_position()
 	recent_spawn_positions.append(spawn_position)
 	return spawn_position
-
-func get_valid_formation_start_position(formation_width: float) -> Vector2:
-	var attempts = 0
-	var start_position: Vector2
-	
-	while attempts < max_spawn_attempts:
-		start_position = get_spawn_position()
-		var formation_start_x = start_position.x - formation_width * 0.5
-		
-		var formation_valid = true
-		for x_offset in range(0, int(formation_width), int(min_spawn_distance / 3)):
-			var check_pos = Vector2(formation_start_x + x_offset, start_position.y)
-			if is_position_too_close(check_pos):
-				formation_valid = false
-				break
-		
-		if formation_valid:
-			return start_position
-		
-		attempts += 1
-	
-	return get_spawn_position()
 
 func get_zigzag_spawn_position() -> Vector2:
 	var viewport = get_viewport()
@@ -148,43 +269,6 @@ func update_path_history(used_path: Path2D) -> void:
 	while path_usage_history.size() > max_history_size:
 		path_usage_history.pop_front()
 
-func perform_initial_spawns() -> void:
-	for i in range(spawn_data_list.size()):
-		var data = spawn_data_list[i]
-		if data.can_be_first_spawn and can_spawn_enemy_type(data):
-			spawn_enemy_from_data(data)
-			spawn_timers[i] = game_time
-
-func _process(delta: float) -> void:
-	game_time += delta
-	
-	for i in range(spawn_data_list.size()):
-		var data = spawn_data_list[i]
-		if should_spawn_enemy(data, i):
-			spawn_enemy_from_data(data)
-			spawn_timers[i] = game_time
-
-func should_spawn_enemy(data: SpawnData, index: int) -> bool:
-	if game_time < data.min_spawn_time:
-		return false
-	if game_time - spawn_timers[index] < data.spawn_interval:
-		return false
-	if not can_spawn_enemy_type(data):
-		return false
-	return randf() <= data.spawn_chance
-
-func can_spawn_enemy_type(data: SpawnData) -> bool:
-	if unlocked_enemies.size() > 0 and not unlocked_enemies.has(data.enemy_scene):
-		return false
-	var current_total = get_total_enemy_count()
-	var formation_size = max(1, data.formation_count)
-	if current_total + formation_size > max_total_enemies:
-		return false
-	return true
-
-func get_total_enemy_count() -> int:
-	return get_tree().get_nodes_in_group("enemies").size()
-
 func spawn_enemy_from_data(data: SpawnData) -> void:
 	if not data.enemy_scene:
 		return
@@ -206,7 +290,7 @@ func spawn_enemy_from_data(data: SpawnData) -> void:
 func spawn_zigzag_formation(data: SpawnData) -> void:
 	var formation_size = max(1, data.formation_count)
 	
-	if formation_size == 1:
+	for i in formation_size:
 		var spawn_position = get_zigzag_spawn_position()
 		
 		var enemy = data.enemy_scene.instantiate()
@@ -215,27 +299,10 @@ func spawn_zigzag_formation(data: SpawnData) -> void:
 		get_tree().current_scene.add_child(enemy)
 		
 		if enemy.has_method("set_movement_direction"):
-			var random_direction = 1 if randf() > 0.5 else -1
-			enemy.set_movement_direction(random_direction)
+			var direction = 1 if i % 2 == 0 else -1
+			enemy.set_movement_direction(direction)
 		
 		recent_spawn_positions.append(spawn_position)
-		
-		print("Debug ZigZag Spawn único - Posição: ", spawn_position)
-		
-	else:
-		for i in formation_size:
-			var spawn_position = get_zigzag_spawn_position()
-			
-			var enemy = data.enemy_scene.instantiate()
-			enemy.add_to_group("enemies")
-			enemy.global_position = spawn_position
-			get_tree().current_scene.add_child(enemy)
-			
-			if enemy.has_method("set_movement_direction"):
-				var direction = 1 if i % 2 == 0 else -1
-				enemy.set_movement_direction(direction)
-			
-			recent_spawn_positions.append(spawn_position)
 
 func spawn_viper_formation(data: SpawnData) -> void:
 	var selected_path = get_best_path_for_spawn()
@@ -264,13 +331,12 @@ func spawn_single_enemy(data: SpawnData) -> void:
 	var spawn_position = get_valid_spawn_position()
 	enemy.global_position = spawn_position
 	get_tree().current_scene.add_child(enemy)
-	
 
 func spawn_formation(data: SpawnData) -> void:
 	var formation_size = data.formation_count
 	var total_width = (formation_size - 1) * data.enemy_spacing
 	
-	var formation_start = get_valid_formation_start_position(total_width)
+	var formation_start = get_valid_spawn_position()
 	var start_x = formation_start.x - total_width * 0.5
 	
 	for i in formation_size:
@@ -294,25 +360,33 @@ func _draw() -> void:
 	if spawner_node:
 		var rect_pos = spawner_node.position + Vector2(-spawn_area_width * 0.5, 0)
 		draw_rect(Rect2(rect_pos, Vector2(spawn_area_width, spawn_area_height)), debug_draw_color, false)
-		
-		if Engine.is_editor_hint() or OS.is_debug_build():
-			for pos in recent_spawn_positions:
-				var local_pos = to_local(pos)
-				draw_circle(local_pos, min_spawn_distance, Color(1, 1, 0, 0.2))
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_ENTER_TREE or what == NOTIFICATION_TRANSFORM_CHANGED:
 		queue_redraw()
 
-func unlock_enemy(enemy_scene: PackedScene) -> void:
-	if not unlocked_enemies.has(enemy_scene):
-		unlocked_enemies.append(enemy_scene)
+func get_current_wave_info() -> String:
+	if current_wave_index >= wave_list.size():
+		return "Finalizado"
+	
+	var wave = wave_list[current_wave_index]
+	var state_text = ""
+	
+	match current_state:
+		SpawnerState.WAITING_TO_START:
+			state_text = "Aguardando início"
+		SpawnerState.SPAWNING_WAVE:
+			if wave.is_boss_wave:
+				state_text = "Boss em combate"
+			else:
+				state_text = "Em progresso"
+		SpawnerState.WAVE_BREAK:
+			state_text = "Intervalo"
+		SpawnerState.FINISHED:
+			state_text = "Finalizado"
+	
+	return wave.wave_name + " - " + state_text
 
-func unlock_all_enemies() -> void:
-	unlocked_enemies.clear()
-	for data in spawn_data_list:
-		if data.enemy_scene and not unlocked_enemies.has(data.enemy_scene):
-			unlocked_enemies.append(data.enemy_scene)
-
-func clear_unlocked_enemies() -> void:
-	unlocked_enemies.clear()
+func force_next_wave() -> void:
+	if current_state == SpawnerState.SPAWNING_WAVE:
+		end_current_wave()

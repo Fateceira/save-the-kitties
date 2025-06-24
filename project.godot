@@ -14,6 +14,10 @@ config/name="Save the kitties"
 run/main_scene="res://Scenes/Gameplay.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
+[autoload]
+
+AudioManager="*res://Scripts/Core/AudioManager.gd"
+
 [display]
 
 window/size/viewport_width=1280
