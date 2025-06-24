@@ -16,7 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://Assets/Prefabs/Components/pf_PostProcessing.tscn" id="15_2aia5"]
 [ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://Assets/Prefabs/Components/pf_ExplosionManager.tscn" id="15_buxyy"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_buxyy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2aia5"]
 shader = ExtResource("2_2aia5")
 shader_parameter/pixel_scale = 0.165
 shader_parameter/star_texture = ExtResource("2_mofsa")
@@ -92,7 +92,7 @@ metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 [node name="Fase_Teste" type="Node2D"]
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
-material = SubResource("ShaderMaterial_buxyy")
+material = SubResource("ShaderMaterial_2aia5")
 pixel_scale = 0.165
 star_texture = ExtResource("2_mofsa")
 star_density = 30.0
@@ -111,10 +111,10 @@ position = Vector2(0, 227)
 fade_speed = 10.0
 
 [node name="EnemySpawner" parent="." instance=ExtResource("6_xwjbm")]
-position = Vector2(-704, -403)
+position = Vector2(-704, -414)
 spawn_area_width = 1200.0
 spawn_data_list = Array[ExtResource("7_uotjs")]([SubResource("Resource_vu60g"), SubResource("Resource_cfeic"), SubResource("Resource_w5l26"), SubResource("Resource_7wr7o")])
-debug_draw_color = Color(1, 0, 0, 0)
+screen_margin = 80.0
 viper_path_spacing = 0.015
 
 [node name="Dev_Script" type="Node" parent="."]

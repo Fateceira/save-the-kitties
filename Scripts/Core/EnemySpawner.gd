@@ -10,6 +10,7 @@ class_name EnemySpawner
 @export var max_total_enemies: int = 15
 @export var min_spawn_distance: float = 80.0  
 @export var max_spawn_attempts: int = 10   
+@export var zigzag_spawn_variation: float = 150.0  
 
 var game_time: float = 0.0
 var screen_size: Vector2
@@ -98,6 +99,24 @@ func get_valid_formation_start_position(formation_width: float) -> Vector2:
 	
 	return get_spawn_position()
 
+func get_zigzag_spawn_position() -> Vector2:
+	var viewport = get_viewport()
+	var viewport_size = viewport.get_visible_rect().size
+	var camera = get_viewport().get_camera_2d()
+	
+	var center_x: float
+	if camera:
+		center_x = camera.global_position.x
+	else:
+		center_x = viewport_size.x / 2.0
+	
+	var variation_x = randf_range(-zigzag_spawn_variation * 0.5, zigzag_spawn_variation * 0.5)
+	var final_x = center_x + variation_x
+	
+	var spawn_y = spawner_node.global_position.y
+	
+	return Vector2(final_x, spawn_y)
+
 func get_best_path_for_spawn() -> Path2D:
 	if available_paths.size() == 0:
 		return null
@@ -172,14 +191,51 @@ func spawn_enemy_from_data(data: SpawnData) -> void:
 	
 	var temp_enemy = data.enemy_scene.instantiate()
 	var is_viper = temp_enemy is ViperEnemy
+	var is_zigzag = temp_enemy is ZigZagEnemy
 	temp_enemy.queue_free()
 	
 	if is_viper:
 		spawn_viper_formation(data)
+	elif is_zigzag:
+		spawn_zigzag_formation(data)
 	elif data.formation_count <= 1:
 		spawn_single_enemy(data)
 	else:
 		spawn_formation(data)
+
+func spawn_zigzag_formation(data: SpawnData) -> void:
+	var formation_size = max(1, data.formation_count)
+	
+	if formation_size == 1:
+		var spawn_position = get_zigzag_spawn_position()
+		
+		var enemy = data.enemy_scene.instantiate()
+		enemy.add_to_group("enemies")
+		enemy.global_position = spawn_position
+		get_tree().current_scene.add_child(enemy)
+		
+		if enemy.has_method("set_movement_direction"):
+			var random_direction = 1 if randf() > 0.5 else -1
+			enemy.set_movement_direction(random_direction)
+		
+		recent_spawn_positions.append(spawn_position)
+		
+		print("Debug ZigZag Spawn único - Posição: ", spawn_position)
+		
+	else:
+		for i in formation_size:
+			var spawn_position = get_zigzag_spawn_position()
+			
+			var enemy = data.enemy_scene.instantiate()
+			enemy.add_to_group("enemies")
+			enemy.global_position = spawn_position
+			get_tree().current_scene.add_child(enemy)
+			
+			if enemy.has_method("set_movement_direction"):
+				var direction = 1 if i % 2 == 0 else -1
+				enemy.set_movement_direction(direction)
+			
+			recent_spawn_positions.append(spawn_position)
 
 func spawn_viper_formation(data: SpawnData) -> void:
 	var selected_path = get_best_path_for_spawn()
