@@ -90,7 +90,6 @@ max_enemies = 8
 metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 
 [node name="Fase_Teste" type="Node2D"]
-position = Vector2(0, 1)
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
 material = SubResource("ShaderMaterial_2aia5")

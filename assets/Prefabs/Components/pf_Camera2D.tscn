@@ -4,4 +4,7 @@
 
 [node name="Camera2D" type="Camera2D"]
 script = ExtResource("1_2eaqw")
+max_shake = 8.0
+fade_speed = 9.0
+enemy_hit_shake = 5.0
 metadata/_custom_type_script = "uid://dqwgsd4vr6xqv"
