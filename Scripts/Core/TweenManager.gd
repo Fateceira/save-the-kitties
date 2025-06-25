@@ -37,5 +37,3 @@ func _on_damage_received(_damage_info: DamageInfo, component: DamageableComponen
 	tween.tween_property(root, "scale", Vector2.ONE, return_duration)\
 		.set_ease(return_ease)\
 		.set_trans(return_transition)
-		
-	print("TweenManager: Punch aplicado em ", root.name)

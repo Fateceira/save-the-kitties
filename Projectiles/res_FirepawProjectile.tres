@@ -6,8 +6,8 @@
 
 [resource]
 script = ExtResource("2_b6vrn")
-damage = 2
-pierce = 1
+damage = 3
+pierce = 0
 speed = 600.0
 projectile_scene = ExtResource("1_clxup")
 impact_spark_scene = ExtResource("1_b6vrn")

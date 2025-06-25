@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ddhj8o34jrs6g"]
+[gd_scene load_steps=13 format=3 uid="uid://ddhj8o34jrs6g"]
 
 [ext_resource type="Script" uid="uid://clr2bqciwia30" path="res://Scripts/Enemys/BossEnemy.gd" id="1_3u5qh"]
 [ext_resource type="Resource" uid="uid://bkg5d1byo52e8" path="res://Projectiles/res_BasicProjectile_Boss.tres" id="2_0ta2x"]
@@ -13,6 +13,14 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h863f"]
 radius = 56.0
 height = 112.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d323o"]
+radius = 15.0
+height = 60.0
+
+[sub_resource type="Gradient" id="Gradient_d323o"]
+offsets = PackedFloat32Array(0, 0.59366, 1)
+colors = PackedColorArray(0.960562, 0.634181, 0, 1, 0.909829, 0, 0.168546, 1, 0.791538, 0, 0.398067, 1)
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
@@ -45,5 +53,32 @@ shape = SubResource("CapsuleShape2D_h863f")
 [node name="MuzzleLeft" type="Marker2D" parent="."]
 position = Vector2(-47, 56)
 
+[node name="ShapeCast2D" type="ShapeCast2D" parent="MuzzleLeft"]
+position = Vector2(0, 30)
+shape = SubResource("CapsuleShape2D_d323o")
+target_position = Vector2(1, 0)
+
+[node name="Line2D" type="Line2D" parent="MuzzleLeft"]
+position = Vector2(2, 30)
+width = 60.0
+gradient = SubResource("Gradient_d323o")
+joint_mode = 1
+begin_cap_mode = 2
+end_cap_mode = 2
+round_precision = 10
+
 [node name="MuzzleRight" type="Marker2D" parent="."]
 position = Vector2(48, 56)
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="MuzzleRight"]
+position = Vector2(0, 30)
+shape = SubResource("CapsuleShape2D_d323o")
+target_position = Vector2(1, 0)
+
+[node name="Line2D" type="Line2D" parent="MuzzleRight"]
+position = Vector2(2, 30)
+gradient = SubResource("Gradient_d323o")
+joint_mode = 1
+begin_cap_mode = 2
+end_cap_mode = 2
+round_precision = 10
