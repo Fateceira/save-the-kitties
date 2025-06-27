@@ -1,13 +1,22 @@
-[gd_resource type="Resource" script_class="WaveData" load_steps=5 format=3 uid="uid://ciqwwhc2ewv65"]
+[gd_resource type="Resource" script_class="WaveData" load_steps=7 format=3 uid="uid://ciqwwhc2ewv65"]
 
 [ext_resource type="Script" uid="uid://ckerbjvn8w5w6" path="res://Scripts/CustomResources/SpawnData.gd" id="1_1s5od"]
 [ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="2_ssmt3"]
 [ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="2_u2pk2"]
+[ext_resource type="PackedScene" uid="uid://rgk572ugupa" path="res://assets/Prefabs/Enemys/pf_Meteor_Enemy.tscn" id="3_ssmt3"]
 
 [sub_resource type="Resource" id="Resource_v145j"]
 script = ExtResource("1_1s5od")
 enemy_scene = ExtResource("2_ssmt3")
-spawn_chance = 1.0
+spawn_chance = 0.7
+formation_count = 1
+enemy_spacing = 80.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[sub_resource type="Resource" id="Resource_5udca"]
+script = ExtResource("1_1s5od")
+enemy_scene = ExtResource("3_ssmt3")
+spawn_chance = 0.4
 formation_count = 1
 enemy_spacing = 80.0
 metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
@@ -15,7 +24,7 @@ metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 [resource]
 script = ExtResource("2_u2pk2")
 wave_name = "Tutorial"
-enemy_spawns = Array[ExtResource("1_1s5od")]([SubResource("Resource_v145j")])
+enemy_spawns = Array[ExtResource("1_1s5od")]([SubResource("Resource_v145j"), SubResource("Resource_5udca")])
 enemies_per_spawn = 1
 spawn_delay = 1.5
 wave_duration = 10.0

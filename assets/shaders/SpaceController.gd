@@ -12,7 +12,7 @@ extends TextureRect
 @export_range(0.005, 1) var star_size_min: float = 0.01 : set = _update_star_size_min
 @export_range(0.01, 1) var star_size_max: float = 0.03 : set = _update_star_size_max
 @export_range(0.1, 2.0) var twinkle_speed: float = 0.5 : set = _update_twinkle_speed
-@export_range(-0.1, 0.1) var parallax_speed: float = 0.02 : set = _update_parallax_speed
+@export_range(-2, 2) var parallax_speed: float = 0.02 : set = _update_parallax_speed
 
 @export_group("Nebulas")
 @export var nebula_color1: Color = Color(0.8, 0.4, 1.0, 1.0) : set = _update_nebula_color1

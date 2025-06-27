@@ -7,6 +7,17 @@ extends CharacterBody2D
 @export var death_sfx: AudioStream
 @export var dash_sfx: AudioStream 
 
+@export var animation_blend_speed: float = 8.0
+@export var turn_threshold: float = 0.1
+
+@export_group("Engine System")
+@export var engine_transition_speed: float = 8.0
+@export var forward_lifetime: float = 0.25
+@export var backward_lifetime: float = 0.01
+@export var side_lifetime: float = 0.15
+@export var idle_lifetime: float = 0.08
+@export var dash_lifetime_multiplier: float = 1.8
+
 signal shot_fired
 signal request_sfx(audio_stream, position, pitch_range, volume_db)
 signal dash_performed  
@@ -26,17 +37,21 @@ var dash_timer: float = 0.0
 var dash_direction: Vector2 = Vector2.ZERO
 
 var engine_particles: Array[CPUParticles2D] = []
-var target_engine_intensity: float = 0.0
-var current_engine_intensity: float = 0.0
-var engine_fade_speed: float = 6.0
-var max_engine_particles: int = 100
-var min_engine_particles: int = 15
-var idle_engine_particles: int = 25
-var side_engine_particles: int = 40
-var engine_boost_multiplier: float = 1.8
+var engine_containers: Array[Node2D] = []
+var target_engine_lifetime: float = 0.0
+var current_engine_lifetime: float = 0.0
+
+var animated_sprite: AnimatedSprite2D
+var current_animation_state: String = "Center"
+var target_animation_state: String = "Center"
+
+var previous_input_vector: Vector2 = Vector2.ZERO
+var input_change_timer: float = 0.0
+var input_stability_threshold: float = 0.1
 
 func _ready() -> void:
 	setup_player_components()
+	setup_animation_system()
 	find_and_setup_muzzles()
 	connect_damage_signals()
 	configure_invulnerability_behavior()
@@ -49,6 +64,16 @@ func setup_player_components() -> void:
 	damageable_component = $DamageableComponent
 	if ship_stats and damageable_component:
 		damageable_component.set_max_hp(ship_stats.max_hp)
+
+func setup_animation_system() -> void:
+	animated_sprite = get_node_or_null("AnimatedSprite2D")
+	if not animated_sprite:
+		push_error("Player precisa ter AnimatedSprite2D como filho")
+		return
+	
+	animated_sprite.play("Center")
+	current_animation_state = "Center"
+	target_animation_state = "Center"
 
 func find_and_setup_muzzles() -> void:
 	muzzles.clear()
@@ -78,32 +103,32 @@ func configure_invulnerability_behavior() -> void:
 
 func setup_engine_system() -> void:
 	engine_particles.clear()
+	engine_containers.clear()
 	
-	var left_engine = get_node_or_null("EngineLeft")
-	var right_engine = get_node_or_null("EngineRight")
-	
-	if left_engine:
-		var particle = find_particle_in_node(left_engine)
-		if particle:
-			engine_particles.append(particle)
-	
-	if right_engine:
-		var particle = find_particle_in_node(right_engine)
-		if particle:
-			engine_particles.append(particle)
-	
+	find_all_engine_containers(self)
 	initialize_engine_particles()
+	current_engine_lifetime = idle_lifetime
 
-func find_particle_in_node(node: Node) -> CPUParticles2D:
-	if node is CPUParticles2D:
-		return node
-	
+func find_all_engine_containers(node: Node) -> void:
 	for child in node.get_children():
+		var node_name = child.name.to_lower()
+		
+		if "engine" in node_name and child is Node2D:
+			engine_containers.append(child)
+			var particle = find_particle_in_container(child)
+			if particle:
+				engine_particles.append(particle)
+		
+		find_all_engine_containers(child)
+
+func find_particle_in_container(container: Node2D) -> CPUParticles2D:
+	for child in container.get_children():
 		if child is CPUParticles2D:
 			return child
-		var found = find_particle_in_node(child)
-		if found:
-			return found
+		
+		var nested_particle = find_particle_in_container(child)
+		if nested_particle:
+			return nested_particle
 	
 	return null
 
@@ -111,15 +136,13 @@ func initialize_engine_particles() -> void:
 	for particle in engine_particles:
 		if particle:
 			particle.emitting = true
-			particle.amount = idle_engine_particles
-			store_original_particle_values(particle)
+			store_original_particle_settings(particle)
+			particle.lifetime = idle_lifetime
 
-func store_original_particle_values(particle: CPUParticles2D) -> void:
-	if not particle.has_meta("original_scale_min"):
-		particle.set_meta("original_scale_min", particle.scale_amount_min)
-		particle.set_meta("original_scale_max", particle.scale_amount_max)
-		particle.set_meta("original_velocity_min", particle.initial_velocity_min)
-		particle.set_meta("original_velocity_max", particle.initial_velocity_max)
+func store_original_particle_settings(particle: CPUParticles2D) -> void:
+	if not particle.has_meta("original_lifetime"):
+		particle.set_meta("original_lifetime", particle.lifetime)
+		particle.set_meta("original_amount", particle.amount)
 
 func on_invulnerability_begin(should_blink: bool) -> void:
 	collision_layer = 0
@@ -141,7 +164,31 @@ func _process(delta: float) -> void:
 	process_player_movement(delta)
 	process_dash_mechanics(delta)
 	process_weapon_shooting(delta)
-	process_engine_visual_effects(delta)
+	process_engine_system(delta)
+	process_ship_animations(delta)
+
+func process_ship_animations(delta: float) -> void:
+	if not animated_sprite:
+		return
+	
+	var input_vector = get_movement_input()
+	determine_target_animation(input_vector)
+	update_animation_state()
+
+func determine_target_animation(input_vector: Vector2) -> void:
+	var horizontal_input = input_vector.x
+	
+	if abs(horizontal_input) < turn_threshold:
+		target_animation_state = "Center"
+	elif horizontal_input > turn_threshold:
+		target_animation_state = "Right"
+	elif horizontal_input < -turn_threshold:
+		target_animation_state = "Left"
+
+func update_animation_state() -> void:
+	if current_animation_state != target_animation_state:
+		current_animation_state = target_animation_state
+		animated_sprite.play(current_animation_state)
 
 func process_player_movement(delta: float) -> void:
 	if not ship_stats:
@@ -169,6 +216,63 @@ func get_movement_input() -> Vector2:
 		input_vector = input_vector.normalized()
 	
 	return input_vector
+
+func process_engine_system(delta: float) -> void:
+	calculate_target_engine_lifetime(delta)
+	update_current_engine_lifetime(delta)
+	apply_engine_lifetime_to_particles()
+
+func calculate_target_engine_lifetime(delta: float) -> void:
+	var input_vector = get_movement_input()
+	var input_change = input_vector.distance_to(previous_input_vector)
+	
+	if input_change > 0.05:
+		input_change_timer = 0.0
+	else:
+		input_change_timer += delta
+	
+	var input_stability = min(input_change_timer / input_stability_threshold, 1.0)
+	var smoothed_input = previous_input_vector.lerp(input_vector, 1.0 - input_stability * 0.7)
+	previous_input_vector = smoothed_input
+	
+	var forward_movement = -smoothed_input.y
+	var backward_movement = smoothed_input.y
+	var side_movement = abs(smoothed_input.x)
+	
+	if forward_movement > 0.1:
+		target_engine_lifetime = lerp(idle_lifetime, forward_lifetime, forward_movement)
+	elif backward_movement > 0.1:
+		target_engine_lifetime = lerp(idle_lifetime, backward_lifetime, backward_movement)
+	elif side_movement > 0.1:
+		target_engine_lifetime = lerp(idle_lifetime, side_lifetime, side_movement)
+	else:
+		target_engine_lifetime = idle_lifetime
+	
+	if is_dashing:
+		target_engine_lifetime *= dash_lifetime_multiplier
+
+func update_current_engine_lifetime(delta: float) -> void:
+	var transition_speed = engine_transition_speed * delta
+	
+	if target_engine_lifetime < current_engine_lifetime:
+		transition_speed *= 1.5
+	
+	current_engine_lifetime = move_toward(current_engine_lifetime, target_engine_lifetime, transition_speed)
+
+func apply_engine_lifetime_to_particles() -> void:
+	for particle in engine_particles:
+		if not particle:
+			continue
+		
+		var should_emit = current_engine_lifetime > 0.02
+		
+		if should_emit:
+			if not particle.emitting:
+				particle.emitting = true
+			particle.lifetime = current_engine_lifetime
+		else:
+			if particle.emitting:
+				particle.emitting = false
 
 func process_dash_mechanics(delta: float) -> void:
 	if not ship_stats:
@@ -337,92 +441,14 @@ func fire_projectile_from_position(spawn_position: Vector2) -> void:
 	if shoot_sfx:
 		emit_signal("request_sfx", shoot_sfx, global_position, Vector2(0.95, 1.05), 0.0)
 
-func process_engine_visual_effects(delta: float) -> void:
-	if not ship_stats:
-		return
-	
-	calculate_engine_intensity_target()
-	update_engine_intensity_smoothly(delta)
-	apply_engine_effects()
+func get_current_animation() -> String:
+	return current_animation_state
 
-func calculate_engine_intensity_target() -> void:
-	var input_vector = get_movement_input()
-	var forward_input = -input_vector.y
-	var side_input = abs(input_vector.x)
-	
-	var base_intensity = 0.0
-	
-	if forward_input > 0.1:
-		base_intensity = forward_input
-	elif forward_input < -0.1:
-		base_intensity = 0.0
-	elif side_input > 0.1:
-		base_intensity = 0.4
-	else:
-		base_intensity = 0.2
-	
-	if is_dashing:
-		base_intensity *= engine_boost_multiplier
-	
-	target_engine_intensity = clamp(base_intensity, 0.0, 1.0)
-
-func update_engine_intensity_smoothly(delta: float) -> void:
-	current_engine_intensity = move_toward(current_engine_intensity, target_engine_intensity, engine_fade_speed * delta)
-
-func apply_engine_effects() -> void:
-	for particle in engine_particles:
-		if not particle:
-			continue
-		
-		var should_emit = current_engine_intensity > 0.05
-		
-		if should_emit and not particle.emitting:
-			particle.emitting = true
-		elif not should_emit and particle.emitting:
-			particle.emitting = false
-		
-		if particle.emitting:
-			update_particle_properties(particle)
-
-func update_particle_properties(particle: CPUParticles2D) -> void:
-	var new_amount: int
-	
-	if current_engine_intensity >= 0.8:
-		new_amount = max_engine_particles
-	elif current_engine_intensity >= 0.5:
-		new_amount = int(lerp(side_engine_particles, max_engine_particles, current_engine_intensity))
-	elif current_engine_intensity >= 0.3:
-		new_amount = side_engine_particles
-	elif current_engine_intensity >= 0.15:
-		new_amount = idle_engine_particles
-	else:
-		new_amount = min_engine_particles
-	
-	if is_dashing:
-		new_amount = int(new_amount * 1.5)
-	
-	if particle.amount != new_amount:
-		particle.amount = new_amount
-	
-	adjust_particle_visual_properties(particle)
-
-func adjust_particle_visual_properties(particle: CPUParticles2D) -> void:
-	var original_scale_min = particle.get_meta("original_scale_min", 0.5)
-	var original_scale_max = particle.get_meta("original_scale_max", 1.0)
-	var original_velocity_min = particle.get_meta("original_velocity_min", 50.0)
-	var original_velocity_max = particle.get_meta("original_velocity_max", 100.0)
-	
-	var scale_multiplier = lerp(0.6, 1.4, current_engine_intensity)
-	particle.scale_amount_min = original_scale_min * scale_multiplier
-	particle.scale_amount_max = original_scale_max * scale_multiplier
-	
-	var speed_multiplier = lerp(0.7, 1.6, current_engine_intensity)
-	particle.initial_velocity_min = original_velocity_min * speed_multiplier
-	particle.initial_velocity_max = original_velocity_max * speed_multiplier
-	
-	if is_dashing:
-		particle.scale_amount_min *= 1.3
-		particle.scale_amount_max *= 1.3
+func force_animation(animation_name: String) -> void:
+	if animated_sprite and animated_sprite.sprite_frames.has_animation(animation_name):
+		current_animation_state = animation_name
+		target_animation_state = animation_name
+		animated_sprite.play(animation_name)
 
 func equip_projectile(new_projectile: ProjectileStats) -> void:
 	equipped_projectile = new_projectile
@@ -456,8 +482,5 @@ func enable_damage_invulnerability() -> void:
 		damageable_component.invulnerability_on_damage = true
 		damageable_component.invulnerability_duration = 1.0
 
-func set_engine_fade_speed(speed: float) -> void:
-	engine_fade_speed = speed
-
-func get_current_engine_intensity() -> float:
-	return current_engine_intensity
+func get_current_engine_lifetime() -> float:
+	return current_engine_lifetime

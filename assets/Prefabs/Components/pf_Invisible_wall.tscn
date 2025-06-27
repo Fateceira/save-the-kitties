@@ -5,6 +5,7 @@
 [node name="InvisibleWall" type="Node"]
 
 [node name="Wall_Top" type="StaticBody2D" parent="."]
+position = Vector2(642, 369)
 collision_layer = 8
 collision_mask = 0
 
@@ -15,6 +16,7 @@ one_way_collision = true
 debug_color = Color(0.958536, 0, 0.401614, 0.42)
 
 [node name="Wall_Bottom" type="StaticBody2D" parent="."]
+position = Vector2(642, 369)
 collision_layer = 8
 collision_mask = 0
 
@@ -25,6 +27,7 @@ one_way_collision = true
 debug_color = Color(0.958536, 0, 0.401614, 0.42)
 
 [node name="Wall_Left" type="StaticBody2D" parent="."]
+position = Vector2(642, 369)
 collision_layer = 8
 collision_mask = 0
 
@@ -35,6 +38,7 @@ shape = SubResource("WorldBoundaryShape2D_dfdco")
 debug_color = Color(0.958536, 0, 0.401614, 0.42)
 
 [node name="Wall_Right" type="StaticBody2D" parent="."]
+position = Vector2(642, 369)
 collision_layer = 8
 collision_mask = 0
 

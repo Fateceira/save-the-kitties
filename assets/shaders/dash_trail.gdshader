@@ -10,6 +10,6 @@ void fragment() {
     vec3 mixed_with_white = mix(tex_color.rgb, white_color, white_intensity);
     vec3 final_color = mix(mixed_with_white, trail_color.rgb, trail_color.a);
     float final_alpha = tex_color.a * alpha_fade;
-    
+
     COLOR = vec4(final_color, final_alpha);
 }

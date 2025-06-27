@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3 uid="uid://dngl2x6strt8l"]
+
+[ext_resource type="Script" uid="uid://3cfxhe3ulkvy" path="res://Scripts/Core/JuicyHealthBar.gd" id="1_2knuk"]
+[ext_resource type="Texture2D" uid="uid://bxxng4hrcd3lg" path="res://assets/sprites/others/UIHEALTHBARTESTE.png" id="1_6vk5n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jb38r"]
+bg_color = Color(0.0406023, 0.0331056, 0.159889, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vk5n"]
+bg_color = Color(0.721823, 0.477357, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jb38r"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2knuk"]
+bg_color = Color(0.94732, 0, 0.0213121, 1)
+
+[sub_resource type="Gradient" id="Gradient_2knuk"]
+colors = PackedColorArray(0.201527, 0.201527, 0.201527, 1, 0.172833, 0.172833, 0.172833, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2rm6g"]
+gradient = SubResource("Gradient_2knuk")
+fill_to = Vector2(1, 1)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+size_flags_horizontal = 4
+script = ExtResource("1_2knuk")
+
+[node name="BottomLayer" type="ProgressBar" parent="."]
+z_index = 10
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 112.0
+offset_top = -38.0
+offset_right = 288.0
+offset_bottom = -3.0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_jb38r")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6vk5n")
+value = 80.0
+show_percentage = false
+
+[node name="TopLayer" type="ProgressBar" parent="."]
+z_index = 10
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 112.0
+offset_top = -38.0
+offset_right = 288.0
+offset_bottom = -3.0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxEmpty_jb38r")
+theme_override_styles/fill = SubResource("StyleBoxFlat_2knuk")
+value = 70.0
+show_percentage = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(56, 664)
+scale = Vector2(1.75, 1.75)
+texture = SubResource("GradientTexture2D_2rm6g")
+
+[node name="Uihealthbarteste" type="Sprite2D" parent="."]
+position = Vector2(58, 663)
+texture = ExtResource("1_6vk5n")

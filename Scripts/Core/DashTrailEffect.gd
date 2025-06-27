@@ -18,18 +18,11 @@ func _ready() -> void:
 
 func setup_trail_system() -> void:
 	player = get_parent() as CharacterBody2D
-	if not player:
-		push_error("DashTrailEffect deve ser filho do Player")
-		return
-	
-	player_sprite = player.get_node_or_null("Sprite2D")
+	player_sprite = player.get_node_or_null("AnimatedSprite2D")
 	if not player_sprite:
-		push_error("Player deve ter um node Sprite2D")
-		return
+		player_sprite = player.get_node_or_null("Sprite2D")
 	
 	dash_shader = load("res://assets/shaders/dash_trail.gdshader")
-	if not dash_shader:
-		dash_shader = load("res://assets/shaders/damage_blink.gdshader")
 	
 	setup_default_gradient()
 
@@ -90,23 +83,26 @@ func spawn_trail_ghost() -> void:
 		get_tree().current_scene.add_child(ghost_data.sprite)
 
 func create_ghost_data() -> Dictionary:
-	if not player_sprite or not player_sprite.texture:
+	if not player_sprite:
+		return {}
+	
+	var current_texture = get_current_sprite_texture()
+	if not current_texture:
 		return {}
 	
 	var ghost = Sprite2D.new()
 	ghost.name = "DashGhost"
-	ghost.texture = player_sprite.texture
+	ghost.texture = current_texture
 	
-	# COPIA EXATAMENTE A POSIÇÃO E PROPRIEDADES DO SPRITE
 	ghost.global_position = player_sprite.global_position
 	ghost.global_rotation = player_sprite.global_rotation
 	ghost.global_scale = player_sprite.global_scale
 	ghost.z_index = player_sprite.z_index - 1
 	
-	# Configura o material
+	copy_sprite_visual_properties(ghost)
+	
 	setup_ghost_material(ghost)
 	
-	# Retorna dados completos do ghost
 	return {
 		"sprite": ghost,
 		"age": 0.0,
@@ -114,20 +110,56 @@ func create_ghost_data() -> Dictionary:
 		"initial_color": trail_gradient.sample(0.0)
 	}
 
+func get_current_sprite_texture() -> Texture2D:
+	if player_sprite is AnimatedSprite2D:
+		var animated_sprite = player_sprite as AnimatedSprite2D
+		
+		if not animated_sprite.sprite_frames:
+			return null
+		
+		var current_animation = animated_sprite.animation
+		if current_animation == "":
+			return null
+		
+		var current_frame = animated_sprite.frame
+		return animated_sprite.sprite_frames.get_frame_texture(current_animation, current_frame)
+		
+	elif player_sprite is Sprite2D:
+		var sprite = player_sprite as Sprite2D
+		return sprite.texture
+	
+	return null
+
+func copy_sprite_visual_properties(ghost: Sprite2D) -> void:
+	if player_sprite is AnimatedSprite2D:
+		var animated_sprite = player_sprite as AnimatedSprite2D
+		
+		ghost.centered = animated_sprite.centered
+		ghost.offset = animated_sprite.offset
+		ghost.flip_h = animated_sprite.flip_h
+		ghost.flip_v = animated_sprite.flip_v
+		
+	elif player_sprite is Sprite2D:
+		var sprite = player_sprite as Sprite2D
+		
+		ghost.centered = sprite.centered
+		ghost.offset = sprite.offset
+		ghost.flip_h = sprite.flip_h
+		ghost.flip_v = sprite.flip_v
+
 func setup_ghost_material(ghost: Sprite2D) -> void:
 	var material = ShaderMaterial.new()
 	material.shader = dash_shader
 	
 	var initial_color = trail_gradient.sample(0.0)
 	
-	if dash_shader.get_path().ends_with("dash_trail.gdshader"):
-		# Shader customizado
+	if dash_shader and dash_shader.get_path().ends_with("dash_trail.gdshader"):
 		material.set_shader_parameter("white_intensity", 1.0)
 		material.set_shader_parameter("trail_color", initial_color)
 		material.set_shader_parameter("alpha_fade", 1.0)
 	else:
-		# Shader original - usa white_intensity e modulate
-		material.set_shader_parameter("white_intensity", 1.0)
+		if dash_shader:
+			material.set_shader_parameter("white_intensity", 1.0)
 		ghost.modulate = initial_color
 	
 	ghost.material = material
@@ -147,7 +179,6 @@ func update_all_ghosts(delta: float) -> void:
 		
 		update_ghost_visual(ghost_data, progress)
 	
-	# Remove ghosts expirados (de trás para frente para não bagunçar índices)
 	for i in range(ghosts_to_remove.size() - 1, -1, -1):
 		var ghost_index = ghosts_to_remove[i]
 		remove_ghost_at_index(ghost_index)
@@ -157,22 +188,17 @@ func update_ghost_visual(ghost_data: Dictionary, progress: float) -> void:
 	if not is_instance_valid(ghost):
 		return
 	
-	# Cor do gradiente baseada no progresso
 	var current_color = trail_gradient.sample(progress)
 	
-	# Fade de alpha (começa em 0.8 e vai para 0.0)
 	var alpha_fade = lerp(0.8, 0.0, progress)
 	
-	# Diminui ligeiramente o tamanho
 	var scale_factor = lerp(1.0, 0.85, progress)
 	ghost.scale = player_sprite.global_scale * scale_factor
 	
-	# Atualiza o material
-	if ghost.material and dash_shader.get_path().ends_with("dash_trail.gdshader"):
+	if ghost.material and dash_shader and dash_shader.get_path().ends_with("dash_trail.gdshader"):
 		ghost.material.set_shader_parameter("trail_color", current_color)
 		ghost.material.set_shader_parameter("alpha_fade", alpha_fade)
 	else:
-		# Shader original
 		current_color.a = alpha_fade
 		ghost.modulate = current_color
 
@@ -205,3 +231,13 @@ func set_trail_color_gradient(new_gradient: Gradient) -> void:
 
 func _exit_tree() -> void:
 	clear_all_ghosts()
+
+func get_player_sprite_type() -> String:
+	if not player_sprite:
+		return "None"
+	elif player_sprite is AnimatedSprite2D:
+		return "AnimatedSprite2D"
+	elif player_sprite is Sprite2D:
+		return "Sprite2D"
+	else:
+		return "Unknown"

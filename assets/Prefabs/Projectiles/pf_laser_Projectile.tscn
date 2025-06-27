@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://boxihtk7k673i" path="res://assets/sprites/shots/2.png" id="2_o6lw2"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_66wql"]
-radius = 17.0
-height = 36.0
+radius = 8.0
+height = 20.0
 
 [node name="laser" type="Area2D"]
 collision_layer = 4
@@ -13,14 +13,12 @@ collision_mask = 2
 script = ExtResource("1_uci8i")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
 texture = ExtResource("2_o6lw2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_66wql")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(0, 44)
 scale = Vector2(0.6, 0.35)
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

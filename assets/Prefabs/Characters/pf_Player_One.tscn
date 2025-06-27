@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://t1npnwhj8j4e"]
+[gd_scene load_steps=19 format=3 uid="uid://t1npnwhj8j4e"]
 
 [ext_resource type="Script" uid="uid://rrt7cqx34bhn" path="res://Scripts/Core/Player.gd" id="1_cvnsp"]
 [ext_resource type="Resource" uid="uid://bns14gcx57n25" path="res://Entities/res_PlayerShip.tres" id="2_m0ojv"]
@@ -9,17 +9,56 @@
 [ext_resource type="AudioStream" uid="uid://onxbt731iwwm" path="res://assets/Audio/sounds/death.wav" id="5_bmb80"]
 [ext_resource type="PackedScene" uid="uid://brstb7qetc6e4" path="res://assets/VFX/pf_Fire.tscn" id="5_klsxt"]
 [ext_resource type="AudioStream" uid="uid://dppml712dvq1y" path="res://assets/Audio/sounds/4.wav" id="5_rc0f7"]
-[ext_resource type="Texture2D" uid="uid://cmcd0aryolkeh" path="res://assets/sprites/ships/2.png" id="6_bggkm"]
 [ext_resource type="AudioStream" uid="uid://dhs6orgbo05p5" path="res://assets/Audio/sounds/power-up-1.wav" id="7_taklx"]
 [ext_resource type="Script" uid="uid://bhqedhj4cspwe" path="res://Scripts/Core/DashTrailEffect.gd" id="8_7678b"]
+[ext_resource type="Texture2D" uid="uid://sgh1kfo8yn74" path="res://assets/sprites/ships/NaveAnimacao-Sheet.png" id="10_7678b"]
 
 [sub_resource type="Gradient" id="Gradient_7678b"]
 offsets = PackedFloat32Array(0.189415, 0.465181, 0.768802, 1)
 colors = PackedColorArray(0, 0.510346, 0.842422, 1, 0.310739, 0.0625752, 1, 1, 0.613468, 0.00194179, 0.816295, 1, 1, 1, 1, 1)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vkbhm"]
+atlas = ExtResource("10_7678b")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_76gqt"]
+atlas = ExtResource("10_7678b")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wj0ma"]
+atlas = ExtResource("10_7678b")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7ju62"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vkbhm")
+}],
+"loop": true,
+"name": &"Center",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_76gqt")
+}],
+"loop": true,
+"name": &"Left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wj0ma")
+}],
+"loop": true,
+"name": &"Right",
+"speed": 5.0
+}]
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7678b"]
-radius = 24.0
-height = 66.0
+radius = 23.0
+height = 46.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_mask = 8
@@ -31,31 +70,33 @@ shoot_sfx = ExtResource("4_6d2c3")
 damage_sfx = ExtResource("5_rc0f7")
 death_sfx = ExtResource("5_bmb80")
 dash_sfx = ExtResource("7_taklx")
+forward_lifetime = 0.2
+side_lifetime = 0.1
+idle_lifetime = 0.2
 
 [node name="DashTrailEffect" type="Node2D" parent="."]
 script = ExtResource("8_7678b")
 trail_gradient = SubResource("Gradient_7678b")
 
 [node name="EngineLeft" parent="." instance=ExtResource("5_klsxt")]
-position = Vector2(-13, 36)
+z_index = 1
+position = Vector2(-14, 26)
+
+[node name="EngineCenter" parent="." instance=ExtResource("5_klsxt")]
+z_index = 1
+position = Vector2(0, 30)
 
 [node name="EngineRight" parent="." instance=ExtResource("5_klsxt")]
-position = Vector2(13, 36)
+z_index = 1
+position = Vector2(14, 26)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
-texture = ExtResource("6_bggkm")
+sprite_frames = SubResource("SpriteFrames_7ju62")
+animation = &"Center"
+autoplay = "Center"
 
 [node name="BlinkComponent" parent="." instance=ExtResource("4_0d3bl")]
-
-[node name="Muzzle" type="Marker2D" parent="."]
-position = Vector2(0, -37)
-
-[node name="MuzzleLeft" type="Marker2D" parent="."]
-position = Vector2(-24, -27)
-
-[node name="MuzzleRight" type="Marker2D" parent="."]
-position = Vector2(24, -27)
 
 [node name="DamageableComponent" type="Node" parent="."]
 script = ExtResource("3_ebihn")
@@ -64,4 +105,14 @@ invulnerability_on_damage = true
 metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CapsuleShape2D_7678b")
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(0, -36)
+
+[node name="MuzzleLeft" type="Marker2D" parent="."]
+position = Vector2(-16, -36)
+
+[node name="MuzzleRight" type="Marker2D" parent="."]
+position = Vector2(16, -36)
