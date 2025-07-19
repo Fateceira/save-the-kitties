@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="WaveData" load_steps=5 format=3 uid="uid://b0exgurjhjpeq"]
 
 [ext_resource type="Script" uid="uid://ckerbjvn8w5w6" path="res://Scripts/CustomResources/SpawnData.gd" id="1_15sr8"]
-[ext_resource type="PackedScene" uid="uid://banes6f2ekukf" path="res://assets/Prefabs/Enemys/pf_Boss_2_Enemy.tscn" id="2_ll187"]
+[ext_resource type="PackedScene" uid="uid://ddhj8o34jrs6g" path="res://assets/Prefabs/Enemys/pf_Boss_Enemy.tscn" id="2_ll187"]
 [ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="6_n2oxi"]
 
 [sub_resource type="Resource" id="Resource_2jfg5"]
