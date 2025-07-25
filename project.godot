@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Save the kitties"
 config/version="0.3.0"
-run/main_scene="res://Scenes/Gameplay.tscn"
+run/main_scene="uid://lqobf1dcrjeu"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]

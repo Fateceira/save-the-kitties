@@ -1,0 +1,110 @@
+[gd_scene load_steps=13 format=3 uid="uid://bntaqlkf7t3ri"]
+
+[ext_resource type="Texture2D" uid="uid://du4lbc1h1jbls" path="res://assets/Menu/Background Menu/Background - Fundo.png" id="1_1u7eb"]
+[ext_resource type="Script" uid="uid://bevgwqmckwcph" path="res://Scripts/Menu/options_scene.gd" id="1_fkm42"]
+[ext_resource type="Texture2D" uid="uid://du08dmy3kjl5p" path="res://assets/Menu/Background Menu/Background - Meio.png" id="3_mwvo7"]
+[ext_resource type="Script" uid="uid://rrjks381c6yf" path="res://Scripts/Menu/Background/Meio.gd" id="4_3jm3x"]
+[ext_resource type="Texture2D" uid="uid://dkyag0nwhbg8s" path="res://assets/Menu/Background Menu/Background - Frente.png" id="5_1i2mg"]
+[ext_resource type="Script" uid="uid://by2xhiwsr384l" path="res://Scripts/Menu/Background/Frente.gd" id="6_wfa2f"]
+[ext_resource type="Texture2D" uid="uid://bfe2sc0evtos0" path="res://assets/Menu/Background Menu/Background - Estrelas.png" id="7_i5tcc"]
+[ext_resource type="Script" uid="uid://cdn18rcv1qj4u" path="res://Scripts/Menu/Background/Estrelas.gd" id="8_ndr2s"]
+[ext_resource type="Texture2D" uid="uid://drvvv34vau6f" path="res://assets/Menu/Background Menu/Background - Efeito escurecer.png" id="9_3nnlt"]
+[ext_resource type="Texture2D" uid="uid://c4uhb32wy6iyu" path="res://assets/Menu/Bot+úo Voltar - Normal.png" id="10_le0ib"]
+[ext_resource type="Texture2D" uid="uid://dvhn2n3twgim5" path="res://assets/Menu/Bot+úo Voltar - Pressed.png" id="11_77uth"]
+
+[sub_resource type="GDScript" id="GDScript_518t2"]
+script/source = "extends Node2D
+
+@export var move_force : int = 1
+
+func _physics_process(delta: float) -> void:
+	position += (get_global_mouse_position() / move_force * delta / 3) - position
+"
+
+[node name="options_scene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fkm42")
+
+[node name="Background" type="Node2D" parent="."]
+position = Vector2(640, 358)
+scale = Vector2(5.41862, 4.84909)
+
+[node name="Fundo" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.24065, 1.34087)
+texture = ExtResource("1_1u7eb")
+script = SubResource("GDScript_518t2")
+
+[node name="Meio" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.18124, 1.22811)
+texture = ExtResource("3_mwvo7")
+script = ExtResource("4_3jm3x")
+
+[node name="Frente" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.32405, 1.18952)
+texture = ExtResource("5_1i2mg")
+script = ExtResource("6_wfa2f")
+
+[node name="Estrelas" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.3114, 1.3114)
+texture = ExtResource("7_i5tcc")
+script = ExtResource("8_ndr2s")
+
+[node name="Filtro" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.22138, 1.23342)
+texture = ExtResource("9_3nnlt")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Botão Voltar" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Botão Voltar" type="VBoxContainer" parent="MarginContainer/Botão Voltar"]
+layout_mode = 2
+
+[node name="back" type="TextureButton" parent="MarginContainer/Botão Voltar/Botão Voltar"]
+layout_mode = 2
+texture_normal = ExtResource("10_le0ib")
+texture_pressed = ExtResource("11_77uth")
+
+[node name="audio_slider" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_left = 237.0
+offset_top = 100.0
+offset_right = 1349.0
+offset_bottom = 708.0
+scale = Vector2(0.741385, 0.843871)
+
+[node name="volume_control" type="HSlider" parent="audio_slider"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Volume"
+value = 100.0
+
+[connection signal="pressed" from="MarginContainer/Botão Voltar/Botão Voltar/back" to="." method="_on_voltar_pressed"]

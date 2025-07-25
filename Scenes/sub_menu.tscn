@@ -1,0 +1,122 @@
+[gd_scene load_steps=17 format=3 uid="uid://ctni1ok6vjljh"]
+
+[ext_resource type="Texture2D" uid="uid://du4lbc1h1jbls" path="res://assets/Menu/Background Menu/Background - Fundo.png" id="1_64ibs"]
+[ext_resource type="Script" uid="uid://cb2fmwndi01x" path="res://Scripts/Menu/Background/Fundo.gd" id="2_sfqj5"]
+[ext_resource type="Texture2D" uid="uid://du08dmy3kjl5p" path="res://assets/Menu/Background Menu/Background - Meio.png" id="3_bnib7"]
+[ext_resource type="Script" uid="uid://rrjks381c6yf" path="res://Scripts/Menu/Background/Meio.gd" id="4_8dp64"]
+[ext_resource type="Texture2D" uid="uid://dkyag0nwhbg8s" path="res://assets/Menu/Background Menu/Background - Frente.png" id="5_4kxng"]
+[ext_resource type="Script" uid="uid://by2xhiwsr384l" path="res://Scripts/Menu/Background/Frente.gd" id="6_kn67m"]
+[ext_resource type="Texture2D" uid="uid://bfe2sc0evtos0" path="res://assets/Menu/Background Menu/Background - Estrelas.png" id="7_psybi"]
+[ext_resource type="Script" uid="uid://cdn18rcv1qj4u" path="res://Scripts/Menu/Background/Estrelas.gd" id="8_b0erw"]
+[ext_resource type="Texture2D" uid="uid://drvvv34vau6f" path="res://assets/Menu/Background Menu/Background - Efeito escurecer.png" id="9_t0rrc"]
+[ext_resource type="Texture2D" uid="uid://bx1nj0bkjy5ve" path="res://assets/Menu/Bot+úo largo - Normal.png" id="10_8gh4c"]
+[ext_resource type="Texture2D" uid="uid://c4uhb32wy6iyu" path="res://assets/Menu/Bot+úo Voltar - Normal.png" id="10_h6siv"]
+[ext_resource type="Script" path="res://Scripts/Menu/Bot+úo Fiesta.gd" id="11_1exj5"]
+[ext_resource type="Texture2D" uid="uid://dvhn2n3twgim5" path="res://assets/Menu/Bot+úo Voltar - Pressed.png" id="11_63vcd"]
+[ext_resource type="Texture2D" uid="uid://cr1di5h7fsuy8" path="res://assets/Menu/Bot+úo largo - pressed.png" id="11_ht5kf"]
+[ext_resource type="Script" uid="uid://bbp4fd3egnmla" path="res://Scripts/Menu/Voltar.gd" id="12_t58se"]
+[ext_resource type="Script" path="res://Scripts/Menu/botão.gd" id="13_y4w1t"]
+
+[node name="Sub-menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="Node2D" parent="."]
+position = Vector2(577, 323)
+scale = Vector2(4.85602, 4.34563)
+
+[node name="Fundo" type="Sprite2D" parent="Background"]
+texture_filter = 1
+texture = ExtResource("1_64ibs")
+script = ExtResource("2_sfqj5")
+
+[node name="Meio" type="Sprite2D" parent="Background"]
+texture_filter = 1
+texture = ExtResource("3_bnib7")
+script = ExtResource("4_8dp64")
+
+[node name="Frente" type="Sprite2D" parent="Background"]
+texture_filter = 1
+texture = ExtResource("5_4kxng")
+script = ExtResource("6_kn67m")
+
+[node name="Estrelas" type="Sprite2D" parent="Background"]
+texture_filter = 1
+texture = ExtResource("7_psybi")
+script = ExtResource("8_b0erw")
+
+[node name="Filtro" type="Sprite2D" parent="Background"]
+texture_filter = 1
+texture = ExtResource("9_t0rrc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Fiesta" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+alignment = 1
+
+[node name="Modo Fiesta" type="VBoxContainer" parent="MarginContainer/Fiesta"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="Botão Fiesta" type="TextureButton" parent="MarginContainer/Fiesta/Modo Fiesta"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture_normal = ExtResource("10_8gh4c")
+texture_pressed = ExtResource("11_ht5kf")
+script = ExtResource("11_1exj5")
+
+[node name="Um Jogador" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Modo Um Jogador" type="VBoxContainer" parent="MarginContainer/Um Jogador"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[node name="Botão Solo" type="TextureButton" parent="MarginContainer/Um Jogador/Modo Um Jogador"]
+layout_mode = 2
+tooltip_text = "SINGLEPLAYER
+"
+texture_normal = ExtResource("10_8gh4c")
+texture_pressed = ExtResource("11_ht5kf")
+script = ExtResource("13_y4w1t")
+
+[node name="Botão Voltar" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Botão Voltar" type="VBoxContainer" parent="MarginContainer/Botão Voltar"]
+layout_mode = 2
+
+[node name="Voltar" type="TextureButton" parent="MarginContainer/Botão Voltar/Botão Voltar"]
+layout_mode = 2
+texture_normal = ExtResource("10_h6siv")
+texture_pressed = ExtResource("11_63vcd")
+script = ExtResource("12_t58se")
+
+[connection signal="pressed" from="MarginContainer/Fiesta/Modo Fiesta/Botão Fiesta" to="MarginContainer/Fiesta/Modo Fiesta/Botão Fiesta" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/Um Jogador/Modo Um Jogador/Botão Solo" to="MarginContainer/Um Jogador/Modo Um Jogador/Botão Solo" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/Botão Voltar/Botão Voltar/Voltar" to="MarginContainer/Botão Voltar/Botão Voltar/Voltar" method="_on_pressed"]

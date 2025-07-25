@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dtdbxmo7tjsvg"]
+[gd_scene load_steps=17 format=3 uid="uid://dtdbxmo7tjsvg"]
 
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="1_tdndw"]
 [ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="2_2aia5"]
@@ -11,11 +11,12 @@
 [ext_resource type="Script" uid="uid://biqccyyu52q7b" path="res://Scripts/Test/LevelTest.gd" id="10_vu60g"]
 [ext_resource type="Resource" uid="uid://b0exgurjhjpeq" path="res://WaveData/wv_Wave_04.tres" id="12_qaqk3"]
 [ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://assets/Prefabs/Components/pf_PostProcessing.tscn" id="15_2aia5"]
+[ext_resource type="PackedScene" uid="uid://c4w8f0xl136ew" path="res://Scenes/pause_screen.tscn" id="15_bk2no"]
 [ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://assets/Prefabs/Components/pf_ExplosionManager.tscn" id="15_buxyy"]
 [ext_resource type="PackedScene" uid="uid://d25pxvapoj0rb" path="res://assets/Prefabs/Components/pf_TimeManager.tscn" id="16_buxyy"]
 [ext_resource type="PackedScene" uid="uid://dngl2x6strt8l" path="res://assets/Prefabs/Components/pf_Healthbar.tscn" id="17_bk2no"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rbnsi"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2aia5"]
 shader = ExtResource("2_2aia5")
 shader_parameter/pixel_scale = 0.1
 shader_parameter/star_texture = ExtResource("3_buxyy")
@@ -40,7 +41,7 @@ shader_parameter/color_variation = 0.783
 
 [node name="Parallax" parent="." instance=ExtResource("1_tdndw")]
 z_index = -10
-material = SubResource("ShaderMaterial_rbnsi")
+material = SubResource("ShaderMaterial_2aia5")
 offset_left = -285.996
 offset_top = 889.007
 offset_right = 794.004
@@ -87,3 +88,6 @@ HITSTOP_DURATION = 0.01
 [node name="PostProcessWorldEnvi" parent="." instance=ExtResource("15_2aia5")]
 
 [node name="Control" parent="." instance=ExtResource("17_bk2no")]
+
+[node name="pause_menu" parent="." instance=ExtResource("15_bk2no")]
+visible = false

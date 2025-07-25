@@ -1,0 +1,147 @@
+[gd_scene load_steps=19 format=3 uid="uid://lqobf1dcrjeu"]
+
+[ext_resource type="Script" uid="uid://bu181ijnoss2j" path="res://Scripts/Menu/menu_principal.gd" id="1_afpbj"]
+[ext_resource type="Texture2D" uid="uid://du4lbc1h1jbls" path="res://assets/Menu/Background Menu/Background - Fundo.png" id="1_ux70g"]
+[ext_resource type="Texture2D" uid="uid://du08dmy3kjl5p" path="res://assets/Menu/Background Menu/Background - Meio.png" id="2_2gdus"]
+[ext_resource type="Texture2D" uid="uid://disdw5j0du40f" path="res://assets/Menu/play.png" id="2_uyph5"]
+[ext_resource type="Texture2D" uid="uid://b21ew6y7i276x" path="res://assets/Menu/play_pressed.png" id="3_3g06r"]
+[ext_resource type="Texture2D" uid="uid://c8jek1jy7ilyh" path="res://assets/Menu/close_button.png" id="3_egshe"]
+[ext_resource type="Script" uid="uid://rrjks381c6yf" path="res://Scripts/Menu/Background/Meio.gd" id="3_xuofx"]
+[ext_resource type="Texture2D" uid="uid://dkyag0nwhbg8s" path="res://assets/Menu/Background Menu/Background - Frente.png" id="4_himd8"]
+[ext_resource type="Texture2D" uid="uid://d3mthgjgocgkf" path="res://assets/Menu/close_button_pressed.png" id="5_4jhak"]
+[ext_resource type="Texture2D" uid="uid://dsmi6ofhn8you" path="res://assets/Menu/options.png" id="5_77b31"]
+[ext_resource type="Texture2D" uid="uid://bfe2sc0evtos0" path="res://assets/Menu/Background Menu/Background - Estrelas.png" id="5_q6fp4"]
+[ext_resource type="Texture2D" uid="uid://drvvv34vau6f" path="res://assets/Menu/Background Menu/Background - Efeito escurecer.png" id="6_bqeso"]
+[ext_resource type="Texture2D" uid="uid://ca2brp8yf8j0i" path="res://assets/Menu/options_pressed.png" id="6_gqty3"]
+[ext_resource type="Script" uid="uid://by2xhiwsr384l" path="res://Scripts/Menu/Background/Frente.gd" id="6_wleil"]
+[ext_resource type="Script" uid="uid://cdn18rcv1qj4u" path="res://Scripts/Menu/Background/Estrelas.gd" id="8_trynp"]
+[ext_resource type="Texture2D" uid="uid://djgwm0jgkerol" path="res://assets/Menu/Sem t+¡tulo-1.png" id="20_d8y8x"]
+[ext_resource type="Script" uid="uid://bs6n5krekbhod" path="res://Scripts/Menu/Background/Logo.gd" id="21_20887"]
+
+[sub_resource type="GDScript" id="GDScript_0gx5w"]
+script/source = "extends Node2D
+
+@export var move_force : int = 1
+
+func _physics_process(delta: float) -> void:
+	position += (get_global_mouse_position() / move_force * delta / 3) - position
+"
+
+[node name="Menu Principal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_afpbj")
+
+[node name="Background" type="Node2D" parent="."]
+position = Vector2(640, 358)
+scale = Vector2(5.41862, 4.84909)
+
+[node name="Fundo" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.24065, 1.34087)
+texture = ExtResource("1_ux70g")
+script = SubResource("GDScript_0gx5w")
+
+[node name="Meio" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.18124, 1.22811)
+texture = ExtResource("2_2gdus")
+script = ExtResource("3_xuofx")
+
+[node name="Frente" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.32405, 1.18952)
+texture = ExtResource("4_himd8")
+script = ExtResource("6_wleil")
+
+[node name="Estrelas" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.3114, 1.3114)
+texture = ExtResource("5_q6fp4")
+script = ExtResource("8_trynp")
+
+[node name="Filtro" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.22138, 1.23342)
+texture = ExtResource("6_bqeso")
+
+[node name="menu_holder" type="MarginContainer" parent="."]
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Jogar" type="HBoxContainer" parent="menu_holder"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+alignment = 1
+
+[node name="Botão Jogar" type="VBoxContainer" parent="menu_holder/Jogar"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="play_button" type="TextureButton" parent="menu_holder/Jogar/Botão Jogar"]
+layout_mode = 2
+texture_normal = ExtResource("2_uyph5")
+texture_pressed = ExtResource("3_3g06r")
+
+[node name="Fechar" type="HBoxContainer" parent="menu_holder"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="Botão Fechar" type="VBoxContainer" parent="menu_holder/Fechar"]
+layout_mode = 2
+
+[node name="close_button" type="TextureButton" parent="menu_holder/Fechar/Botão Fechar"]
+layout_mode = 2
+texture_normal = ExtResource("3_egshe")
+texture_pressed = ExtResource("5_4jhak")
+
+[node name="Opções" type="HBoxContainer" parent="menu_holder"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Botão Opções" type="VBoxContainer" parent="menu_holder/Opções"]
+layout_mode = 2
+
+[node name="options" type="TextureButton" parent="menu_holder/Opções/Botão Opções"]
+process_mode = 3
+layout_mode = 2
+texture_normal = ExtResource("5_77b31")
+texture_pressed = ExtResource("6_gqty3")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+offset_left = 637.0
+offset_top = 230.0
+offset_right = 1749.0
+offset_bottom = 253.0
+scale = Vector2(1.98229, 1.98229)
+
+[node name="Sprite2D" type="Sprite2D" parent="Label"]
+texture = ExtResource("20_d8y8x")
+script = ExtResource("21_20887")
+
+[connection signal="pressed" from="menu_holder/Jogar/Botão Jogar/play_button" to="." method="_on_jogar_pressed"]
+[connection signal="pressed" from="menu_holder/Fechar/Botão Fechar/close_button" to="." method="_on_fechar_pressed"]
+[connection signal="pressed" from="menu_holder/Opções/Botão Opções/options" to="." method="_on_opções_pressed"]
+[connection signal="pressed" from="menu_holder/Opções/Botão Opções/options" to="." method="_on_options_pressed"]

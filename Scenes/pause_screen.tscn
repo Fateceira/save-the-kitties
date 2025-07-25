@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4w8f0xl136ew"]
+
+[ext_resource type="Texture2D" uid="uid://bjd1xuvce4qpe" path="res://assets/Menu/Tela de Pause/continue_button.png" id="1_8py1w"]
+[ext_resource type="Script" uid="uid://ywsqcqbg7fqr" path="res://Scripts/Menu/Pause_Menu/pause_screen.gd" id="1_orahx"]
+[ext_resource type="Texture2D" uid="uid://cckkldjkfmhp2" path="res://assets/Menu/Tela de Pause/continue_pressed.png" id="2_16tsp"]
+[ext_resource type="Texture2D" uid="uid://dj7aviha0w33u" path="res://assets/Menu/Tela de Pause/backto_menu_button.png" id="2_hl5t3"]
+[ext_resource type="Texture2D" uid="uid://5gduitdwgtt3" path="res://assets/Menu/Tela de Pause/backto_menu_pressed.png" id="4_orahx"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_orahx"]
+action = &"ui_cancel"
+
+[sub_resource type="Shortcut" id="Shortcut_umkmc"]
+events = [SubResource("InputEventAction_orahx")]
+
+[node name="pause_menu" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_orahx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_top = 2.0
+offset_right = 256.0
+offset_bottom = 258.0
+scale = Vector2(4.99557, 2.80454)
+color = Color(0.447059, 0.447059, 0.447059, 0.313726)
+
+[node name="container_menu" type="AspectRatioContainer" parent="."]
+offset_left = 445.0
+offset_top = 217.0
+offset_right = 701.0
+offset_bottom = 477.0
+scale = Vector2(1.39262, 1.35002)
+
+[node name="pause_holder" type="VBoxContainer" parent="container_menu"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="continue_button" type="TextureButton" parent="container_menu/pause_holder"]
+layout_mode = 2
+size_flags_horizontal = 4
+shortcut = SubResource("Shortcut_umkmc")
+texture_normal = ExtResource("1_8py1w")
+texture_pressed = ExtResource("2_16tsp")
+
+[node name="back_to_menu" type="TextureButton" parent="container_menu/pause_holder"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("2_hl5t3")
+texture_pressed = ExtResource("4_orahx")
+
+[connection signal="pressed" from="container_menu/pause_holder/continue_button" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="container_menu/pause_holder/back_to_menu" to="." method="_on_back_to_menu_pressed"]

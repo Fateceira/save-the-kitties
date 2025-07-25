@@ -1,0 +1,162 @@
+[gd_scene load_steps=16 format=3 uid="uid://nlajwwcp2ugr"]
+
+[ext_resource type="Texture2D" uid="uid://du4lbc1h1jbls" path="res://assets/Menu/Background Menu/Background - Fundo.png" id="1_byl76"]
+[ext_resource type="Script" uid="uid://cqhpk2anqcn0m" path="res://Scripts/Menu/fases.gd" id="1_g8fw3"]
+[ext_resource type="Texture2D" uid="uid://du08dmy3kjl5p" path="res://assets/Menu/Background Menu/Background - Meio.png" id="3_jvfxp"]
+[ext_resource type="Script" uid="uid://rrjks381c6yf" path="res://Scripts/Menu/Background/Meio.gd" id="4_u1xum"]
+[ext_resource type="Texture2D" uid="uid://dkyag0nwhbg8s" path="res://assets/Menu/Background Menu/Background - Frente.png" id="5_hyo25"]
+[ext_resource type="Script" uid="uid://by2xhiwsr384l" path="res://Scripts/Menu/Background/Frente.gd" id="6_la6jj"]
+[ext_resource type="Texture2D" uid="uid://bfe2sc0evtos0" path="res://assets/Menu/Background Menu/Background - Estrelas.png" id="7_ug7bc"]
+[ext_resource type="Script" uid="uid://cdn18rcv1qj4u" path="res://Scripts/Menu/Background/Estrelas.gd" id="8_gfr74"]
+[ext_resource type="Texture2D" uid="uid://drvvv34vau6f" path="res://assets/Menu/Background Menu/Background - Efeito escurecer.png" id="9_app50"]
+[ext_resource type="Texture2D" uid="uid://v7krvj68uvil" path="res://assets/Menu/Botao de Fases-fase1-export.png" id="10_g8fw3"]
+[ext_resource type="Texture2D" uid="uid://c32seflr5kjao" path="res://assets/Menu/Bot+úo de Fases - Pressed.png" id="11_qwohq"]
+[ext_resource type="Texture2D" uid="uid://c4uhb32wy6iyu" path="res://assets/Menu/Bot+úo Voltar - Normal.png" id="13_3ou5a"]
+[ext_resource type="Texture2D" uid="uid://bpcr3rw1n2umj" path="res://assets/Menu/Locked_level.png" id="13_jvfxp"]
+[ext_resource type="Texture2D" uid="uid://dvhn2n3twgim5" path="res://assets/Menu/Bot+úo Voltar - Pressed.png" id="14_mjp8i"]
+
+[sub_resource type="GDScript" id="GDScript_lj7aq"]
+script/source = "extends Node2D
+
+@export var move_force : int = 1
+
+func _physics_process(delta: float) -> void:
+	position += (get_global_mouse_position() / move_force * delta / 3) - position
+"
+
+[node name="Fases" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g8fw3")
+
+[node name="Background" type="Node2D" parent="."]
+position = Vector2(640, 358)
+scale = Vector2(5.41862, 4.84909)
+
+[node name="Fundo" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.24065, 1.34087)
+texture = ExtResource("1_byl76")
+script = SubResource("GDScript_lj7aq")
+
+[node name="Meio" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.18124, 1.22811)
+texture = ExtResource("3_jvfxp")
+script = ExtResource("4_u1xum")
+
+[node name="Frente" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.32405, 1.18952)
+texture = ExtResource("5_hyo25")
+script = ExtResource("6_la6jj")
+
+[node name="Estrelas" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.3114, 1.3114)
+texture = ExtResource("7_ug7bc")
+script = ExtResource("8_gfr74")
+
+[node name="Filtro" type="Sprite2D" parent="Background"]
+texture_filter = 1
+scale = Vector2(1.22138, 1.23342)
+texture = ExtResource("9_app50")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Um Jogador" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Botão 1" type="VBoxContainer" parent="MarginContainer/Um Jogador"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="fase_1" type="TextureButton" parent="MarginContainer/Um Jogador/Botão 1"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture_normal = ExtResource("10_g8fw3")
+texture_pressed = ExtResource("11_qwohq")
+
+[node name="Botão 2" type="VBoxContainer" parent="MarginContainer/Um Jogador"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="fase_2" type="TextureButton" parent="MarginContainer/Um Jogador/Botão 2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture_normal = ExtResource("13_jvfxp")
+
+[node name="Botão 3" type="VBoxContainer" parent="MarginContainer/Um Jogador"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="fase_3" type="TextureButton" parent="MarginContainer/Um Jogador/Botão 3"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture_normal = ExtResource("13_jvfxp")
+
+[node name="Botão 4" type="VBoxContainer" parent="MarginContainer/Um Jogador"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="fase_4" type="TextureButton" parent="MarginContainer/Um Jogador/Botão 4"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture_normal = ExtResource("13_jvfxp")
+
+[node name="Botão 5" type="VBoxContainer" parent="MarginContainer/Um Jogador"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="fase_5" type="TextureButton" parent="MarginContainer/Um Jogador/Botão 5"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture_normal = ExtResource("13_jvfxp")
+
+[node name="Botão Voltar Sub-Menu" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Botão Voltar" type="VBoxContainer" parent="MarginContainer/Botão Voltar Sub-Menu"]
+layout_mode = 2
+
+[node name="back" type="TextureButton" parent="MarginContainer/Botão Voltar Sub-Menu/Botão Voltar"]
+layout_mode = 2
+texture_normal = ExtResource("13_3ou5a")
+texture_pressed = ExtResource("14_mjp8i")
+
+[connection signal="pressed" from="MarginContainer/Um Jogador/Botão 1/fase_1" to="." method="_on_fase_1_pressed"]
+[connection signal="pressed" from="MarginContainer/Botão Voltar Sub-Menu/Botão Voltar/back" to="." method="_on_back_pressed"]
