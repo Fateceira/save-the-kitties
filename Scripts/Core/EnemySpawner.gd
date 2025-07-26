@@ -11,20 +11,35 @@ class_name EnemySpawner
 @export var min_spawn_distance: float = 80.0
 @export var max_spawn_attempts: int = 10
 @export var zigzag_spawn_variation: float = 150.0
-@export var initial_spawn_delay: float = 2.0
+@export var initial_spawn_delay: float = 0
 @export var boss_spawn_position_offset: Vector2 = Vector2(0, -100)
 
+@export_group("Cutscene Integration")
+@export var wait_for_cutscene: bool = true
+@export var cutscene_delay: float = 0 
+
+@export_group("Enemy Cleanup")
+@export var cleanup_enabled: bool = true
+@export var cleanup_margin: float = 200.0 
+@export var cleanup_interval: float = 1.0  
+@export var debug_cleanup: bool = false     
+
 enum SpawnerState {
+	WAITING_FOR_CUTSCENE,
 	WAITING_TO_START,
+	SHOWING_DIALOG,
 	SPAWNING_WAVE,
 	WAVE_BREAK,
+	WAITING_FOR_ENEMIES_TO_DIE,  
+	SHOWING_POST_WAVE_DIALOG,    
 	FINISHED
 }
 
-var current_state: SpawnerState = SpawnerState.WAITING_TO_START
+var current_state: SpawnerState = SpawnerState.WAITING_FOR_CUTSCENE
 var current_wave_index: int = 0
 var wave_timer: float = 0.0
 var spawn_timer: float = 0.0
+var cleanup_timer: float = 0.0
 var screen_size: Vector2
 var spawner_node: Node2D
 var available_paths: Array[Path2D] = []
@@ -33,17 +48,60 @@ var path_usage_history: Array[Path2D] = []
 var max_history_size: int = 3
 var recent_spawn_positions: Array[Vector2] = []
 var boss_spawned_in_current_wave: bool = false
+var dialog_connection_made: bool = false
+var cutscene_active: bool = true
+
+var wave_spawn_finished: bool = false
+var post_wave_dialog_delay: float = 0.0
 
 func _ready() -> void:
+	add_to_group("enemy_spawner")
+	
 	screen_size = get_viewport().get_visible_rect().size
 	spawner_node = get_node("Spawner")
 	collect_available_paths()
-	start_spawning()
+	call_deferred("setup_dialog_connection")
+	call_deferred("setup_cutscene_connection")
+	
+	if wait_for_cutscene:
+		current_state = SpawnerState.WAITING_FOR_CUTSCENE
+		print("EnemySpawner: Aguardando cutscene de intro...")
+	else:
+		start_spawning()
+
+func setup_dialog_connection() -> void:
+	if DialogManager.instance and not dialog_connection_made:
+		DialogManager.instance.dialog_finished.connect(_on_dialog_finished)
+		dialog_connection_made = true
+
+func setup_cutscene_connection() -> void:
+	if CutsceneManager.instance:
+		CutsceneManager.instance.intro_finished.connect(_on_cutscene_intro_finished)
+		print("EnemySpawner: Conectado ao CutsceneManager")
+
+func _on_cutscene_intro_finished() -> void:
+	if current_state == SpawnerState.WAITING_FOR_CUTSCENE:
+		print("EnemySpawner: Cutscene de intro finalizada - iniciando spawning")
+		cutscene_active = false
+		start_spawning()
 
 func start_spawning() -> void:
+	current_wave_index = 0
+	cleanup_timer = cleanup_interval
+	
+	if current_wave_index < wave_list.size():
+		var first_wave = wave_list[current_wave_index]
+		
+		if should_show_dialog(first_wave):
+			current_state = SpawnerState.SHOWING_DIALOG
+			show_wave_dialog(first_wave)
+			print("EnemySpawner: Mostrando diálogo pré-wave imediatamente após cutscene")
+			return
+	
 	current_state = SpawnerState.WAITING_TO_START
 	wave_timer = initial_spawn_delay
-	current_wave_index = 0
+	
+	print("EnemySpawner: Aguardando ", wave_timer, " segundos para iniciar primeira wave")
 
 func collect_available_paths() -> void:
 	var paths_node = get_node("Paths")
@@ -54,23 +112,118 @@ func collect_available_paths() -> void:
 
 func _process(delta: float) -> void:
 	wave_timer -= delta
+	post_wave_dialog_delay -= delta
+	
+	if cleanup_enabled:
+		cleanup_timer -= delta
+		if cleanup_timer <= 0.0:
+			cleanup_offscreen_enemies()
+			cleanup_timer = cleanup_interval
 	
 	match current_state:
+		SpawnerState.WAITING_FOR_CUTSCENE:
+			pass
+		
 		SpawnerState.WAITING_TO_START:
 			if wave_timer <= 0.0:
-				start_current_wave()
+				start_next_wave()
+		
+		SpawnerState.SHOWING_DIALOG:
+			pass
 		
 		SpawnerState.SPAWNING_WAVE:
 			handle_wave_spawning(delta)
 		
+		SpawnerState.WAITING_FOR_ENEMIES_TO_DIE:
+			check_if_all_enemies_dead()
+		
+		SpawnerState.SHOWING_POST_WAVE_DIALOG:
+			pass
+		
 		SpawnerState.WAVE_BREAK:
 			if wave_timer <= 0.0:
-				next_wave()
+				advance_to_next_wave()
 		
 		SpawnerState.FINISHED:
 			pass
 
-func start_current_wave() -> void:
+
+func cleanup_offscreen_enemies() -> void:
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	var camera = get_viewport().get_camera_2d()
+	var cleanup_bounds = get_cleanup_bounds(camera)
+	var enemies_removed = 0
+	
+	for enemy in enemies:
+		if not is_instance_valid(enemy):
+			continue
+		
+		if enemy.is_in_group("boss"):
+			continue
+		
+		var enemy_pos = enemy.global_position
+		
+		if is_enemy_outside_bounds(enemy_pos, cleanup_bounds):
+			if debug_cleanup:
+				print("EnemySpawner: Removendo inimigo fora da tela em ", enemy_pos)
+			
+			enemy.queue_free()
+			enemies_removed += 1
+	
+	if debug_cleanup and enemies_removed > 0:
+		print("EnemySpawner: ", enemies_removed, " inimigos removidos da tela")
+
+func get_cleanup_bounds(camera: Camera2D) -> Rect2:
+	var bounds: Rect2
+	
+	if camera:
+		var camera_pos = camera.global_position
+		var half_screen = screen_size * 0.5
+		
+		bounds = Rect2(
+			camera_pos.x - half_screen.x - cleanup_margin,
+			camera_pos.y - half_screen.y - cleanup_margin,
+			screen_size.x + cleanup_margin * 2,
+			screen_size.y + cleanup_margin * 2
+		)
+	else:
+		bounds = Rect2(
+			-cleanup_margin,
+			-cleanup_margin,
+			screen_size.x + cleanup_margin * 2,
+			screen_size.y + cleanup_margin * 2
+		)
+	
+	return bounds
+
+func is_enemy_outside_bounds(enemy_pos: Vector2, bounds: Rect2) -> bool:
+	return not bounds.has_point(enemy_pos)
+
+
+func start_next_wave() -> void:
+	if current_wave_index >= wave_list.size():
+		current_state = SpawnerState.FINISHED
+		print("EnemySpawner: Todas as waves foram completadas! Estado: FINISHED")
+		return
+	
+	var current_wave = wave_list[current_wave_index]
+	
+	print("EnemySpawner: Iniciando wave ", current_wave_index + 1, "/", wave_list.size(), " - ", current_wave.wave_name)
+	
+	if should_show_dialog(current_wave):
+		show_wave_dialog(current_wave)
+	else:
+		begin_wave_spawning()
+
+func should_show_dialog(wave_data: WaveData) -> bool:
+	return wave_data.has_pre_wave_dialog and wave_data.pre_wave_dialog_id != ""
+
+func show_wave_dialog(wave_data: WaveData) -> void:
+	current_state = SpawnerState.SHOWING_DIALOG
+	if DialogManager.instance:
+		DialogManager.start_dialog(wave_data.pre_wave_dialog_id)
+
+func begin_wave_spawning() -> void:
 	if current_wave_index >= wave_list.size():
 		current_state = SpawnerState.FINISHED
 		return
@@ -80,11 +233,13 @@ func start_current_wave() -> void:
 	wave_timer = current_wave.wave_duration
 	spawn_timer = 0.0
 	boss_spawned_in_current_wave = false
+	wave_spawn_finished = false 
 	
-	print("Iniciando ", current_wave.wave_name)
+	print("EnemySpawner: Wave ", current_wave_index + 1, " em progresso")
 	
 	if current_wave.is_boss_wave:
 		spawn_boss_immediately(current_wave)
+		wave_spawn_finished = true 
 
 func spawn_boss_immediately(wave_data: WaveData) -> void:
 	if wave_data.enemy_spawns.size() == 0:
@@ -94,7 +249,7 @@ func spawn_boss_immediately(wave_data: WaveData) -> void:
 	spawn_boss_enemy(boss_spawn_data)
 	boss_spawned_in_current_wave = true
 	
-	print("Boss spawnado na wave: ", wave_data.wave_name)
+	print("EnemySpawner: Boss spawnado para wave ", current_wave_index + 1)
 
 func spawn_boss_enemy(data: SpawnData) -> void:
 	if not data.enemy_scene:
@@ -108,8 +263,6 @@ func spawn_boss_enemy(data: SpawnData) -> void:
 	boss.global_position = boss_position
 	
 	get_tree().current_scene.add_child(boss)
-	
-	print("Boss spawnado em posição fixa: ", boss_position)
 
 func get_boss_spawn_position() -> Vector2:
 	var center_x = spawner_node.global_position.x
@@ -126,20 +279,100 @@ func handle_wave_spawning(delta: float) -> void:
 		check_boss_wave_completion()
 		return
 	
-	spawn_timer -= delta
+	if not wave_spawn_finished:
+		spawn_timer -= delta
+		
+		if spawn_timer <= 0.0:
+			attempt_spawn_from_wave(current_wave)
+			spawn_timer = current_wave.spawn_delay
+		
+		if wave_timer <= 0.0:
+			wave_spawn_finished = true
+			print("EnemySpawner: Tempo da wave ", current_wave_index + 1, " esgotado - parando spawn, aguardando inimigos morrerem")
 	
-	if spawn_timer <= 0.0:
-		attempt_spawn_from_wave(current_wave)
-		spawn_timer = current_wave.spawn_delay
-	
-	if wave_timer <= 0.0:
-		end_current_wave()
+	if wave_spawn_finished:
+		var remaining_enemies = get_total_enemy_count()
+		if remaining_enemies == 0:
+			print("EnemySpawner: Todos os inimigos da wave ", current_wave_index + 1, " foram eliminados")
+			finish_current_wave()
 
 func check_boss_wave_completion() -> void:
 	var bosses = get_tree().get_nodes_in_group("boss")
 	
 	if bosses.size() == 0:
-		end_current_wave()
+		print("EnemySpawner: Boss derrotado - wave ", current_wave_index + 1, " completada")
+		finish_current_wave()
+
+func finish_current_wave() -> void:
+	if current_wave_index >= wave_list.size():
+		current_state = SpawnerState.FINISHED
+		return
+	
+	var current_wave = wave_list[current_wave_index]
+	
+	print("EnemySpawner: Wave ", current_wave_index + 1, " finalizada")
+	
+	if current_wave.has_post_wave_dialog and current_wave.post_wave_dialog_id != "":
+		current_state = SpawnerState.WAITING_FOR_ENEMIES_TO_DIE
+		post_wave_dialog_delay = 0.01  
+		print("EnemySpawner: Preparando diálogo pós-wave...")
+	else:
+		start_wave_break()
+
+func check_if_all_enemies_dead() -> void:
+	var remaining_enemies = get_total_enemy_count()
+	
+	if remaining_enemies > 0:
+		print("EnemySpawner: Ainda há ", remaining_enemies, " inimigos na cena - aguardando...")
+		return
+	
+	if post_wave_dialog_delay <= 0.0:
+		show_post_wave_dialog()
+
+func show_post_wave_dialog() -> void:
+	if current_wave_index >= wave_list.size():
+		return
+		
+	var current_wave = wave_list[current_wave_index]
+	
+	if current_wave.has_post_wave_dialog and current_wave.post_wave_dialog_id != "":
+		current_state = SpawnerState.SHOWING_POST_WAVE_DIALOG
+		print("EnemySpawner: Mostrando diálogo pós-wave: ", current_wave.post_wave_dialog_id)
+		DialogManager.start_dialog(current_wave.post_wave_dialog_id)
+	else:
+		start_wave_break()
+
+func start_wave_break() -> void:
+	if current_wave_index >= wave_list.size():
+		current_state = SpawnerState.FINISHED
+		return
+	
+	var current_wave = wave_list[current_wave_index]
+	current_state = SpawnerState.WAVE_BREAK
+	wave_timer = current_wave.break_duration
+	
+	print("EnemySpawner: Intervalo entre waves - ", wave_timer, " segundos")
+
+func advance_to_next_wave() -> void:
+	current_wave_index += 1
+	
+	if current_wave_index >= wave_list.size():
+		current_state = SpawnerState.FINISHED
+		print("EnemySpawner: Todas as waves completadas! Estado: FINISHED")
+		return
+	
+	start_next_wave()
+
+func _on_dialog_finished() -> void:
+	match current_state:
+		SpawnerState.SHOWING_DIALOG:
+			print("EnemySpawner: Diálogo pré-wave finalizado - iniciando wave")
+			begin_wave_spawning()
+		
+		SpawnerState.SHOWING_POST_WAVE_DIALOG:
+			print("EnemySpawner: Diálogo pós-wave finalizado - iniciando intervalo")
+			start_wave_break()
+
 
 func attempt_spawn_from_wave(wave_data: WaveData) -> void:
 	if get_total_enemy_count() >= max_total_enemies:
@@ -158,29 +391,6 @@ func attempt_spawn_from_wave(wave_data: WaveData) -> void:
 	for i in enemies_to_spawn:
 		var selected_spawn = valid_spawns[randi() % valid_spawns.size()]
 		spawn_enemy_from_data(selected_spawn)
-
-func end_current_wave() -> void:
-	if current_wave_index >= wave_list.size():
-		current_state = SpawnerState.FINISHED
-		return
-	
-	var current_wave = wave_list[current_wave_index]
-	current_state = SpawnerState.WAVE_BREAK
-	wave_timer = current_wave.break_duration
-	
-	if current_wave.is_boss_wave:
-		print("Boss da ", current_wave.wave_name, " foi derrotado! Intervalo: ", current_wave.break_duration, "s")
-	else:
-		print("Wave ", current_wave.wave_name, " finalizada. Intervalo: ", current_wave.break_duration, "s")
-
-func next_wave() -> void:
-	current_wave_index += 1
-	if current_wave_index >= wave_list.size():
-		current_state = SpawnerState.FINISHED
-		print("Todas as waves concluídas!")
-		return
-	
-	start_current_wave()
 
 func get_total_enemy_count() -> int:
 	return get_tree().get_nodes_in_group("enemies").size()
@@ -373,13 +583,21 @@ func get_current_wave_info() -> String:
 	var state_text = ""
 	
 	match current_state:
+		SpawnerState.WAITING_FOR_CUTSCENE:
+			state_text = "Aguardando cutscene"
 		SpawnerState.WAITING_TO_START:
 			state_text = "Aguardando início"
+		SpawnerState.SHOWING_DIALOG:
+			state_text = "Mostrando diálogo pré-wave"
 		SpawnerState.SPAWNING_WAVE:
 			if wave.is_boss_wave:
 				state_text = "Boss em combate"
 			else:
 				state_text = "Em progresso"
+		SpawnerState.WAITING_FOR_ENEMIES_TO_DIE:
+			state_text = "Aguardando inimigos morrerem"
+		SpawnerState.SHOWING_POST_WAVE_DIALOG:
+			state_text = "Mostrando diálogo pós-wave"
 		SpawnerState.WAVE_BREAK:
 			state_text = "Intervalo"
 		SpawnerState.FINISHED:
@@ -389,4 +607,57 @@ func get_current_wave_info() -> String:
 
 func force_next_wave() -> void:
 	if current_state == SpawnerState.SPAWNING_WAVE:
-		end_current_wave()
+		finish_current_wave()
+
+
+func set_cutscene_active(active: bool) -> void:
+	cutscene_active = active
+	
+	if not active and current_state == SpawnerState.WAITING_FOR_CUTSCENE:
+		start_spawning()
+	
+	print("EnemySpawner: Cutscene mode ", "ATIVO" if active else "INATIVO")
+
+func is_finished() -> bool:
+	return current_state == SpawnerState.FINISHED
+
+func get_current_state() -> SpawnerState:
+	return current_state
+
+func force_finish() -> void:
+	current_state = SpawnerState.FINISHED
+	print("EnemySpawner: Forçadamente finalizado")
+
+func restart_spawning() -> void:
+	current_wave_index = 0
+	current_state = SpawnerState.WAITING_TO_START
+	wave_timer = initial_spawn_delay
+	boss_spawned_in_current_wave = false
+	wave_spawn_finished = false
+	recent_spawn_positions.clear()
+	cleanup_timer = cleanup_interval
+	
+	print("EnemySpawner: Sistema reiniciado")
+
+func enable_cleanup(enabled: bool) -> void:
+	cleanup_enabled = enabled
+	print("EnemySpawner: Sistema de limpeza ", "ATIVADO" if enabled else "DESATIVADO")
+
+func set_cleanup_margin(margin: float) -> void:
+	cleanup_margin = margin
+	print("EnemySpawner: Margem de limpeza alterada para ", margin)
+
+func set_cleanup_interval(interval: float) -> void:
+	cleanup_interval = interval
+	cleanup_timer = interval
+	print("EnemySpawner: Intervalo de limpeza alterado para ", interval)
+
+func force_cleanup() -> void:
+	cleanup_offscreen_enemies()
+	print("EnemySpawner: Limpeza forçada executada")
+
+static func get_spawner() -> EnemySpawner:
+	var spawners = Engine.get_main_loop().current_scene.get_tree().get_nodes_in_group("enemy_spawner")
+	if spawners.size() > 0:
+		return spawners[0] as EnemySpawner
+	return null

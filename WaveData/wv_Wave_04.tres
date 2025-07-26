@@ -14,11 +14,18 @@ metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 
 [resource]
 script = ExtResource("6_n2oxi")
-wave_name = "Wave 1"
+wave_name = "Wave 4"
 enemy_spawns = Array[ExtResource("1_15sr8")]([SubResource("Resource_2jfg5")])
 enemies_per_spawn = 1
 spawn_delay = 2.0
 wave_duration = 30.0
 break_duration = 3.0
 is_boss_wave = true
+has_pre_wave_dialog = false
+pre_wave_dialog_id = ""
+has_post_wave_dialog = false
+post_wave_dialog_id = ""
+has_mid_wave_dialog = false
+mid_wave_dialog_id = ""
+mid_wave_trigger_time = 15.0
 metadata/_custom_type_script = "uid://br8fwkyeo43qx"

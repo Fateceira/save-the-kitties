@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnwqb3mvr02ym"]
+
+[ext_resource type="Script" uid="uid://br3pollyjgb1w" path="res://Scripts/Core/CutsceneManager.gd" id="1_s0gqt"]
+
+[node name="CutsceneManager" type="Node2D"]
+script = ExtResource("1_s0gqt")
+debug_mode = true

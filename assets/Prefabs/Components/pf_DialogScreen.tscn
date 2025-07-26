@@ -1,12 +1,37 @@
-[gd_scene format=3 uid="uid://gd1405rbm13n"]
+[gd_scene load_steps=5 format=3 uid="uid://gd1405rbm13n"]
 
-[node name="DialogScreen" type="Control"]
+[ext_resource type="Script" uid="uid://cg2eaysv4huov" path="res://Scripts/Dialog/DialogUI.gd" id="1_edk4t"]
+[ext_resource type="Texture2D" uid="uid://bvs03t3ji084v" path="res://assets/sprites/others/Principal - Pixel - 128x128.png" id="1_whxa6"]
+[ext_resource type="FontFile" uid="uid://g5pk0srtl7aw" path="res://assets/Fonts/EquipmentPro.otf" id="2_bhcor"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bhcor"]
+line_spacing = 0.0
+font = ExtResource("2_bhcor")
+font_size = 40
+shadow_color = Color(0, 0, 0, 0.6)
+
+[node name="DialogUI" type="Control" node_paths=PackedStringArray("background", "character_name", "dialog_text", "character_portrait", "skip_indicator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_edk4t")
+background = NodePath("Control/Background")
+character_name = NodePath("Control/Background/HBoxContainer/VBoxContainer/Name")
+dialog_text = NodePath("Control/Background/HBoxContainer/VBoxContainer/Dialog")
+character_portrait = NodePath("Control/Background/HBoxContainer/Border/Faceset")
+skip_indicator = NodePath("Control/Background/HBoxContainer/VBoxContainer/Skip Label")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.796078)
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -15,8 +40,77 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -500.0
-offset_top = -200.0
-offset_right = 500.0
+offset_left = -600.0
+offset_top = -300.0
+offset_right = 600.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="Background" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.141176, 0.141176, 0.141176, 0.6)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -590.0
+offset_top = -142.5
+offset_right = 590.0
+offset_bottom = 137.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Border" type="ColorRect" parent="Control/Background/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+color = Color(0.111197, 0.111197, 0.111197, 1)
+
+[node name="Faceset" type="TextureRect" parent="Control/Background/HBoxContainer/Border"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -130.0
+offset_right = 140.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_whxa6")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Background/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="Control/Background/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Recruta Miauverick"
+label_settings = SubResource("LabelSettings_bhcor")
+vertical_alignment = 1
+
+[node name="Dialog" type="RichTextLabel" parent="Control/Background/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("2_bhcor")
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "Puxa, nem acredito que vou para a minha primeira missão como Astrogato! Estou ansioso para demonstrar as minhas habilidades protegendo quem precisa. Quem está requisitando meus auxílios, doutora?"
+
+[node name="Skip Label" type="Label" parent="Control/Background/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Skip Text..."
+label_settings = SubResource("LabelSettings_bhcor")
+horizontal_alignment = 2
+vertical_alignment = 1

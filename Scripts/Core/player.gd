@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name player
 
 @export var ship_stats: ShipStats
 @export var equipped_projectile: ProjectileStats
@@ -18,9 +19,16 @@ extends CharacterBody2D
 @export var idle_lifetime: float = 0.08
 @export var dash_lifetime_multiplier: float = 1.8
 
+@export_group("Tutorial/Progression")
+@export var dash_unlocked: bool = false # Controla se o dash está desbloqueado
+
+@export_group("Cutscene Control")
+@export var cutscene_mode: bool = false # Nova variável para controlar cutscenes
+
 signal shot_fired
 signal request_sfx(audio_stream, position, pitch_range, volume_db)
 signal dash_performed  
+signal dash_unlocked_signal # Sinal para quando o dash for desbloqueado
 
 var shoot_timer: float = 0.0
 var damageable_component: DamageableComponent
@@ -49,16 +57,61 @@ var previous_input_vector: Vector2 = Vector2.ZERO
 var input_change_timer: float = 0.0
 var input_stability_threshold: float = 0.1
 
+# Variáveis para controle de colisão
+var original_collision_layer: int
+var original_collision_mask: int
+var collisions_disabled: bool = false
+
 func _ready() -> void:
+	# Adiciona o player ao grupo para facilitar a busca
+	add_to_group("player")
+	
+	# Armazena as configurações originais de colisão
+	original_collision_layer = collision_layer
+	original_collision_mask = collision_mask
+	
 	setup_player_components()
 	setup_animation_system()
 	find_and_setup_muzzles()
 	connect_damage_signals()
 	configure_invulnerability_behavior()
 	setup_engine_system()
-	
+	setup_dash_system()
+	connect_to_dialog_events()
+
+func setup_dash_system() -> void:
+	# Inicia com dash bloqueado (para tutorial)
 	if ship_stats:
-		dash_charges = ship_stats.max_dash_charges
+		if dash_unlocked:
+			dash_charges = ship_stats.max_dash_charges
+		else:
+			dash_charges = 0
+	
+	print("Dash inicializado - Desbloqueado: ", dash_unlocked, " | Cargas: ", dash_charges)
+
+func connect_to_dialog_events() -> void:
+	# Conecta aos eventos do DialogManager para desbloquear dash
+	if DialogManager.instance:
+		DialogManager.instance.dialog_event_triggered.connect(_on_dialog_event)
+
+func _on_dialog_event(event_name: String) -> void:
+	match event_name:
+		"unlock_dash":
+			unlock_dash()
+		"tutorial_complete":
+			print("Tutorial completado!")
+		_:
+			# Outros eventos podem ser adicionados aqui
+			pass
+
+func unlock_dash() -> void:
+	if not dash_unlocked:
+		dash_unlocked = true
+		if ship_stats:
+			dash_charges = ship_stats.max_dash_charges
+		
+		print("🚀 DASH DESBLOQUEADO! Cargas disponíveis: ", dash_charges)
+		dash_unlocked_signal.emit()
 
 func setup_player_components() -> void:
 	damageable_component = $DamageableComponent
@@ -149,8 +202,9 @@ func on_invulnerability_begin(should_blink: bool) -> void:
 	collision_mask = 8
 
 func on_invulnerability_end() -> void:
-	collision_layer = 1
-	collision_mask = 9
+	if not cutscene_mode and not collisions_disabled:
+		collision_layer = original_collision_layer
+		collision_mask = original_collision_mask
 
 func handle_player_damage(damage_info: DamageInfo) -> void:
 	if damage_sfx:
@@ -161,11 +215,70 @@ func handle_player_death() -> void:
 		emit_signal("request_sfx", death_sfx, global_position, Vector2(1.0, 1.0), 0.0)
 
 func _process(delta: float) -> void:
+	if cutscene_mode:
+		process_engine_system_cutscene(delta)
+		process_ship_animations_cutscene()
+		return
+	
 	process_player_movement(delta)
 	process_dash_mechanics(delta)
 	process_weapon_shooting(delta)
 	process_engine_system(delta)
 	process_ship_animations(delta)
+
+# ============ NOVOS MÉTODOS PARA CUTSCENE ============
+
+func set_cutscene_mode(enabled: bool) -> void:
+	cutscene_mode = enabled
+	
+	if enabled:
+		velocity = Vector2.ZERO
+		current_velocity = Vector2.ZERO
+		target_velocity = Vector2.ZERO
+		is_dashing = false
+		is_shooting_burst = false
+		
+		force_animation("Center")
+		
+		print("Player em modo cutscene: ATIVO")
+	else:
+		print("Player em modo cutscene: DESATIVO - controles liberados")
+
+func disable_collisions() -> void:
+	collision_layer = 0
+	collision_mask = 0
+	collisions_disabled = true
+	print("Colisões do player desabilitadas")
+
+func enable_collisions() -> void:
+	collision_layer = original_collision_layer
+	collision_mask = original_collision_mask
+	collisions_disabled = false
+	print("Colisões do player reabilitadas")
+
+func process_engine_system_cutscene(delta: float) -> void:
+	target_engine_lifetime = idle_lifetime
+	update_current_engine_lifetime(delta)
+	apply_engine_lifetime_to_particles()
+
+func process_ship_animations_cutscene() -> void:
+	target_animation_state = "Center"
+	update_animation_state()
+
+func get_movement_input() -> Vector2:
+	if cutscene_mode:
+		return Vector2.ZERO
+	
+	var input_vector = Vector2.ZERO
+	input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+	input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
+
+	if input_vector.length() > 1:
+		input_vector = input_vector.normalized()
+	
+	return input_vector
+
+# ============ MÉTODOS ORIGINAIS (sem alteração significativa) ============
 
 func process_ship_animations(delta: float) -> void:
 	if not animated_sprite:
@@ -191,7 +304,7 @@ func update_animation_state() -> void:
 		animated_sprite.play(current_animation_state)
 
 func process_player_movement(delta: float) -> void:
-	if not ship_stats:
+	if not ship_stats or cutscene_mode:
 		return
 	
 	var input_vector = get_movement_input()
@@ -206,16 +319,6 @@ func process_player_movement(delta: float) -> void:
 		velocity = current_velocity
 	
 	move_and_slide()
-
-func get_movement_input() -> Vector2:
-	var input_vector = Vector2.ZERO
-	input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
-
-	if input_vector.length() > 1:
-		input_vector = input_vector.normalized()
-	
-	return input_vector
 
 func process_engine_system(delta: float) -> void:
 	calculate_target_engine_lifetime(delta)
@@ -275,7 +378,7 @@ func apply_engine_lifetime_to_particles() -> void:
 				particle.emitting = false
 
 func process_dash_mechanics(delta: float) -> void:
-	if not ship_stats:
+	if not ship_stats or cutscene_mode:
 		return
 	
 	update_dash_cooldown(delta)
@@ -290,16 +393,16 @@ func update_dash_cooldown(delta: float) -> void:
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
 		
-		if dash_cooldown_timer <= 0 and dash_charges < ship_stats.max_dash_charges:
+		if dash_cooldown_timer <= 0 and dash_charges < ship_stats.max_dash_charges and dash_unlocked:
 			dash_charges += 1
 			if dash_charges < ship_stats.max_dash_charges:
 				dash_cooldown_timer = ship_stats.dash_cooldown
 
 func can_perform_dash() -> bool:
-	return dash_charges > 0 and not is_dashing
+	return dash_unlocked and dash_charges > 0 and not is_dashing and not cutscene_mode
 
 func execute_dash() -> void:
-	if not ship_stats:
+	if not ship_stats or not dash_unlocked or cutscene_mode:
 		return
 	
 	var dash_input = get_movement_input()
@@ -344,7 +447,7 @@ func deactivate_dash_invulnerability() -> void:
 		damageable_component.end_invulnerability()
 
 func process_weapon_shooting(delta: float) -> void:
-	if not ship_stats or not equipped_projectile or is_shooting_burst:
+	if not ship_stats or not equipped_projectile or is_shooting_burst or cutscene_mode:
 		return
 		
 	shoot_timer -= delta
@@ -441,6 +544,8 @@ func fire_projectile_from_position(spawn_position: Vector2) -> void:
 	if shoot_sfx:
 		emit_signal("request_sfx", shoot_sfx, global_position, Vector2(0.95, 1.05), 0.0)
 
+# ============ MÉTODOS UTILITÁRIOS ============
+
 func get_current_animation() -> String:
 	return current_animation_state
 
@@ -465,7 +570,7 @@ func get_dash_cooldown_percentage() -> float:
 	return dash_cooldown_timer / ship_stats.dash_cooldown
 
 func is_dash_available() -> bool:
-	return dash_charges > 0
+	return dash_unlocked and dash_charges > 0
 
 func get_max_dash_charges() -> int:
 	if not ship_stats:
@@ -484,3 +589,24 @@ func enable_damage_invulnerability() -> void:
 
 func get_current_engine_lifetime() -> float:
 	return current_engine_lifetime
+
+# ============ MÉTODOS ESPECÍFICOS PARA CONTROLE DO DASH ============
+
+func is_dash_unlocked() -> bool:
+	return dash_unlocked
+
+func force_unlock_dash() -> void:
+	unlock_dash()
+
+func lock_dash() -> void:
+	dash_unlocked = false
+	dash_charges = 0
+	print("Dash bloqueado!")
+
+# ============ MÉTODOS PÚBLICOS PARA CUTSCENE ============
+
+func is_in_cutscene_mode() -> bool:
+	return cutscene_mode
+
+func are_collisions_disabled() -> bool:
+	return collisions_disabled
