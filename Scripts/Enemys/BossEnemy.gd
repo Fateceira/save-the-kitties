@@ -31,10 +31,10 @@ var laser_charge_time: float = 1.2
 var laser_active_time: float = 2.5  
 var laser_cooldown_timer: float = 0.0
 var laser_cooldown: float = 6.0  
-var max_laser_width: float = 40.0  
+var max_laser_width: float = 50.0  
 var max_shapecast_width: float = 22.0  
 var laser_range: float = 900.0
-var laser_damage: int = 3  
+var laser_damage: int = 1  
 var laser_damage_timer: float = 0.0
 var laser_damage_interval: float = 0.5
 
@@ -44,9 +44,9 @@ var orbit_angle: float = 0.0
 var orbit_speed: float = 1.8 
 
 var attack_timer: float = 0.0
-var attack_cooldown: float = 0.5  
+var attack_cooldown: float = 0.8  
 var shots_fired: int = 0
-var burst_size: int = 6 
+var burst_size: int = 8
 var burst_delay: float = 0.25
 var burst_active: bool = false
 

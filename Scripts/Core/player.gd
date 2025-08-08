@@ -20,15 +20,15 @@ class_name player
 @export var dash_lifetime_multiplier: float = 1.8
 
 @export_group("Tutorial/Progression")
-@export var dash_unlocked: bool = false # Controla se o dash está desbloqueado
+@export var dash_unlocked: bool = false 
 
 @export_group("Cutscene Control")
-@export var cutscene_mode: bool = false # Nova variável para controlar cutscenes
+@export var cutscene_mode: bool = false 
 
 signal shot_fired
 signal request_sfx(audio_stream, position, pitch_range, volume_db)
 signal dash_performed  
-signal dash_unlocked_signal # Sinal para quando o dash for desbloqueado
+signal dash_unlocked_signal 
 
 var shoot_timer: float = 0.0
 var damageable_component: DamageableComponent
@@ -57,16 +57,15 @@ var previous_input_vector: Vector2 = Vector2.ZERO
 var input_change_timer: float = 0.0
 var input_stability_threshold: float = 0.1
 
-# Variáveis para controle de colisão
 var original_collision_layer: int
 var original_collision_mask: int
 var collisions_disabled: bool = false
 
+var dialog_manager_connected: bool = false
+
 func _ready() -> void:
-	# Adiciona o player ao grupo para facilitar a busca
 	add_to_group("player")
 	
-	# Armazena as configurações originais de colisão
 	original_collision_layer = collision_layer
 	original_collision_mask = collision_mask
 	
@@ -77,10 +76,14 @@ func _ready() -> void:
 	configure_invulnerability_behavior()
 	setup_engine_system()
 	setup_dash_system()
+	
 	connect_to_dialog_events()
+	
+	if not dialog_manager_connected:
+		await get_tree().process_frame
+		connect_to_dialog_events()
 
 func setup_dash_system() -> void:
-	# Inicia com dash bloqueado (para tutorial)
 	if ship_stats:
 		if dash_unlocked:
 			dash_charges = ship_stats.max_dash_charges
@@ -90,28 +93,73 @@ func setup_dash_system() -> void:
 	print("Dash inicializado - Desbloqueado: ", dash_unlocked, " | Cargas: ", dash_charges)
 
 func connect_to_dialog_events() -> void:
-	# Conecta aos eventos do DialogManager para desbloquear dash
-	if DialogManager.instance:
-		DialogManager.instance.dialog_event_triggered.connect(_on_dialog_event)
+	print("Tentando conectar aos eventos do DialogManager...")
+	
+	if DialogManager == null:
+		push_error("DialogManager class não encontrada!")
+		return
+	
+	if DialogManager.instance == null:
+		print("DialogManager.instance ainda é null, tentando novamente...")
+		return
+	
+	if dialog_manager_connected:
+		print("Já conectado ao DialogManager")
+		return
+	
+	var connection_result = DialogManager.instance.dialog_event_triggered.connect(_on_dialog_event)
+	if connection_result == OK:
+		dialog_manager_connected = true
+		print("✅ Conectado com sucesso aos eventos do DialogManager!")
+	else:
+		push_error("❌ Falha ao conectar aos eventos do DialogManager: " + str(connection_result))
 
 func _on_dialog_event(event_name: String) -> void:
+	print("🎯 Player recebeu evento de diálogo: ", event_name)
+	
 	match event_name:
 		"unlock_dash":
+			print("Processando evento unlock_dash...")
 			unlock_dash()
 		"tutorial_complete":
 			print("Tutorial completado!")
 		_:
-			# Outros eventos podem ser adicionados aqui
-			pass
+			print("Evento não reconhecido: ", event_name)
 
 func unlock_dash() -> void:
+	print("🚀 Função unlock_dash chamada!")
+	
 	if not dash_unlocked:
 		dash_unlocked = true
 		if ship_stats:
 			dash_charges = ship_stats.max_dash_charges
 		
-		print("🚀 DASH DESBLOQUEADO! Cargas disponíveis: ", dash_charges)
+		print("✨ DASH DESBLOQUEADO! Cargas disponíveis: ", dash_charges)
 		dash_unlocked_signal.emit()
+		
+		if dash_sfx:
+			emit_signal("request_sfx", dash_sfx, global_position, Vector2(0.8, 1.2), -10.0)
+	else:
+		print("⚠️ Dash já estava desbloqueado")
+
+func debug_unlock_dash() -> void:
+	print("🔧 DEBUG: Forçando desbloqueio do dash...")
+	unlock_dash()
+
+func debug_check_dialog_connection() -> void:
+	print("=== DEBUG CONEXÃO DIALOG ===")
+	print("DialogManager existe: ", DialogManager != null)
+	print("DialogManager.instance existe: ", DialogManager.instance != null)
+	print("Conectado: ", dialog_manager_connected)
+	
+	if DialogManager.instance:
+		print("Listeners no DialogManager: ")
+		DialogManager.instance.debug_check_connections()
+	print("============================")
+
+func force_reconnect_dialog_manager() -> void:
+	dialog_manager_connected = false
+	connect_to_dialog_events()
 
 func setup_player_components() -> void:
 	damageable_component = $DamageableComponent
@@ -277,8 +325,6 @@ func get_movement_input() -> Vector2:
 		input_vector = input_vector.normalized()
 	
 	return input_vector
-
-# ============ MÉTODOS ORIGINAIS (sem alteração significativa) ============
 
 func process_ship_animations(delta: float) -> void:
 	if not animated_sprite:

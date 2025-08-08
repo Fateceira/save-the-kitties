@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bbw5s6yctlbuk"]
+[gd_scene load_steps=34 format=3 uid="uid://bbw5s6yctlbuk"]
 
 [ext_resource type="PackedScene" uid="uid://c0wfn18x1c4tm" path="res://Scenes/phasePoints.tscn" id="1_dq5g6"]
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="2_v2epp"]
@@ -8,7 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://cdrcq0atefc6k" path="res://assets/Prefabs/Components/pf_Camera2D.tscn" id="6_eukr2"]
 [ext_resource type="PackedScene" uid="uid://4w4jgxgfn2um" path="res://assets/Prefabs/Components/pf_Enemy_Spawner.tscn" id="7_pan4p"]
 [ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="8_t8f65"]
-[ext_resource type="Resource" uid="uid://ciqwwhc2ewv65" path="res://WaveData/wv_TutorialWave_1.tres" id="9_yufdy"]
+[ext_resource type="Resource" uid="uid://cmfgyq1s0noff" path="res://WaveData/wv_Wave_02.tres" id="9_gxhi0"]
+[ext_resource type="Resource" uid="uid://cpaids5lgcisn" path="res://WaveData/wv_Wave_03.tres" id="10_ws64i"]
 [ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://assets/Prefabs/Components/pf_ExplosionManager.tscn" id="10_xyt75"]
 [ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://assets/Prefabs/Components/pf_Invisible_wall.tscn" id="11_nx52d"]
 [ext_resource type="PackedScene" uid="uid://d25pxvapoj0rb" path="res://assets/Prefabs/Components/pf_TimeManager.tscn" id="12_6vn2e"]
@@ -24,7 +25,7 @@
 [ext_resource type="Script" uid="uid://bqdl7ns2qavsj" path="res://Scripts/Core/GameManager.gd" id="22_pm0kx"]
 [ext_resource type="PackedScene" uid="uid://c5u87buq8shtx" path="res://Scenes/FinalFase.tscn" id="23_v2epp"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v2epp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gxhi0"]
 shader = ExtResource("3_gxhi0")
 shader_parameter/pixel_scale = 0.1
 shader_parameter/star_texture = ExtResource("4_ws64i")
@@ -149,7 +150,7 @@ offset_bottom = -2.0
 
 [node name="Parallax" parent="." instance=ExtResource("2_v2epp")]
 z_index = -10
-material = SubResource("ShaderMaterial_v2epp")
+material = SubResource("ShaderMaterial_gxhi0")
 offset_left = -285.996
 offset_top = 889.007
 offset_right = 794.004
@@ -173,6 +174,7 @@ color_variation = 0.712
 
 [node name="Player" parent="." instance=ExtResource("5_dbsch")]
 position = Vector2(641, 837)
+dash_unlocked = true
 
 [node name="Camera2D" parent="." instance=ExtResource("6_eukr2")]
 position = Vector2(641.004, 361.007)
@@ -181,7 +183,7 @@ fade_speed = 10.0
 [node name="EnemySpawner" parent="." instance=ExtResource("7_pan4p")]
 position = Vector2(-62.9961, -98.993)
 spawn_area_width = 1200.0
-wave_list = Array[ExtResource("8_t8f65")]([ExtResource("9_yufdy")])
+wave_list = Array[ExtResource("8_t8f65")]([ExtResource("9_gxhi0"), ExtResource("10_ws64i"), ExtResource("9_gxhi0")])
 screen_margin = 80.0
 viper_path_spacing = 0.015
 max_total_enemies = 6

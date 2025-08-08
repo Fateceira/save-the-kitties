@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://cxrwb3dox1s08"]
+[gd_scene load_steps=39 format=3 uid="uid://cxrwb3dox1s08"]
 
 [ext_resource type="PackedScene" uid="uid://c0wfn18x1c4tm" path="res://Scenes/phasePoints.tscn" id="1_fh0sh"]
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="2_03od6"]
@@ -21,10 +21,13 @@
 [ext_resource type="Texture2D" uid="uid://bvs03t3ji084v" path="res://assets/sprites/others/Principal - Pixel - 128x128.png" id="19_4f7b1"]
 [ext_resource type="Texture2D" uid="uid://caj21whakar6l" path="res://assets/sprites/Icons/Mentora_-_Pixel_-_128x128.png" id="20_okut1"]
 [ext_resource type="PackedScene" uid="uid://dnwqb3mvr02ym" path="res://assets/Prefabs/Components/pf_CutsceneManager.tscn" id="21_3ocbn"]
+[ext_resource type="Script" uid="uid://ckerbjvn8w5w6" path="res://Scripts/CustomResources/SpawnData.gd" id="21_wb52b"]
 [ext_resource type="Script" uid="uid://bqdl7ns2qavsj" path="res://Scripts/Core/GameManager.gd" id="22_ghekl"]
+[ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="22_p3e6y"]
 [ext_resource type="PackedScene" uid="uid://c5u87buq8shtx" path="res://Scenes/FinalFase.tscn" id="23_7ynny"]
+[ext_resource type="PackedScene" uid="uid://rgk572ugupa" path="res://assets/Prefabs/Enemys/pf_Meteor_Enemy.tscn" id="23_xrpgu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ynny"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wb52b"]
 shader = ExtResource("3_384de")
 shader_parameter/pixel_scale = 0.1
 shader_parameter/star_texture = ExtResource("4_bhaf5")
@@ -139,6 +142,37 @@ can_skip = true
 trigger_on_complete = ""
 metadata/_custom_type_script = "uid://c7ewq13dju7r8"
 
+[sub_resource type="Resource" id="Resource_v145j"]
+script = ExtResource("21_wb52b")
+enemy_scene = ExtResource("22_p3e6y")
+spawn_chance = 0.7
+formation_count = 2
+enemy_spacing = 160.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[sub_resource type="Resource" id="Resource_5udca"]
+script = ExtResource("21_wb52b")
+enemy_scene = ExtResource("23_xrpgu")
+spawn_chance = 0.5
+formation_count = 1
+enemy_spacing = 80.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[sub_resource type="Resource" id="Resource_cfhny"]
+script = ExtResource("8_iswit")
+wave_name = "Tutorial"
+enemy_spawns = Array[ExtResource("21_wb52b")]([SubResource("Resource_v145j"), SubResource("Resource_5udca")])
+enemies_per_spawn = 1
+spawn_delay = 0.885
+wave_duration = 35.0
+break_duration = 0.0
+is_boss_wave = false
+has_pre_wave_dialog = false
+pre_wave_dialog_id = ""
+has_post_wave_dialog = true
+post_wave_dialog_id = "tutorial_outro"
+metadata/_custom_type_script = "uid://br8fwkyeo43qx"
+
 [node name="Fase_Teste" type="Node2D"]
 
 [node name="PhasePoints" parent="." instance=ExtResource("1_fh0sh")]
@@ -149,7 +183,7 @@ offset_bottom = -2.0
 
 [node name="Parallax" parent="." instance=ExtResource("2_03od6")]
 z_index = -10
-material = SubResource("ShaderMaterial_7ynny")
+material = SubResource("ShaderMaterial_wb52b")
 offset_left = -285.996
 offset_top = 889.007
 offset_right = 794.004
@@ -165,6 +199,7 @@ color_variation = 0.783
 
 [node name="Player" parent="." instance=ExtResource("5_o0dvq")]
 position = Vector2(641, 837)
+dash_unlocked = true
 
 [node name="Camera2D" parent="." instance=ExtResource("6_1nrjw")]
 position = Vector2(641.004, 361.007)
@@ -191,7 +226,7 @@ dialog_sequences = Array[ExtResource("17_euove")]([SubResource("Resource_7kt2i")
 [node name="EnemySpawner" parent="." instance=ExtResource("7_bqkvc")]
 position = Vector2(-62.9961, -98.993)
 spawn_area_width = 1200.0
-wave_list = Array[ExtResource("8_iswit")]([ExtResource("9_ud1sj")])
+wave_list = Array[ExtResource("8_iswit")]([ExtResource("9_ud1sj"), SubResource("Resource_cfhny")])
 screen_margin = 80.0
 viper_path_spacing = 0.015
 max_total_enemies = 6

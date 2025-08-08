@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource("3_kua5y")
-damage = 1
+damage = 2
 pierce = 0
 speed = 300.0
 projectile_scene = ExtResource("2_fdbri")

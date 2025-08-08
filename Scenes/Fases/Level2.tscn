@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://b8qtduqg082xu"]
+[gd_scene load_steps=40 format=3 uid="uid://dsh2c2c5v1w7r"]
 
 [ext_resource type="PackedScene" uid="uid://c0wfn18x1c4tm" path="res://Scenes/phasePoints.tscn" id="1_gsxf3"]
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="2_2om4b"]
@@ -22,12 +22,14 @@
 [ext_resource type="Resource" uid="uid://b0exgurjhjpeq" path="res://WaveData/wv_Wave_04.tres" id="17_u8di6"]
 [ext_resource type="PackedScene" uid="uid://rgk572ugupa" path="res://assets/Prefabs/Enemys/pf_Meteor_Enemy.tscn" id="17_uluru"]
 [ext_resource type="Script" uid="uid://by4s6lmv4k0qn" path="res://Scripts/Dialog/DialogData.gd" id="18_cxp7u"]
+[ext_resource type="PackedScene" uid="uid://bu84xhe0os3ph" path="res://assets/Prefabs/Enemys/pf_ZigZag_Enemy.tscn" id="18_uluru"]
 [ext_resource type="Texture2D" uid="uid://bvs03t3ji084v" path="res://assets/sprites/others/Principal - Pixel - 128x128.png" id="19_5s0xt"]
+[ext_resource type="PackedScene" uid="uid://b2jl1786nqx48" path="res://assets/Prefabs/Enemys/pf_Diver_Enemy.tscn" id="19_7tais"]
 [ext_resource type="PackedScene" uid="uid://dnwqb3mvr02ym" path="res://assets/Prefabs/Components/pf_CutsceneManager.tscn" id="21_1oee6"]
 [ext_resource type="Script" uid="uid://bqdl7ns2qavsj" path="res://Scripts/Core/GameManager.gd" id="22_3ye67"]
 [ext_resource type="PackedScene" uid="uid://c5u87buq8shtx" path="res://Scenes/FinalFase.tscn" id="23_2om4b"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7tais"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hhexc"]
 shader = ExtResource("3_u8di6")
 shader_parameter/pixel_scale = 0.1
 shader_parameter/star_texture = ExtResource("4_cw332")
@@ -64,10 +66,26 @@ formation_count = 1
 enemy_spacing = 80.0
 metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 
+[sub_resource type="Resource" id="Resource_0itjw"]
+script = ExtResource("15_qs6pa")
+enemy_scene = ExtResource("18_uluru")
+spawn_chance = 0.4
+formation_count = 2
+enemy_spacing = 80.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[sub_resource type="Resource" id="Resource_tmu2m"]
+script = ExtResource("15_qs6pa")
+enemy_scene = ExtResource("19_7tais")
+spawn_chance = 0.6
+formation_count = 1
+enemy_spacing = 100.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
 [sub_resource type="Resource" id="Resource_hhexc"]
 script = ExtResource("8_7tais")
 wave_name = "wv"
-enemy_spawns = Array[ExtResource("15_qs6pa")]([SubResource("Resource_v145j"), SubResource("Resource_5udca")])
+enemy_spawns = Array[ExtResource("15_qs6pa")]([SubResource("Resource_v145j"), SubResource("Resource_5udca"), SubResource("Resource_0itjw"), SubResource("Resource_tmu2m")])
 enemies_per_spawn = 1
 spawn_delay = 0.885
 wave_duration = 35.0
@@ -144,7 +162,7 @@ offset_bottom = -2.0
 
 [node name="Parallax" parent="." instance=ExtResource("2_2om4b")]
 z_index = -10
-material = SubResource("ShaderMaterial_7tais")
+material = SubResource("ShaderMaterial_hhexc")
 offset_left = -285.996
 offset_top = 889.007
 offset_right = 794.004
@@ -168,6 +186,7 @@ color_variation = 0.712
 
 [node name="Player" parent="." instance=ExtResource("5_qs6pa")]
 position = Vector2(641, 837)
+dash_unlocked = true
 
 [node name="Camera2D" parent="." instance=ExtResource("6_f6vsp")]
 position = Vector2(641.004, 361.007)
