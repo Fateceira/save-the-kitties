@@ -36,10 +36,10 @@ enum CutsceneState {
 @export var outro_movement_speed: float = 250.0
 @export var outro_movement_smoothing: float = 2.5  
 @export var outro_upward_speed: float = 600.0      
-@export var completion_delay: float = 1.0
+@export var completion_delay: float = .1
 
 @export_group("Debug")
-@export var debug_mode: bool = false
+@export var debug_mode: bool = true
 @export var auto_start_cutscene: bool = true
 
 var current_state: CutsceneState = CutsceneState.IDLE
@@ -50,6 +50,8 @@ var intro_tween: Tween
 var outro_tween: Tween
 var completion_timer: float = 0.0
 var level_completed_flag: bool = false
+var player_is_dead: bool = false
+var signal_emitted: bool = false
 
 static var instance: CutsceneManager
 
@@ -75,7 +77,6 @@ func _update_default_positions() -> void:
 		outro_center_position = screen_size * 0.5
 	if outro_exit_position == Vector2(640, -200):
 		outro_exit_position = Vector2(screen_size.x * 0.5, -200)
-
 
 func _set_show_handles(value: bool):
 	show_handles = value
@@ -118,7 +119,6 @@ func _draw():
 		return
 	
 	draw_line(intro_start_position, intro_target_position, line_color, line_width)
-	
 	draw_line(outro_center_position, outro_exit_position, line_color, line_width)
 	
 	_draw_handle(intro_start_position, "START", Color.GREEN)
@@ -152,18 +152,26 @@ func _draw_arrow(from: Vector2, to: Vector2, color: Color):
 	draw_line(to, arrow_left, color, line_width)
 	draw_line(to, arrow_right, color, line_width)
 
-
 func setup_scene_references() -> void:
 	find_player_reference()
 	find_enemy_spawner_reference()
+	connect_player_death_signal()
 	
-	if debug_mode:
-		print("CutsceneManager Setup:")
-		print("- Player found: ", player_ref != null)
-		print("- EnemySpawner found: ", enemy_spawner_ref != null)
-		print("- Screen size: ", screen_size)
-		print("- Intro path: ", intro_start_position, " -> ", intro_target_position)
-		print("- Outro path: ", outro_center_position, " -> ", outro_exit_position)
+	print("CutsceneManager Setup:")
+	print("- Player found: ", player_ref != null)
+	print("- EnemySpawner found: ", enemy_spawner_ref != null)
+
+func connect_player_death_signal() -> void:
+	if player_ref:
+		var damageable = player_ref.get_node("DamageableComponent")
+		if damageable and damageable.has_signal("died"):
+			damageable.died.connect(_on_player_died)
+			print("CutsceneManager: Player death signal conectado")
+
+func _on_player_died() -> void:
+	print("CutsceneManager: Player morreu - parando cutscenes")
+	player_is_dead = true
+	current_state = CutsceneState.CUTSCENE_COMPLETE
 
 func find_player_reference() -> void:
 	var players = get_tree().get_nodes_in_group("player")
@@ -199,6 +207,9 @@ func find_node_of_type(node: Node, type) -> Node:
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
+	
+	if player_is_dead:
+		return
 		
 	match current_state:
 		CutsceneState.INTRO_MOVING_TO_POSITION:
@@ -216,10 +227,9 @@ func _process(delta: float) -> void:
 		CutsceneState.CUTSCENE_COMPLETE:
 			process_completion_delay(delta)
 
-
 func start_intro_cutscene() -> void:
-	if not player_ref:
-		push_error("CutsceneManager: Não é possível iniciar cutscene sem player!")
+	if not player_ref or player_is_dead:
+		print("CutsceneManager: Não pode iniciar intro - Player ref: ", player_ref != null, " Player dead: ", player_is_dead)
 		return
 	
 	player_ref.global_position = intro_start_position
@@ -228,13 +238,10 @@ func start_intro_cutscene() -> void:
 	player_ref.set_cutscene_mode(true)
 	cutscene_started.emit()
 	
-	if debug_mode:
-		print("Iniciando cutscene de intro")
-		print("- Posição inicial: ", intro_start_position)
-		print("- Posição alvo: ", intro_target_position)
+	print("CutsceneManager: Iniciando cutscene de intro")
 
 func process_intro_movement(delta: float) -> void:
-	if not player_ref:
+	if not player_ref or player_is_dead:
 		return
 	
 	var current_pos = player_ref.global_position
@@ -245,43 +252,43 @@ func process_intro_movement(delta: float) -> void:
 		return
 	
 	var lerp_factor = min(intro_movement_smoothing * delta, 1.0)
-	
 	player_ref.global_position = player_ref.global_position.lerp(intro_target_position, lerp_factor)
-	
 
 func finish_intro_cutscene() -> void:
+	if player_is_dead:
+		return
+		
 	current_state = CutsceneState.INTRO_FINISHED
 	player_ref.global_position = intro_target_position
 	
-	if debug_mode:
-		print("Cutscene de intro finalizada")
+	print("CutsceneManager: Cutscene de intro finalizada")
 	intro_finished.emit()
 	start_gameplay()
 
 func start_gameplay() -> void:
+	if player_is_dead:
+		return
+		
 	current_state = CutsceneState.GAMEPLAY_ACTIVE
 	player_ref.set_cutscene_mode(false)
 	
 	if enemy_spawner_ref:
 		enemy_spawner_ref.set_cutscene_active(false)
 	
-	if debug_mode:
-		print("Gameplay iniciado - controles liberados")
-
+	print("CutsceneManager: Gameplay iniciado - controles liberados")
 
 func check_for_level_completion() -> void:
-	if not enemy_spawner_ref or level_completed_flag:
+	if not enemy_spawner_ref or level_completed_flag or player_is_dead:
 		return
 	
 	var spawner_finished = enemy_spawner_ref.is_finished()
 	var enemies_remaining = get_remaining_enemies_count()
 	
-	if debug_mode and spawner_finished:
-		print("EnemySpawner finalizado. Inimigos restantes: ", enemies_remaining)
+	if spawner_finished:
+		print("CutsceneManager: EnemySpawner finalizado. Inimigos restantes: ", enemies_remaining)
 	
 	if spawner_finished and enemies_remaining == 0:
-		if debug_mode:
-			print("Condições para outro cutscene atendidas!")
+		print("CutsceneManager: Condições para outro cutscene atendidas!")
 		level_completed_flag = true
 		start_outro_cutscene()
 
@@ -289,27 +296,27 @@ func get_remaining_enemies_count() -> int:
 	return get_tree().get_nodes_in_group("enemies").size()
 
 func start_outro_cutscene() -> void:
-	if not player_ref:
+	if not player_ref or player_is_dead:
+		print("CutsceneManager: Não pode iniciar outro - Player ref: ", player_ref != null, " Player dead: ", player_is_dead)
+		complete_level()
 		return
 	
-	if debug_mode:
-		print("Iniciando cutscene de outro")
-		print("- Player atual: ", player_ref.global_position)
-		print("- Alvo centro: ", outro_center_position)
+	print("CutsceneManager: Iniciando cutscene de outro")
 	
 	current_state = CutsceneState.OUTRO_MOVING_TO_CENTER
 	player_ref.set_cutscene_mode(true)
 
 func process_outro_center_movement(delta: float) -> void:
-	if not player_ref:
+	if not player_ref or player_is_dead:
+		print("CutsceneManager: Player perdido durante outro center - completando level")
+		complete_level()
 		return
 	
 	var current_pos = player_ref.global_position
 	var distance_to_center = current_pos.distance_to(outro_center_position)
 	
 	if distance_to_center < 5.0:
-		if debug_mode:
-			print("Player chegou ao centro, iniciando movimento para cima")
+		print("CutsceneManager: Player chegou ao centro, iniciando movimento para cima")
 		start_outro_upward_movement()
 		return
 	
@@ -322,32 +329,37 @@ func process_outro_center_movement(delta: float) -> void:
 	player_ref.global_position = player_ref.global_position.lerp(outro_center_position, lerp_factor)
 
 func start_outro_upward_movement() -> void:
+	if player_is_dead:
+		print("CutsceneManager: Player morto durante start upward - completando level")
+		complete_level()
+		return
+		
 	current_state = CutsceneState.OUTRO_MOVING_UP
 	player_ref.global_position = outro_center_position
 	
 	if player_ref:
 		player_ref.disable_collisions()
 	
-	if debug_mode:
-		print("Iniciando movimento para cima - destino: ", outro_exit_position)
+	print("CutsceneManager: Iniciando movimento para cima - destino: ", outro_exit_position)
 
 func process_outro_upward_movement(delta: float) -> void:
-	if not player_ref:
+	if not player_ref or player_is_dead:
+		print("CutsceneManager: Player perdido durante upward movement - completando level")
+		complete_level()
 		return
 	
 	var current_pos = player_ref.global_position
 	var distance_to_exit = current_pos.distance_to(outro_exit_position)
 	
 	if distance_to_exit < 5.0:
-		if debug_mode:
-			print("Player chegou à posição de saída")
+		print("CutsceneManager: Player chegou à posição de saída")
 		finish_outro_cutscene()
 		return
 	
 	var lerp_factor = min((outro_upward_speed / 100.0) * delta, 1.0)
 	
 	var movement_progress = 1.0 - (distance_to_exit / outro_center_position.distance_to(outro_exit_position))
-	var acceleration_factor = min(movement_progress * 2.0 + 0.5, 1.0)  # Acelera gradualmente
+	var acceleration_factor = min(movement_progress * 2.0 + 0.5, 1.0)
 	
 	lerp_factor *= acceleration_factor
 	
@@ -357,50 +369,49 @@ func finish_outro_cutscene() -> void:
 	current_state = CutsceneState.CUTSCENE_COMPLETE
 	completion_timer = completion_delay
 	
-	if debug_mode:
-		print("Cutscene de outro finalizada")
-	
+	print("CutsceneManager: Cutscene de outro finalizada - Timer: ", completion_delay, " segundos")
 	outro_finished.emit()
 
 func process_completion_delay(delta: float) -> void:
+	if signal_emitted:
+		return
+		
 	completion_timer -= delta
 	
 	if completion_timer <= 0.0:
+		print("CutsceneManager: Timer zerado - chamando complete_level()")
 		complete_level()
 
 func complete_level() -> void:
-	if level_completed_flag:
+	if signal_emitted:
+		print("CutsceneManager: Signal já foi emitido - ignorando")
 		return
 	
+	signal_emitted = true
 	level_completed_flag = true
+	
+	print("CutsceneManager: 🚀🚀🚀 EMITINDO SIGNAL level_completed!!! 🚀🚀🚀")
 	level_completed.emit()
 	
-	if debug_mode:
-		print("=== FASE COMPLETADA ===")
-		print("Player completou a fase com sucesso!")
-		print("Aqui seria chamado o menu de conclusão")
-	
-	show_completion_screen()
+	print("CutsceneManager: === FASE COMPLETADA ===")
 
 func show_completion_screen() -> void:
 	if level_completed_flag:
 		print("NÍVEL COMPLETADO!")
-		print("Inimigos derrotados: Todos")
-		print("Status: Missão Cumprida")
-		
-		#  mostrar o menu
-		# get_tree().paused = true
-		# MenuManager.show_level_complete_menu()
-		
 		current_state = CutsceneState.CUTSCENE_COMPLETE
 
+func force_finish() -> void:
+	current_state = CutsceneState.CUTSCENE_COMPLETE
+	level_completed_flag = true
+	player_is_dead = true
+	print("CutsceneManager: Forçadamente finalizado")
 
 func force_start_intro() -> void:
-	if current_state == CutsceneState.IDLE:
+	if current_state == CutsceneState.IDLE and not player_is_dead:
 		start_intro_cutscene()
 
 func force_start_outro() -> void:
-	if current_state == CutsceneState.GAMEPLAY_ACTIVE and not level_completed_flag:
+	if current_state == CutsceneState.GAMEPLAY_ACTIVE and not level_completed_flag and not player_is_dead:
 		start_outro_cutscene()
 
 func skip_intro() -> void:
@@ -425,10 +436,10 @@ func set_outro_positions(center: Vector2, exit: Vector2) -> void:
 
 func reset_level_completion() -> void:
 	level_completed_flag = false
+	player_is_dead = false
+	signal_emitted = false
 	current_state = CutsceneState.IDLE
-	if debug_mode:
-		print("CutsceneManager: Flag de conclusão resetada")
-
+	print("CutsceneManager: Flag de conclusão resetada")
 
 static func start_intro() -> void:
 	if instance:

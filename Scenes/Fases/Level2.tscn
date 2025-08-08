@@ -1,0 +1,213 @@
+[gd_scene load_steps=36 format=3 uid="uid://b8qtduqg082xu"]
+
+[ext_resource type="PackedScene" uid="uid://c0wfn18x1c4tm" path="res://Scenes/phasePoints.tscn" id="1_gsxf3"]
+[ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="2_2om4b"]
+[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="3_u8di6"]
+[ext_resource type="Texture2D" uid="uid://bi4vttjdrerfn" path="res://assets/sprites/others/star-1.png" id="4_cw332"]
+[ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://assets/Prefabs/Characters/pf_Player_One.tscn" id="5_qs6pa"]
+[ext_resource type="PackedScene" uid="uid://cdrcq0atefc6k" path="res://assets/Prefabs/Components/pf_Camera2D.tscn" id="6_f6vsp"]
+[ext_resource type="PackedScene" uid="uid://4w4jgxgfn2um" path="res://assets/Prefabs/Components/pf_Enemy_Spawner.tscn" id="7_uluru"]
+[ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="8_7tais"]
+[ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://assets/Prefabs/Components/pf_ExplosionManager.tscn" id="10_0itjw"]
+[ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://assets/Prefabs/Components/pf_Invisible_wall.tscn" id="11_tmu2m"]
+[ext_resource type="PackedScene" uid="uid://d25pxvapoj0rb" path="res://assets/Prefabs/Components/pf_TimeManager.tscn" id="12_ug302"]
+[ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://assets/Prefabs/Components/pf_PostProcessing.tscn" id="13_bcfs6"]
+[ext_resource type="PackedScene" uid="uid://dngl2x6strt8l" path="res://assets/Prefabs/Components/pf_Healthbar.tscn" id="14_m6v32"]
+[ext_resource type="Script" uid="uid://ckerbjvn8w5w6" path="res://Scripts/CustomResources/SpawnData.gd" id="15_qs6pa"]
+[ext_resource type="PackedScene" uid="uid://c4w8f0xl136ew" path="res://Scenes/pause_screen.tscn" id="15_tvvb2"]
+[ext_resource type="Resource" uid="uid://cmfgyq1s0noff" path="res://WaveData/wv_Wave_02.tres" id="16_2om4b"]
+[ext_resource type="PackedScene" uid="uid://bemxm0enl8fpt" path="res://assets/Prefabs/Enemys/pf_Asteroid_Enemy.tscn" id="16_f6vsp"]
+[ext_resource type="PackedScene" uid="uid://derpnc5byjhyv" path="res://assets/Prefabs/Components/pf_DialogManager.tscn" id="16_mjemp"]
+[ext_resource type="Script" uid="uid://c7ewq13dju7r8" path="res://Scripts/Dialog/DialogSequence.gd" id="17_p27db"]
+[ext_resource type="Resource" uid="uid://b0exgurjhjpeq" path="res://WaveData/wv_Wave_04.tres" id="17_u8di6"]
+[ext_resource type="PackedScene" uid="uid://rgk572ugupa" path="res://assets/Prefabs/Enemys/pf_Meteor_Enemy.tscn" id="17_uluru"]
+[ext_resource type="Script" uid="uid://by4s6lmv4k0qn" path="res://Scripts/Dialog/DialogData.gd" id="18_cxp7u"]
+[ext_resource type="Texture2D" uid="uid://bvs03t3ji084v" path="res://assets/sprites/others/Principal - Pixel - 128x128.png" id="19_5s0xt"]
+[ext_resource type="PackedScene" uid="uid://dnwqb3mvr02ym" path="res://assets/Prefabs/Components/pf_CutsceneManager.tscn" id="21_1oee6"]
+[ext_resource type="Script" uid="uid://bqdl7ns2qavsj" path="res://Scripts/Core/GameManager.gd" id="22_3ye67"]
+[ext_resource type="PackedScene" uid="uid://c5u87buq8shtx" path="res://Scenes/FinalFase.tscn" id="23_2om4b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7tais"]
+shader = ExtResource("3_u8di6")
+shader_parameter/pixel_scale = 0.1
+shader_parameter/star_texture = ExtResource("4_cw332")
+shader_parameter/use_star_texture = true
+shader_parameter/star_tint = Vector4(1, 1, 1, 1)
+shader_parameter/star_density = 55.333
+shader_parameter/star_size_min = 0.395
+shader_parameter/star_size_max = 0.279
+shader_parameter/twinkle_speed = 1.236
+shader_parameter/parallax_speed = 0.04
+shader_parameter/nebula_color1 = Vector4(0.8, 0.4, 1, 1)
+shader_parameter/nebula_color2 = Vector4(0.2, 0.4, 1, 1)
+shader_parameter/nebula_color3 = Vector4(0.1, 0.8, 0.9, 1)
+shader_parameter/nebula_size1 = 3.894
+shader_parameter/nebula_size2 = 4.556
+shader_parameter/nebula_size3 = 1.013
+shader_parameter/nebula_density = 0.73
+shader_parameter/space_color = Vector4(0.03, 0.01, 0.1, 1)
+shader_parameter/color_variation = 0.712
+
+[sub_resource type="Resource" id="Resource_v145j"]
+script = ExtResource("15_qs6pa")
+enemy_scene = ExtResource("16_f6vsp")
+spawn_chance = 0.7
+formation_count = 2
+enemy_spacing = 160.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[sub_resource type="Resource" id="Resource_5udca"]
+script = ExtResource("15_qs6pa")
+enemy_scene = ExtResource("17_uluru")
+spawn_chance = 0.5
+formation_count = 1
+enemy_spacing = 80.0
+metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
+
+[sub_resource type="Resource" id="Resource_hhexc"]
+script = ExtResource("8_7tais")
+wave_name = "wv"
+enemy_spawns = Array[ExtResource("15_qs6pa")]([SubResource("Resource_v145j"), SubResource("Resource_5udca")])
+enemies_per_spawn = 1
+spawn_delay = 0.885
+wave_duration = 35.0
+break_duration = 0.0
+is_boss_wave = false
+has_pre_wave_dialog = true
+pre_wave_dialog_id = "F2Pre"
+has_post_wave_dialog = false
+post_wave_dialog_id = ""
+metadata/_custom_type_script = "uid://br8fwkyeo43qx"
+
+[sub_resource type="Resource" id="Resource_2om4b"]
+script = ExtResource("18_cxp7u")
+character_name = "Recruta Miauverick"
+dialog_text = "Cheguei bem a tempo, meus colegas precisam de mim!"
+character_portrait = ExtResource("19_5s0xt")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_u8di6"]
+script = ExtResource("18_cxp7u")
+character_name = "Recruta Miauverick"
+dialog_text = "Ahn? Mas o que é isso? Naves espaciais que não são dos Astrogatos? Nem pensar! Não deixarei que entrem no Planeta Pasto!"
+character_portrait = ExtResource("19_5s0xt")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_cw332"]
+script = ExtResource("18_cxp7u")
+character_name = "Recruta Miauverick"
+dialog_text = "Mas porque será que querem invadir justamente a casa das novas amigas vaquinhas?..."
+character_portrait = ExtResource("19_5s0xt")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_qs6pa"]
+script = ExtResource("17_p27db")
+sequence_id = "F2Pre"
+dialogs = Array[ExtResource("18_cxp7u")]([SubResource("Resource_2om4b"), SubResource("Resource_u8di6"), SubResource("Resource_cw332")])
+can_skip = true
+trigger_on_complete = ""
+metadata/_custom_type_script = "uid://c7ewq13dju7r8"
+
+[sub_resource type="Resource" id="Resource_f6vsp"]
+script = ExtResource("17_p27db")
+sequence_id = "F2Boss"
+dialogs = Array[ExtResource("18_cxp7u")]([SubResource("Resource_2om4b")])
+can_skip = true
+trigger_on_complete = ""
+metadata/_custom_type_script = "uid://c7ewq13dju7r8"
+
+[node name="Fase_Teste" type="Node2D"]
+
+[node name="PhasePoints" parent="." instance=ExtResource("1_gsxf3")]
+offset_left = 1273.0
+offset_top = -2.0
+offset_right = 1273.0
+offset_bottom = -2.0
+
+[node name="Parallax" parent="." instance=ExtResource("2_2om4b")]
+z_index = -10
+material = SubResource("ShaderMaterial_7tais")
+offset_left = -285.996
+offset_top = 889.007
+offset_right = 794.004
+offset_bottom = 2809.01
+pixel_scale = 0.1
+star_texture = ExtResource("4_cw332")
+star_density = 55.333
+star_size_min = 0.395
+star_size_max = 0.279
+twinkle_speed = 1.236
+parallax_speed = 0.04
+nebula_color1 = Color(1, 0.433486, 0.280092, 1)
+nebula_color2 = Color(0.709163, 0.588943, 0.408575, 1)
+nebula_color3 = Color(0.437383, 0.820069, 0.378653, 1)
+nebula_size1 = 3.894
+nebula_size2 = 4.556
+nebula_size3 = 1.013
+nebula_density = 0.73
+space_color = Color(0, 0, 0, 1)
+color_variation = 0.712
+
+[node name="Player" parent="." instance=ExtResource("5_qs6pa")]
+position = Vector2(641, 837)
+
+[node name="Camera2D" parent="." instance=ExtResource("6_f6vsp")]
+position = Vector2(641.004, 361.007)
+fade_speed = 10.0
+
+[node name="pf_ExplosionManager" parent="." instance=ExtResource("10_0itjw")]
+position = Vector2(641.004, 361.007)
+
+[node name="InvisibleWall" parent="." instance=ExtResource("11_tmu2m")]
+
+[node name="TimeManager" parent="." instance=ExtResource("12_ug302")]
+HITSTOP_DURATION = 0.01
+
+[node name="PostProcessWorldEnvi" parent="." instance=ExtResource("13_bcfs6")]
+
+[node name="Control" parent="." instance=ExtResource("14_m6v32")]
+
+[node name="pause_menu" parent="." instance=ExtResource("15_tvvb2")]
+visible = false
+
+[node name="EnemySpawner" parent="." instance=ExtResource("7_uluru")]
+position = Vector2(-62.9961, -98.993)
+spawn_area_width = 1200.0
+wave_list = Array[ExtResource("8_7tais")]([SubResource("Resource_hhexc"), ExtResource("16_2om4b"), ExtResource("17_u8di6")])
+screen_margin = 80.0
+viper_path_spacing = 0.015
+max_total_enemies = 6
+min_spawn_distance = 100.0
+max_spawn_attempts = 2
+zigzag_spawn_variation = 120.0
+initial_spawn_delay = 1.0
+boss_spawn_position_offset = Vector2(0, 0)
+
+[node name="DialogManager" parent="." instance=ExtResource("16_mjemp")]
+dialog_sequences = Array[ExtResource("17_p27db")]([SubResource("Resource_qs6pa"), SubResource("Resource_f6vsp")])
+
+[node name="CutsceneManager" parent="." instance=ExtResource("21_1oee6")]
+outro_center_position = Vector2(640, 500)
+completion_delay = 1.0
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("22_3ye67")
+final_screen_scene = ExtResource("23_2om4b")

@@ -1,0 +1,209 @@
+[gd_scene load_steps=33 format=3 uid="uid://cxrwb3dox1s08"]
+
+[ext_resource type="PackedScene" uid="uid://c0wfn18x1c4tm" path="res://Scenes/phasePoints.tscn" id="1_fh0sh"]
+[ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="2_03od6"]
+[ext_resource type="Shader" uid="uid://ctx3undwv3fha" path="res://assets/shaders/space_background.gdshader" id="3_384de"]
+[ext_resource type="Texture2D" uid="uid://bi4vttjdrerfn" path="res://assets/sprites/others/star-1.png" id="4_bhaf5"]
+[ext_resource type="PackedScene" uid="uid://t1npnwhj8j4e" path="res://assets/Prefabs/Characters/pf_Player_One.tscn" id="5_o0dvq"]
+[ext_resource type="PackedScene" uid="uid://cdrcq0atefc6k" path="res://assets/Prefabs/Components/pf_Camera2D.tscn" id="6_1nrjw"]
+[ext_resource type="PackedScene" uid="uid://4w4jgxgfn2um" path="res://assets/Prefabs/Components/pf_Enemy_Spawner.tscn" id="7_bqkvc"]
+[ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="8_iswit"]
+[ext_resource type="Resource" uid="uid://ciqwwhc2ewv65" path="res://WaveData/wv_TutorialWave_1.tres" id="9_ud1sj"]
+[ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://assets/Prefabs/Components/pf_ExplosionManager.tscn" id="10_qvja8"]
+[ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://assets/Prefabs/Components/pf_Invisible_wall.tscn" id="11_4rcpl"]
+[ext_resource type="PackedScene" uid="uid://d25pxvapoj0rb" path="res://assets/Prefabs/Components/pf_TimeManager.tscn" id="12_iu5qg"]
+[ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://assets/Prefabs/Components/pf_PostProcessing.tscn" id="13_nlo60"]
+[ext_resource type="PackedScene" uid="uid://dngl2x6strt8l" path="res://assets/Prefabs/Components/pf_Healthbar.tscn" id="14_ek3m4"]
+[ext_resource type="PackedScene" uid="uid://c4w8f0xl136ew" path="res://Scenes/pause_screen.tscn" id="15_8tdsi"]
+[ext_resource type="PackedScene" uid="uid://derpnc5byjhyv" path="res://assets/Prefabs/Components/pf_DialogManager.tscn" id="16_oy1hs"]
+[ext_resource type="Script" uid="uid://c7ewq13dju7r8" path="res://Scripts/Dialog/DialogSequence.gd" id="17_euove"]
+[ext_resource type="Script" uid="uid://by4s6lmv4k0qn" path="res://Scripts/Dialog/DialogData.gd" id="18_3ybmp"]
+[ext_resource type="Texture2D" uid="uid://bvs03t3ji084v" path="res://assets/sprites/others/Principal - Pixel - 128x128.png" id="19_4f7b1"]
+[ext_resource type="Texture2D" uid="uid://caj21whakar6l" path="res://assets/sprites/Icons/Mentora_-_Pixel_-_128x128.png" id="20_okut1"]
+[ext_resource type="PackedScene" uid="uid://dnwqb3mvr02ym" path="res://assets/Prefabs/Components/pf_CutsceneManager.tscn" id="21_3ocbn"]
+[ext_resource type="Script" uid="uid://bqdl7ns2qavsj" path="res://Scripts/Core/GameManager.gd" id="22_ghekl"]
+[ext_resource type="PackedScene" uid="uid://c5u87buq8shtx" path="res://Scenes/FinalFase.tscn" id="23_7ynny"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ynny"]
+shader = ExtResource("3_384de")
+shader_parameter/pixel_scale = 0.1
+shader_parameter/star_texture = ExtResource("4_bhaf5")
+shader_parameter/use_star_texture = true
+shader_parameter/star_tint = Vector4(1, 1, 1, 1)
+shader_parameter/star_density = 30.0
+shader_parameter/star_size_min = 0.217
+shader_parameter/star_size_max = 0.303
+shader_parameter/twinkle_speed = 0.5
+shader_parameter/parallax_speed = 0.02
+shader_parameter/nebula_color1 = Vector4(0.8, 0.4, 1, 1)
+shader_parameter/nebula_color2 = Vector4(0.2, 0.4, 1, 1)
+shader_parameter/nebula_color3 = Vector4(0.1, 0.8, 0.9, 1)
+shader_parameter/nebula_size1 = 2.0
+shader_parameter/nebula_size2 = 3.0
+shader_parameter/nebula_size3 = 1.5
+shader_parameter/nebula_density = 0.5
+shader_parameter/space_color = Vector4(0.03, 0.01, 0.1, 1)
+shader_parameter/color_variation = 0.783
+
+[sub_resource type="Resource" id="Resource_2hbma"]
+script = ExtResource("18_3ybmp")
+character_name = "Recruta Miauverick"
+dialog_text = "Puxa, nem acredito que vou para a minha primeira missão como Astrogato! Estou ansioso para demonstrar as minhas habilidades protegendo quem precisa. Quem está requisitando meus auxílios, doutora?"
+character_portrait = ExtResource("19_4f7b1")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_t23ul"]
+script = ExtResource("18_3ybmp")
+character_name = "Mentora"
+dialog_text = "São alguns habitantes do Planeta Pasto. Estão tendo alguns ataques esporádicos de um grupo misterioso ultimamente e precisamos de você lá. Sua missão é neutralizar o máximo de ameaças antes que atravessem a atmosfera do planeta. "
+character_portrait = ExtResource("20_okut1")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_5gvw3"]
+script = ExtResource("18_3ybmp")
+character_name = "Mentora"
+dialog_text = "Alguns de seus colegas de trabalho já estão lá e nos avisaram de uma possível chuva de meteoros no caminho, então tome cuidado. Qualquer problema, volte para cá, a Estação Sfinx"
+character_portrait = ExtResource("20_okut1")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_1jxql"]
+script = ExtResource("18_3ybmp")
+character_name = "Recruta Miauverick"
+dialog_text = "É pra já, doutora. Tomarei cuidado e estou pronto para a missão."
+character_portrait = ExtResource("19_4f7b1")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_7kt2i"]
+script = ExtResource("17_euove")
+sequence_id = "tutorial_intro"
+dialogs = Array[ExtResource("18_3ybmp")]([SubResource("Resource_2hbma"), SubResource("Resource_t23ul"), SubResource("Resource_5gvw3"), SubResource("Resource_1jxql")])
+can_skip = true
+trigger_on_complete = ""
+metadata/_custom_type_script = "uid://c7ewq13dju7r8"
+
+[sub_resource type="Resource" id="Resource_24v7v"]
+script = ExtResource("18_3ybmp")
+character_name = "Recruta Miauverick"
+dialog_text = "Uuuuuufaa! Essa foi por pouco. Esses meteoros quase me atingiram, mas ainda bem que consegui desviar bem."
+character_portrait = ExtResource("19_4f7b1")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_k2tjh"]
+script = ExtResource("18_3ybmp")
+character_name = "Recruta Miauverick"
+dialog_text = "Chega de demora! Meus colegas estão me esperando para proteger o planeta!"
+character_portrait = ExtResource("19_4f7b1")
+emotion = "neutral"
+text_speed = 0.05
+auto_advance = false
+auto_advance_delay = 2.0
+trigger_event = ""
+pause_game = true
+metadata/_custom_type_script = "uid://by4s6lmv4k0qn"
+
+[sub_resource type="Resource" id="Resource_mfkkv"]
+script = ExtResource("17_euove")
+sequence_id = "tutorial_outro"
+dialogs = Array[ExtResource("18_3ybmp")]([SubResource("Resource_24v7v"), SubResource("Resource_k2tjh")])
+can_skip = true
+trigger_on_complete = ""
+metadata/_custom_type_script = "uid://c7ewq13dju7r8"
+
+[node name="Fase_Teste" type="Node2D"]
+
+[node name="PhasePoints" parent="." instance=ExtResource("1_fh0sh")]
+offset_left = 1273.0
+offset_top = -2.0
+offset_right = 1273.0
+offset_bottom = -2.0
+
+[node name="Parallax" parent="." instance=ExtResource("2_03od6")]
+z_index = -10
+material = SubResource("ShaderMaterial_7ynny")
+offset_left = -285.996
+offset_top = 889.007
+offset_right = 794.004
+offset_bottom = 2809.01
+pixel_scale = 0.1
+star_texture = ExtResource("4_bhaf5")
+star_density = 30.0
+star_size_min = 0.217
+star_size_max = 0.303
+nebula_color1 = Color(0.61263, 0.643526, 0.292669, 1)
+space_color = Color(0.0775852, 0.00745042, 0.0937775, 1)
+color_variation = 0.783
+
+[node name="Player" parent="." instance=ExtResource("5_o0dvq")]
+position = Vector2(641, 837)
+
+[node name="Camera2D" parent="." instance=ExtResource("6_1nrjw")]
+position = Vector2(641.004, 361.007)
+fade_speed = 10.0
+
+[node name="pf_ExplosionManager" parent="." instance=ExtResource("10_qvja8")]
+position = Vector2(641.004, 361.007)
+
+[node name="InvisibleWall" parent="." instance=ExtResource("11_4rcpl")]
+
+[node name="TimeManager" parent="." instance=ExtResource("12_iu5qg")]
+HITSTOP_DURATION = 0.01
+
+[node name="PostProcessWorldEnvi" parent="." instance=ExtResource("13_nlo60")]
+
+[node name="Control" parent="." instance=ExtResource("14_ek3m4")]
+
+[node name="pause_menu" parent="." instance=ExtResource("15_8tdsi")]
+visible = false
+
+[node name="DialogManager" parent="." instance=ExtResource("16_oy1hs")]
+dialog_sequences = Array[ExtResource("17_euove")]([SubResource("Resource_7kt2i"), SubResource("Resource_mfkkv")])
+
+[node name="EnemySpawner" parent="." instance=ExtResource("7_bqkvc")]
+position = Vector2(-62.9961, -98.993)
+spawn_area_width = 1200.0
+wave_list = Array[ExtResource("8_iswit")]([ExtResource("9_ud1sj")])
+screen_margin = 80.0
+viper_path_spacing = 0.015
+max_total_enemies = 6
+min_spawn_distance = 100.0
+max_spawn_attempts = 2
+zigzag_spawn_variation = 120.0
+initial_spawn_delay = 1.0
+boss_spawn_position_offset = Vector2(0, 0)
+
+[node name="CutsceneManager" parent="." instance=ExtResource("21_3ocbn")]
+outro_center_position = Vector2(640, 500)
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("22_ghekl")
+final_screen_scene = ExtResource("23_7ynny")

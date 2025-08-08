@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0wfn18x1c4tm"]
+
+[ext_resource type="Script" uid="uid://cy1h0nu60dpiq" path="res://Scripts/Core/ScoreUI.gd" id="1_64tqr"]
+[ext_resource type="FontFile" uid="uid://b6djdxkl01pwk" path="res://assets/Fonts/EquipmentPro.ttf" id="1_r6dkg"]
+
+[node name="PhasePoints" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_64tqr")
+
+[node name="Label" type="Label" parent="."]
+z_index = 5
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -96.0
+offset_bottom = 56.0
+grow_horizontal = 0
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("1_r6dkg")
+theme_override_font_sizes/font_size = 55
+text = "1234567890"
+horizontal_alignment = 1
+vertical_alignment = 1

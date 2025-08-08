@@ -20,6 +20,7 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 AudioManager="*res://Scripts/Core/AudioManager.gd"
 TweenManager="*res://Scripts/Core/TweenManager.gd"
 DialogManager="*res://Scripts/Dialog/DialogManager.gd"
+ScoreManager="*res://Scripts/Core/ScoreManager.gd"
 
 [display]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csk2jvccf38a1"
-path="res://.godot/imported/Bot++¦o de Fases.png-9f4b118f5769811ee882b8e8365b4d48.ctex"
+uid="uid://kk4kl82cb2dy"
+path="res://.godot/imported/MenuCompleteButtons_SpriteSheet.png-a0b6e08cbee783c6b27a38592149e3c7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Menu/Bot++¦o de Fases.png"
-dest_files=["res://.godot/imported/Bot++¦o de Fases.png-9f4b118f5769811ee882b8e8365b4d48.ctex"]
+source_file="res://assets/sprites/others/MenuCompleteButtons_SpriteSheet.png"
+dest_files=["res://.godot/imported/MenuCompleteButtons_SpriteSheet.png-a0b6e08cbee783c6b27a38592149e3c7.ctex"]
 
 [params]
 

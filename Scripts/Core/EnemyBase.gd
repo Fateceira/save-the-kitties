@@ -4,12 +4,15 @@ class_name EnemyBase
 @export var stats: EnemyStats
 @export var damage_sfx: AudioStream
 @export var death_sfx: AudioStream
+@export var points_value: int = 100
 
-signal request_sfx(audio_stream, position, pitch_range, volume_db) 
+signal request_sfx(audio_stream, position, pitch_range, volume_db)
+signal enemy_killed(points)
 
 var damageable_component: DamageableComponent
 var trigger_area: Area2D
 var trigger_collision: CollisionShape2D
+var killed_by_player: bool = false
 
 func _ready() -> void:
 	damageable_component = $DamageableComponent
@@ -23,6 +26,8 @@ func _ready() -> void:
 func _on_enemy_damaged(damage_info: DamageInfo) -> void:
 	if damage_sfx:
 		emit_signal("request_sfx", damage_sfx, global_position, Vector2(0.9, 1.1), 0.0)
+	
+	killed_by_player = true
 
 func setup_trigger_area() -> void:
 	trigger_area = Area2D.new()
@@ -56,6 +61,14 @@ func _on_trigger_body_entered(body: Node2D) -> void:
 func _on_died() -> void:
 	if death_sfx:
 		emit_signal("request_sfx", death_sfx, global_position, Vector2(1.0, 1.0), 0.0)
+	
+	if killed_by_player:
+		emit_signal("enemy_killed", points_value)
+		
+		var score_manager = get_tree().get_first_node_in_group("score_manager")
+		if score_manager and score_manager.has_method("add_score"):
+			score_manager.add_score(points_value)
+	
 	queue_free()
 
 func setup_enemy(given_stats: EnemyStats) -> void:

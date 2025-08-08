@@ -4,4 +4,10 @@
 
 [node name="CutsceneManager" type="Node2D"]
 script = ExtResource("1_s0gqt")
+intro_start_position = Vector2(640, 810)
+intro_target_position = Vector2(640, 550)
+intro_movement_speed = 250.0
+intro_movement_smoothing = 2.5
+outro_center_position = Vector2(640, 550)
+outro_upward_speed = 300.0
 debug_mode = true
