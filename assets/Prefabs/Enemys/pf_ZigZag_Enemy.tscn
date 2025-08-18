@@ -6,10 +6,11 @@
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="3_dvvel"]
 [ext_resource type="AudioStream" uid="uid://csfmmas2kt04a" path="res://assets/Audio/sounds/3.wav" id="3_w25xd"]
 [ext_resource type="AudioStream" uid="uid://cpoeo66k7hvvt" path="res://assets/Audio/sounds/2.wav" id="4_yfwup"]
-[ext_resource type="Texture2D" uid="uid://b4t748n4e73nk" path="res://assets/sprites/ships/10.png" id="5_bhwbd"]
+[ext_resource type="Texture2D" uid="uid://xla0uocbj1o" path="res://assets/sprites/others/Inimigo.png" id="7_w25xd"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_afpow"]
-radius = 35.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yfwup"]
+radius = 33.0
+height = 74.0
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
@@ -30,10 +31,10 @@ metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-0.719996, -0.719999)
 scale = Vector2(2.44, 2.44)
-texture = ExtResource("5_bhwbd")
+texture = ExtResource("7_w25xd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 0)
-shape = SubResource("CircleShape2D_afpow")
+shape = SubResource("CapsuleShape2D_yfwup")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

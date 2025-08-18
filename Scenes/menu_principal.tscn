@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://ca2brp8yf8j0i" path="res://assets/Menu/options_pressed.png" id="6_gqty3"]
 [ext_resource type="Script" uid="uid://by2xhiwsr384l" path="res://Scripts/Menu/Background/Frente.gd" id="6_wleil"]
 [ext_resource type="Script" uid="uid://cdn18rcv1qj4u" path="res://Scripts/Menu/Background/Estrelas.gd" id="8_trynp"]
-[ext_resource type="Texture2D" uid="uid://djgwm0jgkerol" path="res://assets/Menu/Sem t+¡tulo-1.png" id="20_d8y8x"]
+[ext_resource type="Texture2D" uid="uid://djgwm0jgkerol" path="res://assets/Menu/Sem t+-ítulo-1.png" id="20_d8y8x"]
 [ext_resource type="Script" uid="uid://bs6n5krekbhod" path="res://Scripts/Menu/Background/Logo.gd" id="21_20887"]
 
 [sub_resource type="GDScript" id="GDScript_0gx5w"]

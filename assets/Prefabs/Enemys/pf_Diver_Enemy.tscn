@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://csfmmas2kt04a" path="res://assets/Audio/sounds/3.wav" id="3_fdj6p"]
 [ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="3_u73ir"]
 [ext_resource type="AudioStream" uid="uid://cpoeo66k7hvvt" path="res://assets/Audio/sounds/2.wav" id="4_0du81"]
-[ext_resource type="Texture2D" uid="uid://bquul8yw1i4rd" path="res://assets/sprites/others/Inimigo.png" id="7_0du81"]
+[ext_resource type="Texture2D" uid="uid://xla0uocbj1o" path="res://assets/sprites/others/Inimigo.png" id="7_0du81"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0du81"]
 radius = 31.0

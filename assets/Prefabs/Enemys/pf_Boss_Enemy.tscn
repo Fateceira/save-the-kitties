@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="5_3u5qh"]
 [ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="6_0ta2x"]
 [ext_resource type="AudioStream" uid="uid://onxbt731iwwm" path="res://assets/Audio/sounds/death.wav" id="6_h863f"]
-[ext_resource type="Texture2D" uid="uid://cjrmpj085unp0" path="res://assets/sprites/ships/7.png" id="7_cs1w2"]
+[ext_resource type="Texture2D" uid="uid://bquul8yw1i4rd" path="res://assets/sprites/others/Mecha.png" id="9_h863f"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h863f"]
 radius = 56.0
@@ -43,8 +43,8 @@ metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0.34043, -1.25532)
-scale = Vector2(1.51064, 1.51064)
-texture = ExtResource("7_cs1w2")
+scale = Vector2(2.136, 2.136)
+texture = ExtResource("9_h863f")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_h863f")

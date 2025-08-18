@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xla0uocbj1o"
-path="res://.godot/imported/Inimigo.png-e512279ca2d5f33ff5e78489197eb573.ctex"
+uid="uid://bquul8yw1i4rd"
+path="res://.godot/imported/Mecha.png-465250a156b4587f1a1b6fdc772ed49c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/others/Inimigo.png"
-dest_files=["res://.godot/imported/Inimigo.png-e512279ca2d5f33ff5e78489197eb573.ctex"]
+source_file="res://assets/sprites/others/Mecha.png"
+dest_files=["res://.godot/imported/Mecha.png-465250a156b4587f1a1b6fdc772ed49c.ctex"]
 
 [params]
 
