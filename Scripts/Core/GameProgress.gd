@@ -11,14 +11,13 @@ signal progress_updated
 
 func _ready() -> void:
 	add_to_group("game_progress_singleton")
-	print("=== GAMEMANAGER SINGLETON INICIADO ===")
 	load_progress()
 	print("GameProgress: Níveis desbloqueados: ", unlocked_levels)
 
 func unlock_level(level: int) -> void:
 	if level not in unlocked_levels:
 		unlocked_levels.append(level)
-		print("🔓 GameProgress: Fase ", level, " DESBLOQUEADA!")
+		print("GameProgress: Fase ", level, " DESBLOQUEADA!")
 		save_progress()
 		level_unlocked.emit(level)
 		progress_updated.emit()
@@ -32,18 +31,17 @@ func get_max_unlocked_level() -> int:
 	return unlocked_levels.max()
 
 func complete_level(level: int, score: int) -> void:
-	print("🏆 GameProgress: Completando fase ", level, " com score ", score)
+	print("GameProgress: Completando fase ", level, " com score ", score)
 	level_completed[level] = true
 	set_level_score(level, score)
 	
-	# SEMPRE desbloqueia a próxima fase
 	var next_level = level + 1
-	if next_level <= 5:  # Assumindo 5 fases máximo
+	if next_level <= 5:  
 		unlock_level(next_level)
 	
 	save_progress()
 	progress_updated.emit()
-	print("✅ GameProgress: Fase ", level, " completada! Próxima fase desbloqueada: ", next_level)
+	print("GameProgress: Fase ", level, " completada! Próxima fase desbloqueada: ", next_level)
 
 func is_level_completed(level: int) -> bool:
 	return level_completed.get(level, false)
@@ -66,9 +64,9 @@ func save_progress() -> void:
 		}
 		file.store_string(JSON.stringify(save_data))
 		file.close()
-		print("💾 GameProgress: Salvo - Desbloqueados: ", unlocked_levels)
+		print("GameProgress: Salvo - Desbloqueados: ", unlocked_levels)
 	else:
-		print("❌ GameProgress: ERRO ao salvar!")
+		print("GameProgress: ERRO ao salvar!")
 
 func load_progress() -> void:
 	if FileAccess.file_exists(SAVE_FILE):
@@ -105,11 +103,11 @@ func load_progress() -> void:
 					var level_key = int(key) if key is String else key
 					level_completed[level_key] = loaded_completed[key]
 				
-				print("📂 GameProgress: Carregado do save - Desbloqueados: ", unlocked_levels)
+				print("GameProgress: Carregado do save - Desbloqueados: ", unlocked_levels)
 			else:
-				print("❌ GameProgress: Erro ao parsear JSON")
+				print("GameProgress: Erro ao parsear JSON")
 	else:
-		print("📂 GameProgress: Nenhum save, usando padrão - Desbloqueados: ", unlocked_levels)
+		print("GameProgress: Nenhum save, usando padrão - Desbloqueados: ", unlocked_levels)
 
 func reset_progress() -> void:
 	unlocked_levels = [1]
@@ -117,4 +115,4 @@ func reset_progress() -> void:
 	level_completed.clear()
 	save_progress()
 	progress_updated.emit()
-	print("🔄 GameProgress: Progresso resetado!")
+	print("GameProgress: Progresso resetado!")

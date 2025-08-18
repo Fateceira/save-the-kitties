@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ddhj8o34jrs6g" path="res://assets/Prefabs/Enemys/pf_Boss_Enemy.tscn" id="2_ll187"]
 [ext_resource type="Script" uid="uid://br8fwkyeo43qx" path="res://Scripts/CustomResources/WaveData.gd" id="6_n2oxi"]
 
-[sub_resource type="Resource" id="Resource_2jfg5"]
+[sub_resource type="Resource" id="Resource_ll187"]
 script = ExtResource("1_15sr8")
 enemy_scene = ExtResource("2_ll187")
 spawn_chance = 1.0
@@ -15,14 +15,14 @@ metadata/_custom_type_script = "uid://ckerbjvn8w5w6"
 [resource]
 script = ExtResource("6_n2oxi")
 wave_name = "Wave 4"
-enemy_spawns = Array[ExtResource("1_15sr8")]([SubResource("Resource_2jfg5")])
+enemy_spawns = Array[ExtResource("1_15sr8")]([SubResource("Resource_ll187")])
 enemies_per_spawn = 1
 spawn_delay = 1.5
 wave_duration = 1.0
 break_duration = 1.0
 is_boss_wave = true
-has_pre_wave_dialog = true
-pre_wave_dialog_id = "F2Boss"
+has_pre_wave_dialog = false
+pre_wave_dialog_id = ""
 has_post_wave_dialog = false
 post_wave_dialog_id = ""
 metadata/_custom_type_script = "uid://br8fwkyeo43qx"

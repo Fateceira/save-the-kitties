@@ -105,7 +105,6 @@ invulnerability_on_damage = true
 metadata/_custom_type_script = "uid://l7so7vxpv0dj"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("CapsuleShape2D_7678b")
 
 [node name="Muzzle" type="Marker2D" parent="."]

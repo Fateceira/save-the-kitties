@@ -43,13 +43,11 @@ func _ready() -> void:
 	setup_stars()
 
 func get_singleton_or_create() -> Node:
-	# Tenta encontrar na árvore
 	var existing = get_tree().get_first_node_in_group("game_progress_singleton")
 	if existing:
 		print("FinalFase: Usando GameProgress existente")
 		return existing
 	
-	# Se não encontrar, cria um novo
 	print("FinalFase: Criando GameProgress temporário")
 	var temp_progress = preload("res://Scripts/Core/GameProgress.gd").new()
 	temp_progress.add_to_group("game_progress_singleton")

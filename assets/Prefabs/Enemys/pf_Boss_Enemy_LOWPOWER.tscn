@@ -1,0 +1,92 @@
+[gd_scene load_steps=14 format=3 uid="uid://dho41jnjgjpns"]
+
+[ext_resource type="Script" uid="uid://clr2bqciwia30" path="res://Scripts/Enemys/BossEnemy.gd" id="1_ckrde"]
+[ext_resource type="Resource" uid="uid://bkg5d1byo52e8" path="res://Projectiles/res_BasicProjectile_Boss.tres" id="2_0i7kg"]
+[ext_resource type="AudioStream" uid="uid://gekbs5gg81ny" path="res://assets/Audio/sounds/dark-shoot.wav" id="3_7lvcf"]
+[ext_resource type="Script" uid="uid://cv57o6baohy0p" path="res://Scripts/CustomResources/EnemyStats.gd" id="4_ckrde"]
+[ext_resource type="AudioStream" uid="uid://csfmmas2kt04a" path="res://assets/Audio/sounds/3.wav" id="5_885b0"]
+[ext_resource type="AudioStream" uid="uid://onxbt731iwwm" path="res://assets/Audio/sounds/death.wav" id="6_w3o4d"]
+[ext_resource type="PackedScene" uid="uid://ctw3nilh6fk4y" path="res://assets/Prefabs/Components/pf_BlinkComponent.tscn" id="7_n754l"]
+[ext_resource type="Script" uid="uid://l7so7vxpv0dj" path="res://Scripts/Core/DamageableComponent.gd" id="8_ortjo"]
+[ext_resource type="Texture2D" uid="uid://cf3f65e8sa8y1" path="res://assets/sprites/others/Mecha.png" id="9_yw4rm"]
+
+[sub_resource type="Resource" id="Resource_0i7kg"]
+script = ExtResource("4_ckrde")
+max_hp = 250
+speed = 150.0
+contact_damage = 1
+metadata/_custom_type_script = "uid://cv57o6baohy0p"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h863f"]
+radius = 56.0
+height = 112.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d323o"]
+radius = 15.0
+height = 60.0
+
+[sub_resource type="Gradient" id="Gradient_d323o"]
+offsets = PackedFloat32Array(0, 0.59366, 1)
+colors = PackedColorArray(0.960562, 0.634181, 0, 1, 0.909829, 0, 0.168546, 1, 0.791538, 0, 0.398067, 1)
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_ckrde")
+projectile_stats = ExtResource("2_0i7kg")
+shoot_sfx = ExtResource("3_7lvcf")
+target_position_y = 150.0
+min_y_position = 150.0
+max_y_position = 150.0
+stats = SubResource("Resource_0i7kg")
+damage_sfx = ExtResource("5_885b0")
+death_sfx = ExtResource("6_w3o4d")
+
+[node name="BlinkComponent" parent="." instance=ExtResource("7_n754l")]
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("8_ortjo")
+metadata/_custom_type_script = "uid://l7so7vxpv0dj"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0.34043, -1.25532)
+scale = Vector2(2.136, 2.136)
+texture = ExtResource("9_yw4rm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_h863f")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="MuzzleLeft" type="Marker2D" parent="."]
+position = Vector2(-47, 56)
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="MuzzleLeft"]
+position = Vector2(0, 30)
+shape = SubResource("CapsuleShape2D_d323o")
+target_position = Vector2(1, 0)
+
+[node name="Line2D" type="Line2D" parent="MuzzleLeft"]
+position = Vector2(2, 30)
+width = 60.0
+gradient = SubResource("Gradient_d323o")
+joint_mode = 1
+begin_cap_mode = 2
+end_cap_mode = 2
+round_precision = 10
+
+[node name="MuzzleRight" type="Marker2D" parent="."]
+position = Vector2(48, 56)
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="MuzzleRight"]
+position = Vector2(0, 30)
+shape = SubResource("CapsuleShape2D_d323o")
+target_position = Vector2(1, 0)
+
+[node name="Line2D" type="Line2D" parent="MuzzleRight"]
+position = Vector2(2, 30)
+gradient = SubResource("Gradient_d323o")
+joint_mode = 1
+begin_cap_mode = 2
+end_cap_mode = 2
+round_precision = 10

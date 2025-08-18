@@ -29,7 +29,7 @@
 [ext_resource type="Script" uid="uid://bqdl7ns2qavsj" path="res://Scripts/Core/GameManager.gd" id="22_3ye67"]
 [ext_resource type="PackedScene" uid="uid://c5u87buq8shtx" path="res://Scenes/FinalFase.tscn" id="23_2om4b"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hhexc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uluru"]
 shader = ExtResource("3_u8di6")
 shader_parameter/pixel_scale = 0.1
 shader_parameter/star_texture = ExtResource("4_cw332")
@@ -162,7 +162,7 @@ offset_bottom = -2.0
 
 [node name="Parallax" parent="." instance=ExtResource("2_2om4b")]
 z_index = -10
-material = SubResource("ShaderMaterial_hhexc")
+material = SubResource("ShaderMaterial_uluru")
 offset_left = -285.996
 offset_top = 889.007
 offset_right = 794.004

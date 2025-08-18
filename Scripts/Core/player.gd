@@ -110,12 +110,12 @@ func connect_to_dialog_events() -> void:
 	var connection_result = DialogManager.instance.dialog_event_triggered.connect(_on_dialog_event)
 	if connection_result == OK:
 		dialog_manager_connected = true
-		print("✅ Conectado com sucesso aos eventos do DialogManager!")
+		print("Conectado com sucesso aos eventos do DialogManager!")
 	else:
-		push_error("❌ Falha ao conectar aos eventos do DialogManager: " + str(connection_result))
+		push_error("Falha ao conectar aos eventos do DialogManager: " + str(connection_result))
 
 func _on_dialog_event(event_name: String) -> void:
-	print("🎯 Player recebeu evento de diálogo: ", event_name)
+	print("Player recebeu evento de diálogo: ", event_name)
 	
 	match event_name:
 		"unlock_dash":
@@ -134,16 +134,16 @@ func unlock_dash() -> void:
 		if ship_stats:
 			dash_charges = ship_stats.max_dash_charges
 		
-		print("✨ DASH DESBLOQUEADO! Cargas disponíveis: ", dash_charges)
+		print("DASH DESBLOQUEADO! Cargas disponíveis: ", dash_charges)
 		dash_unlocked_signal.emit()
 		
 		if dash_sfx:
 			emit_signal("request_sfx", dash_sfx, global_position, Vector2(0.8, 1.2), -10.0)
 	else:
-		print("⚠️ Dash já estava desbloqueado")
+		print("Dash já estava desbloqueado")
 
 func debug_unlock_dash() -> void:
-	print("🔧 DEBUG: Forçando desbloqueio do dash...")
+	print("DEBUG: Forçando desbloqueio do dash...")
 	unlock_dash()
 
 func debug_check_dialog_connection() -> void:
@@ -155,7 +155,6 @@ func debug_check_dialog_connection() -> void:
 	if DialogManager.instance:
 		print("Listeners no DialogManager: ")
 		DialogManager.instance.debug_check_connections()
-	print("============================")
 
 func force_reconnect_dialog_manager() -> void:
 	dialog_manager_connected = false
@@ -274,7 +273,7 @@ func _process(delta: float) -> void:
 	process_engine_system(delta)
 	process_ship_animations(delta)
 
-# ============ NOVOS MÉTODOS PARA CUTSCENE ============
+# ============ CUTSCENE ============
 
 func set_cutscene_mode(enabled: bool) -> void:
 	cutscene_mode = enabled
@@ -636,7 +635,7 @@ func enable_damage_invulnerability() -> void:
 func get_current_engine_lifetime() -> float:
 	return current_engine_lifetime
 
-# ============ MÉTODOS ESPECÍFICOS PARA CONTROLE DO DASH ============
+# ============ CONTROLE DO DASH ============
 
 func is_dash_unlocked() -> bool:
 	return dash_unlocked
@@ -648,8 +647,6 @@ func lock_dash() -> void:
 	dash_unlocked = false
 	dash_charges = 0
 	print("Dash bloqueado!")
-
-# ============ MÉTODOS PÚBLICOS PARA CUTSCENE ============
 
 func is_in_cutscene_mode() -> bool:
 	return cutscene_mode

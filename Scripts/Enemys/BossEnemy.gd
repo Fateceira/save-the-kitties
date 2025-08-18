@@ -5,7 +5,7 @@ class_name BossEnemy
 @export var shoot_sfx: AudioStream
 @export var target_position_y: float = -250.0
 @export var attack_range: float = 2000.0
-@export var screen_margin: float = 100.0  # Margem das bordas da tela
+@export var screen_margin: float = 100.0  
 @export var min_y_position: float = -280.0
 @export var max_y_position: float = -120.0
 
@@ -36,7 +36,7 @@ var max_shapecast_width: float = 22.0
 var laser_range: float = 900.0
 var laser_damage: int = 1  
 var laser_damage_timer: float = 0.0
-var laser_damage_interval: float = 0.5
+var laser_damage_interval: float = 0.25
 
 var move_target: Vector2
 var orbit_radius: float = 280.0
@@ -53,14 +53,13 @@ var burst_active: bool = false
 var spiral_attack_timer: float = 0.0
 var spiral_angle: float = 0.0
 var spiral_shots_fired: int = 0
-var max_spiral_shots: int = 24
+var max_spiral_shots: int = 16
 var spiral_shot_interval: float = 0.2
 
 var player_velocity: Vector2 = Vector2.ZERO
 var previous_player_position: Vector2 = Vector2.ZERO
 var prediction_strength: float = 0.25
 
-# Variáveis para limites da tela
 var screen_left_limit: float
 var screen_right_limit: float
 var viewport_size: Vector2
@@ -75,27 +74,22 @@ func _ready() -> void:
 	move_target = global_position
 
 func setup_screen_limits() -> void:
-	# Pega o tamanho do viewport
+	
 	viewport_size = get_viewport().get_visible_rect().size
 	
-	# Se tiver uma câmera, usa os limites dela
 	var camera = get_viewport().get_camera_2d()
 	if camera:
-		# Pega a posição da câmera no mundo
 		var camera_pos = camera.get_screen_center_position()
 		
-		# Calcula os limites baseados na câmera
 		screen_left_limit = camera_pos.x - (viewport_size.x / 2.0) + screen_margin
 		screen_right_limit = camera_pos.x + (viewport_size.x / 2.0) - screen_margin
 	else:
-		# Se não tiver câmera, usa limites baseados no viewport
 		screen_left_limit = -viewport_size.x / 2.0 + screen_margin
 		screen_right_limit = viewport_size.x / 2.0 - screen_margin
 	
 	print("Screen limits: Left=", screen_left_limit, " Right=", screen_right_limit)
 
 func update_screen_limits_if_needed() -> void:
-	# Atualiza os limites durante o jogo se a câmera se mover
 	var camera = get_viewport().get_camera_2d()
 	if camera:
 		var camera_pos = camera.get_screen_center_position()
@@ -166,7 +160,6 @@ func _process(delta: float) -> void:
 		find_player()
 		return
 	
-	# Atualiza os limites da tela se necessário (caso a câmera se mova)
 	update_screen_limits_if_needed()
 	
 	update_player_velocity(delta)
@@ -218,7 +211,6 @@ func update_movement_target() -> void:
 			move_target.y = target_position_y
 		
 		BossState.SPIRAL_ATTACK:
-			# No spiral attack, vai para o centro da tela
 			var screen_center_x = (screen_left_limit + screen_right_limit) / 2.0
 			move_target.x = screen_center_x
 			move_target.y = target_position_y
@@ -310,7 +302,6 @@ func move_towards_target(delta: float) -> void:
 	
 	if distance > 20.0:
 		global_position += direction * stats.speed * delta
-		# Usa os limites calculados automaticamente
 		global_position.x = clamp(global_position.x, screen_left_limit, screen_right_limit)
 		global_position.y = clamp(global_position.y, min_y_position, max_y_position)
 

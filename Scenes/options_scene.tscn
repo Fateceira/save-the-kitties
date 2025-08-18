@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bntaqlkf7t3ri"]
+[gd_scene load_steps=16 format=3 uid="uid://bntaqlkf7t3ri"]
 
 [ext_resource type="Texture2D" uid="uid://du4lbc1h1jbls" path="res://assets/Menu/Background Menu/Background - Fundo.png" id="1_1u7eb"]
 [ext_resource type="Script" uid="uid://bevgwqmckwcph" path="res://Scripts/Menu/options_scene.gd" id="1_fkm42"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://drvvv34vau6f" path="res://assets/Menu/Background Menu/Background - Efeito escurecer.png" id="9_3nnlt"]
 [ext_resource type="Texture2D" uid="uid://c4uhb32wy6iyu" path="res://assets/Menu/Bot++¦o Voltar - Normal.png" id="10_le0ib"]
 [ext_resource type="Texture2D" uid="uid://dvhn2n3twgim5" path="res://assets/Menu/Bot++¦o Voltar - Pressed.png" id="11_77uth"]
+[ext_resource type="FontFile" uid="uid://b6djdxkl01pwk" path="res://assets/Fonts/EquipmentPro.ttf" id="12_fkm42"]
+[ext_resource type="Script" uid="uid://cmqg4ovil6db4" path="res://Scripts/Menu/volume_slider.gd" id="13_72gy0"]
 
 [sub_resource type="GDScript" id="GDScript_518t2"]
 script/source = "extends Node2D
@@ -20,6 +22,10 @@ script/source = "extends Node2D
 func _physics_process(delta: float) -> void:
 	position += (get_global_mouse_position() / move_force * delta / 3) - position
 "
+
+[sub_resource type="LabelSettings" id="LabelSettings_72gy0"]
+font = ExtResource("12_fkm42")
+font_size = 70
 
 [node name="options_scene" type="Control"]
 layout_mode = 3
@@ -93,18 +99,50 @@ layout_mode = 2
 texture_normal = ExtResource("10_le0ib")
 texture_pressed = ExtResource("11_77uth")
 
-[node name="audio_slider" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 237.0
-offset_top = 100.0
-offset_right = 1349.0
-offset_bottom = 708.0
-scale = Vector2(0.741385, 0.843871)
-
-[node name="volume_control" type="HSlider" parent="audio_slider"]
+[node name="Label" type="Label" parent="."]
 layout_mode = 2
+offset_left = 574.0
+offset_top = 193.0
+offset_right = 1686.0
+offset_bottom = 264.0
+text = "Music"
+label_settings = SubResource("LabelSettings_72gy0")
+
+[node name="volume_control" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 431.0
+offset_top = 238.0
+offset_right = 931.0
+offset_bottom = 318.0
 size_flags_vertical = 4
 tooltip_text = "Volume"
-value = 100.0
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("13_72gy0")
+bus_name = "Music"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 2
+offset_left = 574.0
+offset_top = 342.0
+offset_right = 1686.0
+offset_bottom = 413.0
+text = "SFX"
+label_settings = SubResource("LabelSettings_72gy0")
+
+[node name="volume_control2" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 431.0
+offset_top = 387.0
+offset_right = 931.0
+offset_bottom = 467.0
+size_flags_vertical = 4
+tooltip_text = "Volume"
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("13_72gy0")
+bus_name = "SFX"
 
 [connection signal="pressed" from="MarginContainer/Botão Voltar/Botão Voltar/back" to="." method="_on_voltar_pressed"]

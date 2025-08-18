@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("3_kua5y")
-damage = 2
+damage = 1
 pierce = 0
-speed = 300.0
+speed = 200.0
 projectile_scene = ExtResource("2_fdbri")
 impact_spark_scene = ExtResource("1_fdbri")
 metadata/_custom_type_script = "uid://kfcsw8xp3cmh"

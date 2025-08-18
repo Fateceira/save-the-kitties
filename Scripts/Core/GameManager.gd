@@ -23,13 +23,11 @@ func _ready() -> void:
 	print("GameManager iniciado - Level: ", current_level)
 
 func get_singleton_or_create() -> Node:
-	# Tenta encontrar na árvore
 	var existing = get_tree().get_first_node_in_group("game_progress_singleton")
 	if existing:
 		print("GameManager: Usando GameProgress existente")
 		return existing
 	
-	# Se não encontrar, cria um novo
 	print("GameManager: Criando GameProgress temporário")
 	var temp_progress = preload("res://Scripts/Core/GameProgress.gd").new()
 	temp_progress.add_to_group("game_progress_singleton")
@@ -96,28 +94,27 @@ func _on_enemy_destroyed() -> void:
 	enemies_remaining -= 1
 
 func _on_cutscene_level_completed() -> void:
-	print("GameManager: 🎉 Fase completada!")
+	print("GameManager: Fase completada!")
 	if not player_died:
 		trigger_victory()
 
 func trigger_victory() -> void:
-	print("GameManager: 🏆 TRIGGER VICTORY!")
+	print("GameManager: TRIGGER VICTORY!")
 	var final_score = 0
 	if score_manager and score_manager.has_method("get_current_score"):
 		final_score = score_manager.get_current_score()
 	
-	# USA A INSTÂNCIA DO GAMEPRROGRESS
 	if game_progress_singleton and game_progress_singleton.has_method("complete_level"):
 		game_progress_singleton.complete_level(current_level, final_score)
-		print("GameManager: ✅ Progresso salvo! Desbloqueados: ", game_progress_singleton.unlocked_levels)
+		print("GameManager: Progresso salvo! Desbloqueados: ", game_progress_singleton.unlocked_levels)
 	else:
-		print("GameManager: ❌ ERRO: GameProgress não encontrado!")
+		print("GameManager: ERRO: GameProgress não encontrado!")
 	
 	if final_screen and final_screen.has_method("show_final_screen"):
 		final_screen.show_final_screen(final_score, current_level, true)
 
 func _on_player_died() -> void:
-	print("GameManager: 💀 Player morreu!")
+	print("GameManager: Player morreu!")
 	player_died = true
 	
 	if cutscene_manager:

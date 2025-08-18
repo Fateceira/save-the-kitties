@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bbw5s6yctlbuk"]
+[gd_scene load_steps=35 format=3 uid="uid://bbw5s6yctlbuk"]
 
 [ext_resource type="PackedScene" uid="uid://c0wfn18x1c4tm" path="res://Scenes/phasePoints.tscn" id="1_dq5g6"]
 [ext_resource type="PackedScene" uid="uid://dr1pjh4t44adi" path="res://assets/Prefabs/Components/pf_Parallax.tscn" id="2_v2epp"]
@@ -12,6 +12,7 @@
 [ext_resource type="Resource" uid="uid://cpaids5lgcisn" path="res://WaveData/wv_Wave_03.tres" id="10_ws64i"]
 [ext_resource type="PackedScene" uid="uid://cinur83quhu0m" path="res://assets/Prefabs/Components/pf_ExplosionManager.tscn" id="10_xyt75"]
 [ext_resource type="PackedScene" uid="uid://dbse754nr8vs6" path="res://assets/Prefabs/Components/pf_Invisible_wall.tscn" id="11_nx52d"]
+[ext_resource type="Resource" uid="uid://b0exgurjhjpeq" path="res://WaveData/wv_Wave_04.tres" id="11_ws64i"]
 [ext_resource type="PackedScene" uid="uid://d25pxvapoj0rb" path="res://assets/Prefabs/Components/pf_TimeManager.tscn" id="12_6vn2e"]
 [ext_resource type="PackedScene" uid="uid://dfa3sv3uep71a" path="res://assets/Prefabs/Components/pf_PostProcessing.tscn" id="13_18mkm"]
 [ext_resource type="PackedScene" uid="uid://dngl2x6strt8l" path="res://assets/Prefabs/Components/pf_Healthbar.tscn" id="14_a1ik1"]
@@ -25,7 +26,7 @@
 [ext_resource type="Script" uid="uid://bqdl7ns2qavsj" path="res://Scripts/Core/GameManager.gd" id="22_pm0kx"]
 [ext_resource type="PackedScene" uid="uid://c5u87buq8shtx" path="res://Scenes/FinalFase.tscn" id="23_v2epp"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gxhi0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ws64i"]
 shader = ExtResource("3_gxhi0")
 shader_parameter/pixel_scale = 0.1
 shader_parameter/star_texture = ExtResource("4_ws64i")
@@ -150,7 +151,7 @@ offset_bottom = -2.0
 
 [node name="Parallax" parent="." instance=ExtResource("2_v2epp")]
 z_index = -10
-material = SubResource("ShaderMaterial_gxhi0")
+material = SubResource("ShaderMaterial_ws64i")
 offset_left = -285.996
 offset_top = 889.007
 offset_right = 794.004
@@ -183,7 +184,7 @@ fade_speed = 10.0
 [node name="EnemySpawner" parent="." instance=ExtResource("7_pan4p")]
 position = Vector2(-62.9961, -98.993)
 spawn_area_width = 1200.0
-wave_list = Array[ExtResource("8_t8f65")]([ExtResource("9_gxhi0"), ExtResource("10_ws64i"), ExtResource("9_gxhi0")])
+wave_list = Array[ExtResource("8_t8f65")]([ExtResource("9_gxhi0"), ExtResource("10_ws64i"), ExtResource("9_gxhi0"), ExtResource("11_ws64i")])
 screen_margin = 80.0
 viper_path_spacing = 0.015
 max_total_enemies = 6

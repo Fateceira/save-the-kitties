@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_lv60d")
-max_hp = 1000
-speed = 250.0
+max_hp = 650
+speed = 200.0
 contact_damage = 1
 metadata/_custom_type_script = "uid://cv57o6baohy0p"
