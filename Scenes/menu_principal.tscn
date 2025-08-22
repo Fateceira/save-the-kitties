@@ -152,5 +152,5 @@ parameters/looping = true
 
 [connection signal="pressed" from="menu_holder/Jogar/Botão Jogar/play_button" to="." method="_on_jogar_pressed"]
 [connection signal="pressed" from="menu_holder/Fechar/Botão Fechar/close_button" to="." method="_on_fechar_pressed"]
-[connection signal="pressed" from="menu_holder/Opções/Botão Opções/options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="menu_holder/Opções/Botão Opções/options" to="." method="_on_opções_pressed"]
+[connection signal="pressed" from="menu_holder/Opções/Botão Opções/options" to="." method="_on_options_pressed"]

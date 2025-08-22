@@ -4,14 +4,14 @@
 
 [resource]
 script = ExtResource("1_cnne4")
-max_hp = 15
+max_hp = 20
 max_speed = 250.0
 acceleration = 1200.0
 deceleration = 1000.0
 fire_rate = 0.25
 luck = 0.1
 crit_multiplier = 2.0
-projectile_count = 6
+projectile_count = 2
 burst_delay = 0.1
 dash_force = 1000.0
 dash_duration = 0.2
